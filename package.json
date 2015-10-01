@@ -1,0 +1,21 @@
+{
+  "name": "nodejs-admin",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "dioscouri-core": "git+https://github.com/dioscouri/nodejs-lib.git"
+  },
+  "devDependencies": {
+
+  },
+  "engines": {
+    "node": ">=4.1.1",
+    "npm": ">=2.13.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dioscouri/nodejs-admin"
+  },
+  "author": "Dioscouri",
+  "main": "index.js"
+}

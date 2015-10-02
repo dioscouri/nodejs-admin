@@ -33,4 +33,4 @@ exports = module.exports = modelInstance;
 /**
  * Initializing Schema for model
  */
-modelInstance.initSchema('./dbo/webhookevent.js');
+modelInstance.initSchema('/dbo/webhookevent.js', __dirname);

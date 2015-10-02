@@ -11,9 +11,9 @@ var DioscouriCore = require('dioscouri-core');
 var BaseModel = require('./basemodel.js');
 
 /**
- *  Resources model
+ *  User Roles model
  */
-class AclResourceModel extends BaseModel {
+class AclRoleModel extends BaseModel {
     /**
      * Model constructor
      */
@@ -38,14 +38,14 @@ class AclResourceModel extends BaseModel {
 
         if (validationMessages.length == 0) {
             var searchPattern = item.id != null ? {"$and": [{name: item.name}, {_id: {"$ne": item.id.toString()}}]} : {name: item.name};
-            this.findOne(searchPattern, function (error, document) {
+            this.model.findOne(searchPattern, function (error, document) {
                 if (error != null) {
                     validationMessages.push(error.message);
                     return validationCallback(DioscouriCore.ValidationError.create(validationMessages));
                 }
 
                 if (document != null && (item.id == null || item.id.toString() != document.id.toString())) {
-                    validationMessages.push('Acl Resource with the same name already exists in the database');
+                    validationMessages.push('Acl Role with the same name already exists in the database');
                 }
 
                 return validationCallback(DioscouriCore.ValidationError.create(validationMessages));
@@ -59,7 +59,7 @@ class AclResourceModel extends BaseModel {
 /**
  * Creating instance of the model
  */
-var modelInstance = new AclResourceModel('acl_resources');
+var modelInstance = new AclRoleModel('acl_roles');
 
 /**
  * Exporting Model
@@ -71,4 +71,4 @@ exports = module.exports = modelInstance;
 /**
  * Initializing Schema for model
  */
-modelInstance.initSchema('./dbo/acl_resources.js');
+modelInstance.initSchema('/dbo/acl_roles.js', __dirname);

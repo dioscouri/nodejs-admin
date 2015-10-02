@@ -114,4 +114,4 @@ exports = module.exports = modelInstance;
 /**
  * Initializing Schema for model
  */
-modelInstance.initSchema('./dbo/acl_permissions.js');
+modelInstance.initSchema('/dbo/acl_permissions.js', __dirname);

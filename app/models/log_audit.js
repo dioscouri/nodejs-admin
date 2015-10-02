@@ -112,4 +112,4 @@ exports = module.exports = modelInstance;
 /**
  * Initializing Schema for model
  */
-modelInstance.initSchema('./dbo/log_audit.js');
+modelInstance.initSchema('/dbo/log_audit.js', __dirname);

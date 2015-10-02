@@ -123,4 +123,4 @@ exports = module.exports = modelInstance;
 /**
  * Initializing Schema for model
  */
-modelInstance.initSchema('./dbo/notification.js');
+modelInstance.initSchema('/dbo/notification.js', __dirname);

@@ -5,7 +5,7 @@
  */
 var Models                 = {};
 Models.AclPermissionsModel = require('../acl_permissions');
-var Types                  = Models.AclPermissionsModel.mongoose.Schema.Types;
+var Types                  = Models.AclPermissionsModel.mongoose.Schema.Types; // TODO Hmm..
 
 // Acl Permissions Schema Object
 var schemaObject = {

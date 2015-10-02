@@ -128,4 +128,4 @@ exports = module.exports = modelInstance;
 /**
  * Initializing Schema for model
  */
-modelInstance.initSchema('./dbo/log_system.js');
+modelInstance.initSchema('/dbo/log_system.js', __dirname);

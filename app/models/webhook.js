@@ -68,4 +68,4 @@ exports = module.exports = modelInstance;
 /**
  * Initializing Schema for model
  */
-modelInstance.initSchema('./dbo/webhook.js');
+modelInstance.initSchema('/dbo/webhook.js', __dirname);

@@ -25,6 +25,34 @@ class ConfigurationModel extends BaseModel {
         this._configuration = null;
     }
 
+    /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var schemaObject = {
+            mandrill: {
+                apiKey: {type: String},
+                fromName: {type: String},
+                fromEmail: {type: String}
+            },
+            pkgcloud: {
+                provider: {type: String},
+                userName: {type: String},
+                apiKey: {type: String},
+                region: {type: String}
+            }
+        };
+
+        // Creating DBO Schema
+        var ConfigurationDBOSchema = this.createSchema(schemaObject);
+
+        // Registering schema and initializing model
+        this.registerSchema(ConfigurationDBOSchema);
+    }
+
     get conf() {
         return this._configuration;
     }
@@ -60,8 +88,3 @@ var modelInstance = new ConfigurationModel('configuration');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/configuration.js', __dirname);

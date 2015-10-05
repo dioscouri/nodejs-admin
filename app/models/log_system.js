@@ -18,6 +18,35 @@ class LogSystemModel extends BaseModel {
     }
 
     /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var Types = this.mongoose.Schema.Types;
+
+        var schemaObject = {
+            priority: {type: String, index: true},
+            category: {type: String, index: true},
+            message: {type: String, index: true},
+            createdAt: {type: Date, 'default': Date.now}
+        };
+
+        var option = {
+            safe: {
+                w: 0
+            }
+        }; // TODO: Extend
+
+        // Creating DBO Schema
+        var LogSystemDBOSchema = this.createSchema(schemaObject);
+
+        // Registering schema and initializing model
+        this.registerSchema(LogSystemDBOSchema);
+    }
+
+    /**
      * Write a danger log.
      * @param {Object|String} logData - The data to log, or a string log.
      * @param {string} logData.message - Log message.
@@ -124,8 +153,3 @@ var modelInstance = new LogSystemModel('log_system');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/log_system.js', __dirname);

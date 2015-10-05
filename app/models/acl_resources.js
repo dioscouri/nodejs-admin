@@ -23,6 +23,70 @@ class AclResourceModel extends BaseModel {
     }
 
     /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var Types = this.mongoose.Schema.Types;
+
+        var schemaObject = {
+            "name": String,
+            "actions": [String]
+        };
+
+        //Creating DBO Schema
+        var UserDBOSchema = this.createSchema(schemaObject);
+
+        UserDBOSchema.post('save', function () {
+            var resource = this;
+
+            require('./acl_permissions').model.find({
+                aclResource: resource._id,
+                actionName: {
+                    $nin: resource.actions
+                }
+            }, function (err, permissions) {
+                if (err) return console.log(err);
+
+                async.each(permissions, function (permission, callback) {
+
+                    permission.remove(function (err) {
+                        callback(err);
+                    });
+
+                }, function (err) {
+                    if (err) console.log(err);
+                })
+            });
+        });
+
+        UserDBOSchema.post('remove', function () {
+            var resource = this;
+
+            require('./acl_permissions').model.find({
+                aclResource: resource._id
+            }, function (err, permissions) {
+                if (err) return console.log(err);
+
+                async.each(permissions, function (permission, callback) {
+
+                    permission.remove(function (err) {
+                        callback(err);
+                    });
+
+                }, function (err) {
+                    if (err) console.log(err);
+                })
+            });
+        });
+
+        // Registering schema and initializing model
+        this.registerSchema(UserDBOSchema);
+    }
+
+    /**
      * Validating item before save
      *
      * @param item
@@ -67,8 +131,3 @@ var modelInstance = new AclResourceModel('acl_resources');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/acl_resources.js', __dirname);

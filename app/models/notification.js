@@ -23,6 +23,40 @@ class NotificationModel extends BaseModel {
     }
 
     /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var Types = this.mongoose.Schema.Types;
+
+        var schemaObject = {
+            notificationType: {type: String, index: true},
+            resourceType: {type: String, index: true},
+            resourceId: {type: String, index: true},
+            originator: {type: Types.ObjectId, ref: 'user', index: true},
+            targetUser: {type: Types.ObjectId, ref: 'user', index: true},
+            message: {type: String},
+            modifiedAt: {type: Date, 'default': Date.now, index: true},
+            createdAt: {type: Date, 'default': Date.now, index: true},
+            isRead: {type: Boolean, index: true}
+        };
+
+        // Creating DBO Schema
+        var NotificationDBOSchema = this.createSchema(schemaObject);
+
+        NotificationDBOSchema.pre('save', function (next) {
+            this.modifiedAt = new Date();
+
+            next();
+        });
+
+        // Registering schema and initializing model
+        this.registerSchema(NotificationDBOSchema);
+    }
+
+    /**
      * Send notification to some user
      *
      * @param notification
@@ -119,8 +153,3 @@ var modelInstance = new NotificationModel('notifications');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/notification.js', __dirname);

@@ -23,6 +23,54 @@ class AclRoleModel extends BaseModel {
     }
 
     /**
+     * To Enable Audit traces.
+     * 1. Call enableAudit()
+     * 2. Do not forget to add `last_modified_by` field to this schema.
+     */
+    //Models.AclRolesModel.enableAudit(); TODO
+
+    /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var Types = this.mongoose.Schema.Types;
+
+        var schemaObject = {
+            "name": String,
+            "last_modified_by": {type: Types.ObjectId, ref: 'user'}
+        };
+
+        //Creating DBO Schema
+        var AclRoleDBOSchema = this.createSchema(schemaObject);
+
+        AclRoleDBOSchema.post('remove', function () {
+            var role = this;
+
+            require('./acl_permissions').model.find({
+                aclRole: role._id
+            }, function (err, permissions) {
+                if (err) return console.log(err);
+
+                async.each(permissions, function (permission, callback) {
+
+                    permission.remove(function (err) {
+                        callback(err);
+                    });
+
+                }, function (err) {
+                    if (err) console.log(err);
+                })
+            });
+        });
+
+        // Registering schema and initializing model
+        this.registerSchema(AclRoleDBOSchema);
+    }
+
+    /**
      * Validating item before save
      *
      * @param item
@@ -67,8 +115,3 @@ var modelInstance = new AclRoleModel('acl_roles');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/acl_roles.js', __dirname);

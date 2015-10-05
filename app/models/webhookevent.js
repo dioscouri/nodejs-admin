@@ -16,6 +16,26 @@ class WebhookEventsModel extends BaseModel {
         // We must call super() in child class to have access to 'this' in a constructor
         super(listName);
     }
+
+    /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var schemaObject = {
+            name: {type: String, unique: true, required: true},
+            key: {type: String, unique: true, required: true},
+            description: String
+        };
+
+        //Creating DBO Schema
+        var WebhookEventDBOSchema = this.createSchema(schemaObject);
+
+        // Registering schema and initializing model
+        this.registerSchema(WebhookEventDBOSchema);
+    }
 }
 
 /**
@@ -29,8 +49,3 @@ var modelInstance = new WebhookEventsModel('webhookevent');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/webhookevent.js', __dirname);

@@ -20,6 +20,37 @@ class LogAuditModel extends BaseModel {
     }
 
     /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var Types = this.mongoose.Schema.Types;
+
+        var schemaObject = {
+            resource: {type: String, index: true},
+            resourceId: {type: Types.ObjectId},
+            diff: {type: [Types.Mixed]},
+            message: {type: String},
+            userId: {type: Types.ObjectId},
+            createdAt: {type: Date, 'default': Date.now}
+        };
+
+        var option = {
+            safe: {
+                w: 0
+            }
+        }; // TODO: Extend
+
+        // Creating DBO Schema
+        var LogAuditDBOSchema = this.createSchema(schemaObject);
+
+        // Registering schema and initializing model
+        this.registerSchema(LogAuditDBOSchema);
+    }
+
+    /**
      * @param {Object} rawData - The data to log.
      * @param {string} rawData.resource - Name of affected resource.
      * @param {Object} rawData.resourceId - Affected resource ID.
@@ -108,8 +139,3 @@ var modelInstance = new LogAuditModel('log_audit');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/log_audit.js', __dirname);

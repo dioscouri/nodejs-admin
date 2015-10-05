@@ -23,6 +23,28 @@ class AclPermissionModel extends BaseModel {
     }
 
     /**
+     * Define Schema
+     *
+     * @override
+     */
+    defineSchema() {
+
+        var Types = this.mongoose.Schema.Types;
+
+        var schemaObject = {
+            "aclRole": {type: Types.ObjectId, ref: 'acl_roles'},
+            "aclResource": {type: Types.ObjectId, ref: 'acl_resources'},
+            "actionName": String
+        };
+
+        //Creating DBO Schema
+        var UserDBOSchema = this.createSchema(schemaObject);
+
+        // Registering schema and initializing model
+        this.registerSchema(UserDBOSchema);
+    }
+
+    /**
      * Initialize ACL
      *
      * @param callback
@@ -110,8 +132,3 @@ var modelInstance = new AclPermissionModel('acl_permissions');
  * @type {Function}
  */
 exports = module.exports = modelInstance;
-
-/**
- * Initializing Schema for model
- */
-modelInstance.initSchema('/dbo/acl_permissions.js', __dirname);

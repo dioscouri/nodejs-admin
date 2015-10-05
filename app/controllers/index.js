@@ -28,10 +28,10 @@ class AdminIndex extends AdminBaseController {
         /**
          * Set output view object
          */
-        this.view(DioscouriCore.View.htmlView('index.swig'));
+        this.view(DioscouriCore.View.htmlView(this._viewsPath + '/admin/index.swig'));
 
         // Send DATA_READY event
-        dataReadyCallback(null);
+        dataReadyCallback();
     }
 
 }

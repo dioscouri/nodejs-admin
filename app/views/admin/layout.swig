@@ -8,23 +8,11 @@
 
     <title>{% block title %}{% endblock %}</title>
 
-    <link href="/assets/css/style.default.css" rel="stylesheet">
-    <link href="/assets/css/select2.css" rel="stylesheet">
-    <link href="/assets/css/custom.css" rel="stylesheet">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="assets/js/html5shiv.js"></script>
-    <script src="assets/js/respond.min.js"></script>
-    <![endif]-->
+    <link href="/admin/stylesheets/admin_build.min.css" rel="stylesheet">
 
-    <script src="/assets/js/jquery-1.11.1.min.js"></script>
-    <script src="/assets/js/jquery-migrate-1.2.1.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/modernizr.min.js"></script>
-    <script src="/assets/js/pace.min.js"></script>
-    <script src="/assets/js/retina.min.js"></script>
-    <script src="/assets/js/select2.min.js"></script>
-    <script src="/assets/js/jquery.cookies.js"></script>
+    <!--[if lt IE 9]>
+    <script src="/admin/javascripts/admin_build_lt_ie_9_js.min.js"></script>
+    <![endif]-->
 </head>
 
 <body>
@@ -52,7 +40,7 @@
         <div class="mainpanel">
             {% block pageheader %}{% include "./partials/pageheader.swig" %}{% endblock %}
             <div class="contentpanel">
-                {% include "../common/partials/messages.swig" %}
+                {% include "partials/messages.swig" %}
                 {% block pagecontent %}{% endblock %}
             </div>
         </div>
@@ -60,7 +48,7 @@
     <!-- mainwrapper -->
 </section>
 
-<script src="/assets/js/custom.js"></script>
+<script src="/admin/javascripts/admin_build.min.js"></script>
 
 {% block page_js %}{% endblock %}
 </body>

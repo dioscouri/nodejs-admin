@@ -7,7 +7,7 @@ module.exports = function (grunt) {
                     beautify: true
                 },
                 files: {
-                    './public/javascripts/admin_build.min.js': [
+                    './app/public/javascripts/admin_build.min.js': [
                         './resources/bower_components/jquery/dist/jquery.js',
                         './resources/bower_components/bootstrap/dist/js/bootstrap.js',
                         './resources/bower_components/PACE/pace.js',
@@ -23,7 +23,7 @@ module.exports = function (grunt) {
                     beautify: false
                 },
                 files: {
-                    './public/javascripts/admin_build_lt_ie_9_js.min.js': [
+                    './app/public/javascripts/admin_build_lt_ie_9_js.min.js': [
                         './resources/bower_components/respond/dest/respond.src.js',
                         './resources/bower_components/html5shiv/dist/html5shiv.js'
                     ]
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
             },
             target: {
                 files: {
-                    './public/stylesheets/admin_build.min.css': [
+                    './app/public/stylesheets/admin_build.min.css': [
                         './resources/bower_components/bootstrap/dist/css/bootstrap.css',
                         './resources/bower_components/components-font-awesome/css/font-awesome.css',
                         './resources/bower_components/select2/dist/css/select2.css',
@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['./resources/bower_components/components-font-awesome/fonts/*',
                             './resources/bower_components/bootstrap/fonts/*'],
-                        dest: './public/fonts/',
+                        dest: './app/public/fonts/',
                         filter: 'isFile'
                     }
                 ]

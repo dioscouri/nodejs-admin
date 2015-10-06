@@ -1,4 +1,4 @@
-{% extends '../layout.swig' %}
+{% extends 'app/views/admin/layout.swig' %}
 
 {% block title %}{{ header }}{% endblock %}
 

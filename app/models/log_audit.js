@@ -63,7 +63,7 @@ class LogAuditModel extends BaseModel {
      * @param {Object} rawData.userId - User ID who made the change.
      */
     writeRaw(rawData) {
-        this.insert(rawData, function(){}); // TODO: Remove extra argument
+        this.insert(rawData);
     }
 
     /**

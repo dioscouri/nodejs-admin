@@ -1,7 +1,7 @@
-{% extends 'layout.swig' %}
+{% extends 'app/views/admin/layout.swig' %}
 
 {% block title %}{{ header }}{% endblock %}
 
 {% block pagecontent %}
-    <h1>Test 123</h1>
+  <h1>Dashboard</h1>
 {% endblock %}

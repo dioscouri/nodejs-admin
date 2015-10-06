@@ -357,7 +357,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             /**
              * Set output view object
              */
-            this.view(DioscouriCore.View.htmlView(this.getViewFilename('list'), items, error));
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('list'), items, error));
 
             // Send DATA_READY event
             readyCallback();
@@ -399,7 +399,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
         this.data.actionUrl = this.getActionUrl('create');
         if (this.request.method == 'GET') {
-            this.view(DioscouriCore.View.htmlView(this.getViewFilename('create')));
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('create')));
             readyCallback();
         } else {
             this.data.actionUrl = this.getActionUrl('create');
@@ -426,7 +426,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
                     var validationErrors = (error.messages != null) ? error.messages : validationMessages;
                     this.flash.addMessage(validationErrors.join('<br />'), DioscouriCore.FlashMessageType.ERROR);
                     this.data.item       = itemDetails;
-                    this.view(DioscouriCore.View.htmlView(this.getViewFilename('create')));
+                    this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('create')));
                     readyCallback();
                 }
             }.bind(this));
@@ -450,7 +450,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.data.actionUrl  = this.getActionUrl('edit', this.item);
         this.data.item       = this.item;
         if (this.request.method == 'GET') {
-            this.view(DioscouriCore.View.htmlView(this.getViewFilename('edit')));
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('edit')));
             readyCallback();
         } else {
             var itemDetails = this.getItemFromRequest(this.item);
@@ -476,7 +476,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
                     var validationErrors = (error.messages != null) ? error.messages : validationMessages;
                     this.flash.addMessage(validationErrors.join('<br />'), DioscouriCore.FlashMessageType.ERROR);
                     this.data.item       = itemDetails;
-                    this.view(DioscouriCore.View.htmlView(this.getViewFilename('edit')));
+                    this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('edit')));
                     readyCallback();
                 }
             }.bind(this));

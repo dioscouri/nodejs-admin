@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Requiring base Model
+ * Requiring Core Library
  */
-var BaseModel = require('./basemodel.js');
+var DioscouriCore = require('dioscouri-core');
 
 /**
  *  Resources model
  */
-class LogSystemModel extends BaseModel {
+class LogSystemModel extends DioscouriCore.MongooseModel {
     /**
      * Model constructor
      */

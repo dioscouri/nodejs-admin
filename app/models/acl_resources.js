@@ -6,14 +6,9 @@
 var DioscouriCore = require('dioscouri-core');
 
 /**
- * Requiring base Model
- */
-var BaseModel = require('./basemodel.js');
-
-/**
  *  Resources model
  */
-class AclResourceModel extends BaseModel {
+class AclResourceModel extends DioscouriCore.MongooseModel {
     /**
      * Model constructor
      */

@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Requiring base Model
+ * Requiring Core Library
  */
-var BaseModel = require('./basemodel.js');
+var DioscouriCore = require('dioscouri-core');
 
 /**
  *  Webhook Events Model class
  */
-class WebhookEventsModel extends BaseModel {
+class WebhookEventsModel extends DioscouriCore.MongooseModel {
     /**
      * Model constructor
      */

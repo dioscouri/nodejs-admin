@@ -6,14 +6,9 @@
 var DioscouriCore = require('dioscouri-core');
 
 /**
- * Requiring base Model
- */
-var BaseModel = require('./basemodel.js');
-
-/**
  *  Client model class
  */
-class WebhookModel extends BaseModel {
+class WebhookModel extends DioscouriCore.MongooseModel {
     /**
      * Model constructor
      */

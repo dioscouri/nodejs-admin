@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Requiring base Model
+ * Requiring Core Library
  */
-var BaseModel = require('./basemodel.js');
+var DioscouriCore = require('dioscouri-core');
 
 /**
  *  Worker model
  */
-class QueueTaskModel extends BaseModel {
+class QueueTaskModel extends DioscouriCore.MongooseModel {
     /**
      * Model constructor
      */

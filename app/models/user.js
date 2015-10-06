@@ -6,11 +6,6 @@
 var DioscouriCore = require('dioscouri-core');
 
 /**
- * Requiring base Model
- */
-var BaseModel = require('./basemodel.js');
-
-/**
  * Local passport strategy
  */
 var LocalStrategy = require('passport-local').Strategy;
@@ -25,7 +20,7 @@ var bcrypt = require('bcrypt-nodejs');
 /**
  *  User model
  */
-class UserModel extends BaseModel {
+class UserModel extends DioscouriCore.MongooseModel {
     /**
      * Model constructor
      */

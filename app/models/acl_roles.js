@@ -15,14 +15,14 @@ class AclRoleModel extends BaseModel {
     constructor(listName) {
         // We must call super() in child class to have access to 'this' in a constructor
         super(listName);
-    }
 
-    /**
-     * To Enable Audit traces.
-     * 1. Call enableAudit()
-     * 2. Do not forget to add `last_modified_by` field to this schema.
-     */
-    //Models.AclRolesModel.enableAudit(); TODO
+        /**
+         * To Enable Audit traces.
+         * 1. Call enableAudit()
+         * 2. Do not forget to add `last_modified_by` field to this schema.
+         */
+        this.enableAudit();
+    }
 
     /**
      * Define Schema

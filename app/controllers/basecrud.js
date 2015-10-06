@@ -108,7 +108,10 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
         this._viewsPath = require('path').join(__dirname, '..', 'views', 'admin', this._viewsPath || '');
 
-        return callback(); // TODO: Remove this line
+        this.request.user = {
+            _id: 1,
+            isAdmin: true
+        }; // TODO: Remove this line
 
         if (!this.isAuthenticated()) {
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
@@ -404,7 +407,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             this.model.validate(itemDetails, function (error, validationMessages) {
                 if (error == null) {
                     this._logger.debug('Inserting new item to the database');
-                    // TODO: itemDetails.last_modified_by = this.request.user._id;
+                    itemDetails.last_modified_by = this.request.user._id;
                     this.model.insert(itemDetails, function (error, item) {
                         if (error != null) {
                             this.flash.addMessage("Failed to save item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
@@ -453,7 +456,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             var itemDetails = this.getItemFromRequest(this.item);
             this.model.validate(itemDetails, function (error, validationMessages) {
                 if (error == null) {
-                    // TODO: itemDetails.last_modified_by = this.request.user._id;
+                    itemDetails.last_modified_by = this.request.user._id;
                     itemDetails                  = this.beforeSave(itemDetails);
                     itemDetails.save(function (error, item) {
                         if (error != null) {
@@ -497,7 +500,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     doDelete(readyCallback) {
         var itemId = this.request.params.id;
-        this.model.removeById(itemId, /*TODO this.request.user._id,*/ function (error, item) {
+        this.model.removeById(itemId, this.request.user._id, function (error, item) {
             if (error != null) {
                 this.flash.addMessage("Failed to delete item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
                 this.terminate();

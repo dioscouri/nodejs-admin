@@ -3,7 +3,7 @@
 /**
  * Requiring Core Library
  */
-var DioscouriCore = require('dioscouri-core');
+var DioscouriCore = process.mainModule.require('dioscouri-core');
 
 /**
  * Requiring base Controller
@@ -25,10 +25,10 @@ class AdminQueueTasks extends AdminBaseCrudController {
         /**
          * Current CRUD model instance
          *
-         * @type {MongooseModel}
+         * @type {*}
          * @private
          */
-        this._model = require('../../models/queue_task.js');
+        this._model = require('../models/queue_task.js');
 
         /**
          * Context of the controller

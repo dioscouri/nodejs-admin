@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Requiring Core Library
+ * Base model
  */
-var DioscouriCore = require('dioscouri-core');
+var BaseModel = require('./base');
 
 /**
  *  Resources model
  */
-class AclResourceModel extends DioscouriCore.MongooseModel {
+class AclResourceModel extends BaseModel {
     /**
      * Model constructor
      */
@@ -32,9 +32,9 @@ class AclResourceModel extends DioscouriCore.MongooseModel {
         };
 
         //Creating DBO Schema
-        var UserDBOSchema = this.createSchema(schemaObject);
+        var AclResourceDBOSchema = this.createSchema(schemaObject);
 
-        UserDBOSchema.post('save', function () {
+        AclResourceDBOSchema.post('save', function () {
             var resource = this;
 
             require('./acl_permissions').model.find({
@@ -57,7 +57,7 @@ class AclResourceModel extends DioscouriCore.MongooseModel {
             });
         });
 
-        UserDBOSchema.post('remove', function () {
+        AclResourceDBOSchema.post('remove', function () {
             var resource = this;
 
             require('./acl_permissions').model.find({
@@ -78,7 +78,7 @@ class AclResourceModel extends DioscouriCore.MongooseModel {
         });
 
         // Registering schema and initializing model
-        this.registerSchema(UserDBOSchema);
+        this.registerSchema(AclResourceDBOSchema);
     }
 
     /**

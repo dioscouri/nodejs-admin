@@ -3,7 +3,7 @@
 /**
  * Requiring Core Library
  */
-var DioscouriCore = require('dioscouri-core');
+var DioscouriCore = process.mainModule.require('dioscouri-core');
 
 /**
  *  Admin base controller
@@ -15,7 +15,7 @@ class AdminBaseController extends DioscouriCore.Controller {
      */
     preInit(callback) {
 
-        this._viewsPath = require('path').join(__dirname, '..', 'views');
+        this._viewsPath = require('path').join(__dirname, '..', 'views', 'admin', this._viewsPath || '');
 
         return callback(); // TODO: Remove this line
 

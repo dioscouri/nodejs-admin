@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Requiring Core Library
+ * Base model
  */
-var DioscouriCore = require('dioscouri-core');
+var BaseModel = require('./base');
 
 /**
  *  Resources model
  */
-class LogSystemModel extends DioscouriCore.MongooseModel {
+class LogSystemModel extends BaseModel {
     /**
      * Model constructor
      */
@@ -23,9 +23,6 @@ class LogSystemModel extends DioscouriCore.MongooseModel {
      * @override
      */
     defineSchema() {
-
-        var Types = this.mongoose.Schema.Types;
-
         var schemaObject = {
             priority: {type: String, index: true},
             category: {type: String, index: true},

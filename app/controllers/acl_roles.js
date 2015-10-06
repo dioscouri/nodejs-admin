@@ -20,7 +20,7 @@ class AdminAclRoles extends AdminBaseCrudController {
         /**
          * Current CRUD model instance
          *
-         * @type {MongooseModel}
+         * @type {*}
          * @private
          */
         this._model = require('../models/acl_roles.js');

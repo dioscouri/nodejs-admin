@@ -24,10 +24,10 @@ class AdminQueueTasksArchive extends AdminBaseCrudController {
         /**
          * Current CRUD model instance
          *
-         * @type {MongooseModel}
+         * @type {*}
          * @private
          */
-        this._model = require('../../../models/common/queue_task_archive.js');
+        this._model = require('../models/queue_task_archive.js');
 
         /**
          * Context of the controller

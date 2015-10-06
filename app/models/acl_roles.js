@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Requiring Core Library
+ * Base model
  */
-var DioscouriCore = require('dioscouri-core');
+var BaseModel = require('./base');
 
 /**
  *  User Roles model
  */
-class AclRoleModel extends DioscouriCore.MongooseModel {
+class AclRoleModel extends BaseModel {
     /**
      * Model constructor
      */

@@ -20,7 +20,7 @@ class AdminLogSystem extends AdminBaseCrudController {
         /**
          * Current CRUD model instance
          *
-         * @type {MongooseModel}
+         * @type {*}
          * @private
          */
         this._model = require('../models/log_system.js');

@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Requiring Core Library
+ * Base model
  */
-var DioscouriCore = require('dioscouri-core');
+var BaseModel = require('./base');
 
 /**
  *  Permissions model
  */
-class AclPermissionModel extends DioscouriCore.MongooseModel {
+class AclPermissionModel extends BaseModel {
     /**
      * Model constructor
      */
@@ -33,10 +33,10 @@ class AclPermissionModel extends DioscouriCore.MongooseModel {
         };
 
         //Creating DBO Schema
-        var UserDBOSchema = this.createSchema(schemaObject);
+        var AclPermissionDBOSchema = this.createSchema(schemaObject);
 
         // Registering schema and initializing model
-        this.registerSchema(UserDBOSchema);
+        this.registerSchema(AclPermissionDBOSchema);
     }
 
     /**

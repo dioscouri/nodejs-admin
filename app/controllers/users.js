@@ -3,7 +3,7 @@
 /**
  * Requiring Core Library
  */
-var DioscouriCore = require('dioscouri-core');
+var DioscouriCore = process.mainModule.require('dioscouri-core');
 
 /**
  * Requiring base Controller
@@ -25,7 +25,7 @@ class AdminUsers extends AdminBaseCrudController {
         /**
          * Current CRUD model instance
          *
-         * @type {MongooseModel}
+         * @type {*}
          * @private
          */
         this._model = require('../models/user.js');

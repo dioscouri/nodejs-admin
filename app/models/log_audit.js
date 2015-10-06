@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * Requiring Core Library
+ * Base model
  */
-var DioscouriCore = require('dioscouri-core');
+var BaseModel = require('./base');
 
 /**
  * Merge module
@@ -14,7 +14,7 @@ var merge = require('merge');
 /**
  *  Resources model
  */
-class LogAuditModel extends DioscouriCore.MongooseModel {
+class LogAuditModel extends BaseModel {
     /**
      * Model constructor
      */

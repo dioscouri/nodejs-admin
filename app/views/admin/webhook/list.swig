@@ -32,8 +32,6 @@
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
-            <td>Client</td>
-            <td>User</td>
             <td width="25%">Event</td>
             <td width="30%">Url</td>
             <td width="120px"></td>
@@ -46,8 +44,6 @@
                 {% set editUrl = baseUrl + '/' + row.id + '/edit' %}
                 {% set deleteUrl = baseUrl + '/' + row.id + '/delete' %}
                 <tr>
-                    <td>{{ row.clientId.name }}</td>
-                    <td>{{ row.clientUserId.fullName }}</td>
                     <td>{{ row.webhookEventId.name }}</td>
                     <td>{{ row.url }}</td>
                     <td>
@@ -59,7 +55,7 @@
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="6"><h3 class="text-muted">There are no clients yet.</h3></td>
+                <td colspan="6"><h3 class="text-muted">There are no webhooks yet.</h3></td>
             </tr>
         {% endif %}
         </tbody>

@@ -8,12 +8,22 @@
 
 {% block pagecontent %}
 
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group pull-right">
+                <button type="submit" class="btn btn-success" onclick="document.location.href = '{{ createUrl }}'">
+                    Create New
+                </button>
+            </div>
+        </div>
+    </div>
+
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
             <td width="25%">Name</td>
             <td width="25%">Key</td>
-            <td>Description</td>
+            <td width="120px"></td>
         </tr>
         </thead>
         <tbody>
@@ -22,7 +32,11 @@
                 <tr>
                     <td>{{ row.name }}</td>
                     <td>{{ row.key }}</td>
-                    <td>{{ row.description }}</td>
+                    <td>
+                        <a href="{{ editUrl }}" class="btn btn-primary btn-xs">Edit</a>
+                        <a href="javascript:void(0)" class="btn btn-danger btn-xs"
+                           onclick="if (confirm('Are you sure you want to delete this record?')) {document.location.href = '{{ deleteUrl }}';}">Delete</a>
+                    </td>
                 </tr>
             {% endfor %}
         {% else %}
@@ -32,7 +46,5 @@
         {% endif %}
         </tbody>
     </table>
-
-    <a href="/admin/webhookevents/createTestData">Create test webhook events data...</a>
 
 {% endblock %}

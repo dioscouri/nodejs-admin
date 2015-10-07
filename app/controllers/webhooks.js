@@ -1,6 +1,12 @@
 'use strict';
 
 /**
+ * Async library
+ * @type {async|exports|module.exports}
+ */
+var async = require('async');
+
+/**
  * Requiring base Controller
  */
 var AdminBaseCrudController = require('./basecrud.js');
@@ -65,6 +71,47 @@ class AdminWebhooks extends AdminBaseCrudController {
         return result;
     }
 
+    /**
+     * Create item
+     *
+     * @param readyCallback
+     */
+    create(readyCallback) {
+        super.create(function (err) {
+            if (err) {
+                return readyCallback(err);
+            }
+
+            this.loadEvents(readyCallback);
+        }.bind(this));
+    }
+
+    /**
+     * Edit item
+     *
+     * @param readyCallback
+     */
+    edit(readyCallback) {
+        super.edit(function (err) {
+            if (err) return readyCallback(err);
+
+            this.loadEvents(readyCallback);
+        }.bind(this));
+    }
+
+    loadEvents(readyCallback) {
+        async.parallel([
+            function (callback) {
+                require('../models/webhookevent.js').getAll(function (err, webhookevents) {
+                    if (err) {
+                        return callback();
+                    }
+                    this.data.webhookevents = webhookevents;
+                    callback();
+                }.bind(this));
+            }.bind(this)
+        ], readyCallback);
+    }
 }
 
 /**

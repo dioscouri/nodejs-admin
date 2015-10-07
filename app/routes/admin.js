@@ -37,7 +37,8 @@ module.exports = function () {
 
         // Webhook Events management routes
         'get|/admin/webhookevents': 'webhookevents.js',
-        'get|/admin/webhookevents/:action': 'webhookevents.js',
+        'get,post|/admin/webhookevent/:action': 'webhookevents.js',
+        'get,post|/admin/webhookevent/:id/:action': 'webhookevents.js',
 
         // Webhooks management routes
         'get|/admin/webhooks': 'webhooks.js',

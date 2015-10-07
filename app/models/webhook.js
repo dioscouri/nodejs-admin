@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring Core Library
+ */
+var DioscouriCore = process.mainModule.require('dioscouri-core');
+
+/**
  * Base model
  */
 var BaseModel = require('./base');
@@ -27,8 +32,6 @@ class WebhookModel extends BaseModel {
         var Types = this.mongoose.Schema.Types;
 
         var schemaObject = {
-            clientId: {type: Types.ObjectId, ref: 'client'},
-            clientUserId: {type: Types.ObjectId, ref: 'user'},
             webhookEventId: {type: Types.ObjectId, ref: 'webhookevent'},
             url: {type: String, required: true},
             updatedAt: {type: Date, 'default': Date.now},
@@ -52,14 +55,6 @@ class WebhookModel extends BaseModel {
     validate(item, validationCallback) {
         var validationMessages = [];
 
-
-        if (!item.clientId) {
-            validationMessages.push('Client cannot be empty');
-        }
-
-        if (!item.clientUserId) {
-            validationMessages.push('User cannot be empty');
-        }
 
         if (!item.webhookEventId) {
             validationMessages.push('Webhook event cannot be empty');

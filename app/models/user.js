@@ -48,7 +48,6 @@ class UserModel extends BaseModel {
             "token": String,
             "password": String,
             "email": String,
-            "client": {type: Types.ObjectId, ref: 'client'},
             "isAdmin": Boolean,
             "createdAt": {type: Date, 'default': Date.now},
             "modifiedAt": {type: Date, 'default': Date.now},

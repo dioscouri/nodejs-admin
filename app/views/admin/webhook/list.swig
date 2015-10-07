@@ -40,7 +40,6 @@
         <tbody>
         {% if items.length > 0 %}
             {% for row in items %}
-                {% set id = row.id %}
                 {% set editUrl = baseUrl + '/' + row.id + '/edit' %}
                 {% set deleteUrl = baseUrl + '/' + row.id + '/delete' %}
                 <tr>

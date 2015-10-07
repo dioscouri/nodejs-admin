@@ -29,6 +29,8 @@
         <tbody>
         {% if items.length > 0 %}
             {% for row in items %}
+                {% set editUrl = baseUrl + '/' + row.id + '/edit' %}
+                {% set deleteUrl = baseUrl + '/' + row.id + '/delete' %}
                 <tr>
                     <td>{{ row.name }}</td>
                     <td>{{ row.key }}</td>

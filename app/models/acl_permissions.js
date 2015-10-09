@@ -67,7 +67,6 @@ class AclPermissionModel extends BaseModel {
             }.bind(this));
     }
 
-
     /**
      * Validating item before save
      *

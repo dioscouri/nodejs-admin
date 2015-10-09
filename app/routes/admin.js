@@ -5,6 +5,8 @@ module.exports = function () {
         // Application index route
         'get|/admin': 'index.js',
 
+        'get,post|/admin/login': 'login.js',
+
         // System Log route
         'get|/admin/log_system': 'log_system.js',
 

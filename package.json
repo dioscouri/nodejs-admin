@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "acl": "^0.4.9",
     "async": "^1.4.2",
     "bcrypt-nodejs": "0.0.3",
     "merge": "^1.2.0",

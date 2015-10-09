@@ -108,11 +108,6 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
         this._viewsPath = require('path').join(__dirname, '..', 'views', 'admin', this._viewsPath || '');
 
-        this.request.user = {
-            _id: 1,
-            isAdmin: true
-        }; // TODO: Remove this line
-
         if (!this.isAuthenticated()) {
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();

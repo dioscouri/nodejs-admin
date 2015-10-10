@@ -372,3 +372,21 @@ var queryStringHelper = function () {
         getUpdatedQueryString: getUpdatedQueryString
     };
 }();
+
+/**
+ * Bulk Edit
+ */
+$(document).ready(function () {
+    $('#bulk-edit-form .edit-field > textarea,input').focus(function () {
+        var checkbox = $("input[name='" + $(this).attr('name') + "_checkbox']");
+        if (checkbox.length) checkbox.prop('checked', true);
+    });
+    $('#bulk-edit-form .next').click(function () {
+        if ($('#bulk-edit-form input[type="checkbox"]:checked').length === 0) {
+            return $('#flash-messages-bulk-edit')
+                .html('<div class="alert alert-danger"><div>No fields are checked to be edited</div></div>');
+        }
+
+        $('#bulk-edit-form form').submit();
+    });
+});

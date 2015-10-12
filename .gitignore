@@ -29,6 +29,8 @@ resources/bower_components
 
 # Ignore .env configuration files
 .env
+.env-*
+/config/env/test-*
 
 # Ignore WebStorm/Idea project files
 .idea

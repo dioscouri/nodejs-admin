@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring core Path module
+ */
+var path = require('path');
+
+/**
  * Requiring Core Library
  */
 var DioscouriCore = process.mainModule.require('dioscouri-core');
@@ -15,7 +20,7 @@ class AdminBaseController extends DioscouriCore.Controller {
      */
     preInit(callback) {
 
-        this._viewsPath = require('path').join(__dirname, '..', 'views', 'admin', this._viewsPath || '');
+        this._viewsPath = path.join(__dirname, '..', 'views', 'admin', this._viewsPath || '');
 
         if (!this.isAuthenticated()) {
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);

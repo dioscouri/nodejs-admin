@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring core Path module
+ */
+var path = require('path');
+
+/**
  * Requiring Core Library
  */
 var DioscouriCore = process.mainModule.require('dioscouri-core');
@@ -72,7 +77,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
          * @type {string}
          * @private
          */
-        this._baseViewsDir = require('path').join(__dirname, '..', 'views', 'admin', '');
+        this._baseViewsDir = path.join(__dirname, '..', 'views', 'admin', '');
     }
 
     /**
@@ -242,7 +247,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @returns {{}}
      */
     getViewFilename(viewType) {
-        var result = this._baseViewsDir + this._viewsPath + '/' + viewType + '.swig';
+        var result = path.join(this._baseViewsDir || '', this._viewsPath || '', viewType + '.swig');
         console.log('result: ' + result);
         return result;
     }

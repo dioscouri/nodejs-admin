@@ -3,7 +3,7 @@
 module.exports = function () {
     return {
         // Application index route
-        'get|/admin': 'app/controllers/index.js',
+        'get|/admin': 'index.js',
 
         'get,post|/admin/login': 'login.js',
 

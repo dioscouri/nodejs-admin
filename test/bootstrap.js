@@ -25,6 +25,9 @@ var DioscouriCore = require('dioscouri-core');
 describe('Bootstrap', function () {
 
     before(function(done){
+        // Set max timeout to 5 sec. As it may take more then 2 secs to run host server
+        this.timeout(5000);
+
         _init.startServer(function () {
             done();
         })

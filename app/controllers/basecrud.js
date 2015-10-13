@@ -65,6 +65,14 @@ class BaseCRUDController extends DioscouriCore.Controller {
          * @private
          */
         this._viewsPath = 'index';
+
+        /**
+         * Path to UI templates
+         *
+         * @type {string}
+         * @private
+         */
+        this._baseViewsDir = require('path').join(__dirname, '..', 'views', 'admin', '');
     }
 
     /**
@@ -105,9 +113,6 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * Pre-initialize data and event handlers
      */
     preInit(callback) {
-
-        this._viewsPath = require('path').join(__dirname, '..', 'views', 'admin', this._viewsPath || '');
-
         if (!this.isAuthenticated()) {
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();
@@ -237,7 +242,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @returns {{}}
      */
     getViewFilename(viewType) {
-        var result = this._viewsPath + '/' + viewType + '.swig';
+        var result = this._baseViewsDir + this._viewsPath + '/' + viewType + '.swig';
         console.log('result: ' + result);
         return result;
     }

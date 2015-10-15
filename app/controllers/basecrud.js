@@ -355,7 +355,11 @@ class BaseCRUDController extends DioscouriCore.Controller {
             }
 
             // Set page data
-            this.data.items     = items;
+            if (items != null) {
+                for (var key in items) {
+                    this.data[key]     = items[key];
+                }
+            }
             this.data.createUrl = this.getActionUrl('create');
             this.data.baseUrl   = this._baseUrl;
 

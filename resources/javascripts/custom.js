@@ -27,7 +27,7 @@ jQuery(document).ready(function () {
         });
 
         $('.search-box .search').click(function (e) {
-            var basePath = $('.search-box #basePath').val();
+            var basePath    = $('.search-box #basePath').val();
             var searchValue = $('#searchValue').val();
 
             if (searchValue) {
@@ -37,7 +37,7 @@ jQuery(document).ready(function () {
         });
 
         $('.search-box .reset').click(function (e) {
-            var basePath = $('.search-box #basePath').val();
+            var basePath    = $('.search-box #basePath').val();
             var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', '');
             window.location = basePath + queryString;
         });
@@ -137,7 +137,7 @@ jQuery(document).ready(function () {
     });
 
     hideMenu(); // for loading/refreshing the page
-    function hideMenu () {
+    function hideMenu() {
 
         if ($('.header-right').css('position') == 'relative') {
             $('body').addClass('hidden-left');
@@ -159,7 +159,7 @@ jQuery(document).ready(function () {
     }
 
     collapsedMenu(); // for loading/refreshing the page
-    function collapsedMenu () {
+    function collapsedMenu() {
 
         if ($('.logo').css('position') == 'relative') {
             $('.headerwrapper, .mainwrapper').addClass('collapsed');
@@ -231,6 +231,16 @@ jQuery(document).ready(function () {
         });
     }
 
+    var bulkEdit = $('a[class="bulk-edit"]');
+    if (bulkEdit.length > 0) {
+        bulkEdit.attr('href', bulkEdit.attr('href') + window.location.search);
+    }
+
+    var bulkEditForm = $('.bulk-edit-form');
+    if (bulkEditForm.length > 0) {
+        bulkEditForm.attr('action', bulkEditForm.attr('action') + window.location.search);
+    }
+
     var pageSizeSelector = $('#pageSizeSelector');
     if (pageSizeSelector.length > 0) {
         pageSizeSelector.on('change', function () {
@@ -269,7 +279,7 @@ jQuery(document).ready(function () {
         });
     }
 
-    function checkUniquenessOfEmail (event) {
+    function checkUniquenessOfEmail(event) {
         var emailSelector = $('#signUpForm .form-group input[type="email"]');
         if (emailSelector.length == 0)
             return;
@@ -318,7 +328,7 @@ jQuery(document).ready(function () {
     a = s.createElement(o),
         m = s.getElementsByTagName(o)[0];
     a.async = 1;
-    a.src = g;
+    a.src   = g;
     m.parentNode.insertBefore(a, m)
 })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
@@ -327,21 +337,21 @@ ga('send', 'pageview');
 
 
 var queryStringHelper = function () {
-    function getUpdatedQueryString (originalQueryString, name, value) {
+    function getUpdatedQueryString(originalQueryString, name, value) {
         var queryString = "";
         if (originalQueryString.length == 0)
             queryString = '?' + name + '=' + value;
         else {
-            var queryObject = getQueryObject(originalQueryString);
+            var queryObject   = getQueryObject(originalQueryString);
             queryObject[name] = value;
-            queryString = convertToQueryString(queryObject);
+            queryString       = convertToQueryString(queryObject);
         }
         return queryString;
     }
 
-    function getQueryObject (queryString) {
+    function getQueryObject(queryString) {
         var match,
-            pl = /\+/g,  // Regex for replacing addition symbol with a space
+            pl     = /\+/g,  // Regex for replacing addition symbol with a space
             search = /([^&=]+)=?([^&]*)/g,
             decode = function (s) {
                 return decodeURIComponent(s.replace(pl, " "));
@@ -358,7 +368,7 @@ var queryStringHelper = function () {
         return queryObject;
     }
 
-    function convertToQueryString (queryObject) {
+    function convertToQueryString(queryObject) {
         var queryString = '?';
 
         $.each(Object.keys(queryObject), function (index, value) {

@@ -31,7 +31,7 @@ class AdminLogSystem extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/log_system';
+        this._baseUrl = '/admin/system_log';
 
         /**
          * Path to controller views

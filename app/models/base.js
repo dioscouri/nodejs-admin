@@ -64,7 +64,7 @@ class BaseModel extends DioscouriCore.MongooseModel {
         /**
          * Save old item to trace
          */
-        this._schema.pre('save', function (next) {
+        this.schema.pre('save', function (next) {
 
             if (this.isNew) {
                 return next();
@@ -82,7 +82,7 @@ class BaseModel extends DioscouriCore.MongooseModel {
         /**
          * Add trace on `create` and `modify`.
          */
-        this._schema.post('save', function (item) {
+        this.schema.post('save', function (item) {
             if (this.oldItem) {
                 $this.logAudit.traceModelChange({
                     modified: true,
@@ -104,7 +104,7 @@ class BaseModel extends DioscouriCore.MongooseModel {
         /**
          * Add trace on `remove`.
          */
-        this._schema.post('remove', function (item) {
+        this.schema.post('remove', function (item) {
             $this.logAudit.traceModelChange({
                 removed: true,
                 resource: $this._list,

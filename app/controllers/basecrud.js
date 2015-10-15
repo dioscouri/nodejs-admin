@@ -349,17 +349,20 @@ class BaseCRUDController extends DioscouriCore.Controller {
         var pagination  = this.getViewPagination();
         var sorting     = this.getViewSorting();
 
-        this.model.getListFiltered(filters, populations, pagination, sorting, function (error, items) {
+        this.model.getListFiltered(filters, populations, pagination, sorting, function (error, data) {
             if (error != null) {
                 return readyCallback(error);
             }
 
             // Set page data
-            if (items != null) {
-                for (var key in items) {
-                    this.data[key]     = items[key];
+            if (data != null) {
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        this.data[key] = data[key];
+                    }
                 }
             }
+
             this.data.createUrl = this.getActionUrl('create');
             this.data.baseUrl   = this._baseUrl;
 

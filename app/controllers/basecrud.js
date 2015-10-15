@@ -355,14 +355,14 @@ class BaseCRUDController extends DioscouriCore.Controller {
             }
 
             // Set page data
-            this.data           = items;
+            this.data.items     = items;
             this.data.createUrl = this.getActionUrl('create');
             this.data.baseUrl   = this._baseUrl;
 
             /**
              * Set output view object
              */
-            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('list'), items, error));
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('list'), this.data, error));
 
             // Send DATA_READY event
             readyCallback();

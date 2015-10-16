@@ -4,17 +4,21 @@ module.exports = function (grunt) {
         uglify: {
             site_build_js: {
                 options: {
-                    beautify: true
+                    beautify: true,
+                    preserveComments: false
+
                 },
                 files: {
                     './app/adminAssets/javascripts/build.min.js': [
                         './resources/bower_components/jquery/dist/jquery.js',
+                        './resources/bower_components/jquery-ui/jquery-ui.js',
                         './resources/bower_components/bootstrap/dist/js/bootstrap.js',
                         './resources/bower_components/PACE/pace.js',
                         './resources/javascripts/custom.js',
                         './resources/bower_components/select2/dist/js/select2.js',
                         './resources/javascripts/jqBootstrapValidation-1.3.7-customized.js',
-                        './resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'
+                        './resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js',
+                        './resources/bower_components/ckeditor/adapters/jquery.js'
                     ]
                 }
             },
@@ -30,6 +34,18 @@ module.exports = function (grunt) {
                 }
             }
         },
+        concat: {
+            options: {
+                separator: ';'
+            },
+            dist: {
+                src: [
+                    './app/adminAssets/javascripts/build.min.js',
+                    './resources/bower_components/ckeditor/ckeditor.js'
+                ],
+                dest: './app/adminAssets/javascripts/build.min.js'
+            }
+        },
         cssmin: {
             options: {
                 shorthandCompacting: false,
@@ -39,6 +55,7 @@ module.exports = function (grunt) {
                 files: {
                     './app/adminAssets/stylesheets/build.min.css': [
                         './resources/bower_components/bootstrap/dist/css/bootstrap.css',
+                        './resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.css',
                         './resources/bower_components/components-font-awesome/css/font-awesome.css',
                         './resources/bower_components/select2/dist/css/select2.css',
                         './resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
@@ -67,9 +84,10 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    grunt.registerTask('default', ['uglify', 'cssmin', 'copy', 'clean']);
+    grunt.registerTask('default', ['uglify', 'concat', 'cssmin', 'copy', 'clean']);
 };

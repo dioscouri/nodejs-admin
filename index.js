@@ -74,8 +74,8 @@ class Loader extends DioscouriCore.AppBootstrap {
         // Checking Symbolic links
         var fs = require('fs');
         try {
-            if (!fs.existsSync(DioscouriCore.ApplicationFacade.instance.basePath + '/public/admin')) {
-                fs.symlinkSync(__dirname + '/app/public', DioscouriCore.ApplicationFacade.instance.basePath + '/public/admin', 'dir');
+            if (!fs.existsSync(DioscouriCore.ApplicationFacade.instance.basePath + '/public/adminAssets')) {
+                fs.symlinkSync(__dirname + '/app/assets', DioscouriCore.ApplicationFacade.instance.basePath + '/public/adminAssets', 'dir');
             }
         } catch (error) {
             console.error('ERROR: Failed to create symbolic links');

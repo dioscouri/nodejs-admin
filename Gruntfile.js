@@ -7,7 +7,7 @@ module.exports = function (grunt) {
                     beautify: true
                 },
                 files: {
-                    './app/public/javascripts/admin_build.min.js': [
+                    './app/adminAssets/javascripts/build.min.js': [
                         './resources/bower_components/jquery/dist/jquery.js',
                         './resources/bower_components/bootstrap/dist/js/bootstrap.js',
                         './resources/bower_components/PACE/pace.js',
@@ -18,12 +18,12 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            admin_build_lt_ie_9_js: {
+            build_lt_ie_9_js: {
                 options: {
                     beautify: false
                 },
                 files: {
-                    './app/public/javascripts/admin_build_lt_ie_9_js.min.js': [
+                    './app/adminAssets/javascripts/build_lt_ie_9_js.min.js': [
                         './resources/bower_components/respond/dest/respond.src.js',
                         './resources/bower_components/html5shiv/dist/html5shiv.js'
                     ]
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
             },
             target: {
                 files: {
-                    './app/public/stylesheets/admin_build.min.css': [
+                    './app/adminAssets/stylesheets/build.min.css': [
                         './resources/bower_components/bootstrap/dist/css/bootstrap.css',
                         './resources/bower_components/components-font-awesome/css/font-awesome.css',
                         './resources/bower_components/select2/dist/css/select2.css',

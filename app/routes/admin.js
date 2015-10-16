@@ -8,14 +8,16 @@ module.exports = function () {
         'get,post|/admin/login': 'login.js',
 
         // System Log route
-        'get|/admin/log_system': 'log_system.js',
+        'get|/admin/system_logs': 'system_logs.js',
+        'get|/admin/system_logs/page/:page': 'system_logs.js',
+
+        // Audit Log routes
+        'get|/admin/audit_logs': 'audit_logs.js',
+        'get|/admin/audit_logs/page/:page': 'audit_logs.js',
 
         // System notifications routes
         'get|/admin/notifications': 'notifications.js',
         'get|/admin/notifications/page/:page': 'notifications.js',
-
-        // Audit Log routes
-        'get|/admin/log_audit': 'log_audit.js',
 
         // User management routes
         'get|/admin/users': 'users.js',

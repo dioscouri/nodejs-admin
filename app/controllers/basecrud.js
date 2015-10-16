@@ -251,7 +251,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     getViewFilename(viewType) {
         var result = path.join(this._baseViewsDir || '', this._viewsPath || '', viewType + '.swig');
-        console.log('result: ' + result);
+        console.log('getViewFilename: ' + result);
         return result;
     }
 

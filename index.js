@@ -94,18 +94,22 @@ class Loader extends DioscouriCore.AppBootstrap {
         Loader.Admin.Models.Navigation.create({
             name: 'Dashboard',
             icon: 'fa-home',
-            url: '/admin'
+            url: '/admin',
+            order: 0
         });
 
         Loader.Admin.Models.Navigation.create({
             name: 'Users',
             icon: 'fa-users',
-            url: '/admin/users'
+            url: '/admin/users',
+            order: 100
         });
 
         Loader.Admin.Models.Navigation.create({
             name: 'Logs',
             icon: 'fa-list-alt'
+            ,
+            order: 101
         });
 
         Loader.Admin.Models.Navigation.create({
@@ -123,6 +127,8 @@ class Loader extends DioscouriCore.AppBootstrap {
         Loader.Admin.Models.Navigation.create({
             name: 'Queue',
             icon: 'fa-refresh'
+            ,
+            order: 102
         });
 
         Loader.Admin.Models.Navigation.create({
@@ -139,7 +145,8 @@ class Loader extends DioscouriCore.AppBootstrap {
 
         Loader.Admin.Models.Navigation.create({
             name: 'Webhooks',
-            icon: 'fa-globe'
+            icon: 'fa-globe',
+            order: 103
         });
 
         Loader.Admin.Models.Navigation.create({
@@ -157,22 +164,24 @@ class Loader extends DioscouriCore.AppBootstrap {
         Loader.Admin.Models.Navigation.create({
             name: 'Notifications',
             icon: 'fa-cloud',
-            url: '/admin/notifications'
+            url: '/admin/notifications',
+            order: 104
         });
 
         Loader.Admin.Models.Navigation.create({
             name: 'API Keys',
             icon: 'fa-key',
             url: '/admin/api_keys'
+            ,
+            order: 105
         });
 
         Loader.Admin.Models.Navigation.create({
             name: 'Configuration',
             icon: 'fa-cogs',
-            url: '/admin/configurations'
+            url: '/admin/configurations',
+            order: 106
         });
-
-        //Loader.Admin.Models.Navigation.buildNavigation();
     }
 
     /**

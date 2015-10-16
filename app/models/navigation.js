@@ -115,7 +115,7 @@ class NavigationModel extends BaseModel {
     }
 
     doBuildNavigation() {
-        this.getAll(function (err, items) {
+        this.model.find().sort({order: 'asc'}).exec(function (err, items) {
             if (err) return this._logger.error(err);
 
             var elements = items.filter(function (item) {

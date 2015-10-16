@@ -3,5 +3,4 @@ node_js:
   - "4.2.1"
 services:
   - mongodb
-before_install: npm install -g mocha
 script: mocha

@@ -17,6 +17,7 @@
     "grunt-contrib-cssmin": "^0.13.0",
     "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-uglify": "^0.9.2",
+    "nodejs-admin": "git+https://github.com/dioscouri/nodejs-admin.git",
     "mocha": ">=2.3.3"
   },
   "engines": {

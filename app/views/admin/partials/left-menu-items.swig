@@ -39,4 +39,7 @@
   <li>
     <a href="/admin/configurations"><i class="fa fa-cogs"></i> <span>Configuration</span></a>
   </li>
+  <li>
+    <a href="/admin/assets"><i class="fa fa-file-archive-o"></i> <span>Assets</span></a>
+  </li>
 </ul>

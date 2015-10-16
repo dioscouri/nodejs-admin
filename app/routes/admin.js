@@ -64,6 +64,12 @@ module.exports = function () {
         // Configuration management routes
         'get|/admin/configurations': 'configuration.js',
         'get,post|/admin/configuration/:action': 'configuration.js',
-        'get,post|/admin/configuration/:id/:action': 'configuration.js'
+        'get,post|/admin/configuration/:id/:action': 'configuration.js',
+
+        // Assets management
+        'get|/admin/assets': 'assets.js',
+        'get|/admin/assets/page/:page': 'assets.js',
+        'get,post|/admin/asset/:action': 'assets.js',
+        'get,post|/admin/asset/:id/:action': 'assets.js'
     };
 };

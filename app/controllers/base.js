@@ -22,6 +22,8 @@ class AdminBaseController extends DioscouriCore.Controller {
 
         this._viewsPath = path.join(__dirname, '..', 'views', 'admin', this._viewsPath || '');
 
+        this.data.navigation = require('../models/navigation.js').navigation;
+
         if (!this.isAuthenticated()) {
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();

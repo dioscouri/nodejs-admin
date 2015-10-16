@@ -63,6 +63,7 @@ class Loader extends DioscouriCore.AppBootstrap {
         this.applicationFacade.registry.push('Admin.Models.Configuration', Loader.Admin.Models.Configuration);
         this.applicationFacade.registry.push('Admin.Models.LogAudit', Loader.Admin.Models.LogAudit);
         this.applicationFacade.registry.push('Admin.Models.LogSystem', Loader.Admin.Models.LogSystem);
+        this.applicationFacade.registry.push('Admin.Models.Navigation', Loader.Admin.Models.Navigation);
         this.applicationFacade.registry.push('Admin.Models.Notification', Loader.Admin.Models.Notification);
         this.applicationFacade.registry.push('Admin.Models.QueueTask', Loader.Admin.Models.QueueTask);
         this.applicationFacade.registry.push('Admin.Models.QueueTaskArchive', Loader.Admin.Models.QueueTaskArchive);
@@ -89,6 +90,89 @@ class Loader extends DioscouriCore.AppBootstrap {
      */
     bootstrap() {
         super.bootstrap();
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Dashboard',
+            icon: 'fa-home',
+            url: '/admin'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Users',
+            icon: 'fa-users',
+            url: '/admin/users'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Logs',
+            icon: 'fa-list-alt'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'System Logs',
+            url: '/admin/system_logs',
+            parent: 'Logs'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Audit Logs',
+            url: '/admin/audit_logs',
+            parent: 'Logs'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Queue',
+            icon: 'fa-refresh'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Task',
+            url: '/admin/queue_tasks',
+            parent: 'Queue'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Archive',
+            url: '/admin/queue_tasks_archives',
+            parent: 'Queue'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Webhooks',
+            icon: 'fa-globe'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Webhook Events',
+            url: '/admin/webhookevents',
+            parent: 'Webhooks'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Hooks',
+            url: '/admin/webhooks',
+            parent: 'Webhooks'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Notifications',
+            icon: 'fa-cloud',
+            url: '/admin/notifications'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'API Keys',
+            icon: 'fa-key',
+            url: '/admin/api_keys'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Configuration',
+            icon: 'fa-cogs',
+            url: '/admin/configurations'
+        });
+
+        //Loader.Admin.Models.Navigation.buildNavigation();
     }
 
     /**
@@ -118,6 +202,7 @@ Loader.Admin = {
         LogAudit: require('./app/models/log_audit.js'),
         LogSystem: require('./app/models/log_system.js'),
         Notification: require('./app/models/notification.js'),
+        Navigation: require('./app/models/navigation.js'),
         QueueTask: require('./app/models/queue_task.js'),
         QueueTaskArchive: require('./app/models/queue_task_archive.js'),
         User: require('./app/models/user.js'),

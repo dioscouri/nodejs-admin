@@ -98,6 +98,7 @@ describe('Bootstrap', function () {
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.Base'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.LogAudit'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.LogSystem'), null);
+            assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.Navigation'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.Notification'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.QueueTask'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.QueueTaskArchive'), null);

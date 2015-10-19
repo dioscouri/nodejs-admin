@@ -17,3 +17,7 @@ th.sorting.asc {
 th.sorting.desc {
     background: url(/images/sort_desc.png) no-repeat center right;
 }
+
+.media-body {
+    padding-left: 5px;
+}

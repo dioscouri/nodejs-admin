@@ -11,6 +11,33 @@ var path = require('path');
 var DioscouriCore = process.mainModule.require('dioscouri-core');
 
 /**
+ * Excel parse library
+ *
+ * @type {excelParser|exports|module.exports}
+ */
+var excelParser = require('excel-parser');
+
+/**
+ * Library for parse file uploads
+ *
+ * @type {exports|module.exports}
+ */
+var multiparty = require('multiparty');
+
+/**
+ * Async library
+ *
+ * @type {async|exports|module.exports}
+ */
+var async = require('async');
+
+/**
+ * Object managing library
+ * @type {*|exports|module.exports}
+ */
+var objectPath = require('object-path');
+
+/**
  *  Admin base CRUD controller
  */
 class BaseCRUDController extends DioscouriCore.Controller {

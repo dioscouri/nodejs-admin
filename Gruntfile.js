@@ -9,7 +9,7 @@ module.exports = function (grunt) {
 
                 },
                 files: {
-                    './app/adminAssets/javascripts/build.min.js': [
+                    './app/assets/javascripts/build.min.js': [
                         './resources/bower_components/jquery/dist/jquery.js',
                         './resources/bower_components/jquery-ui/jquery-ui.js',
                         './resources/bower_components/bootstrap/dist/js/bootstrap.js',
@@ -27,7 +27,7 @@ module.exports = function (grunt) {
                     beautify: false
                 },
                 files: {
-                    './app/adminAssets/javascripts/build_lt_ie_9_js.min.js': [
+                    './app/assets/javascripts/build_lt_ie_9_js.min.js': [
                         './resources/bower_components/respond/dest/respond.src.js',
                         './resources/bower_components/html5shiv/dist/html5shiv.js'
                     ]
@@ -40,10 +40,10 @@ module.exports = function (grunt) {
             },
             dist: {
                 src: [
-                    './app/adminAssets/javascripts/build.min.js',
+                    './app/assets/javascripts/build.min.js',
                     './resources/bower_components/ckeditor/ckeditor.js'
                 ],
-                dest: './app/adminAssets/javascripts/build.min.js'
+                dest: './app/assets/javascripts/build.min.js'
             }
         },
         cssmin: {
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
             },
             target: {
                 files: {
-                    './app/adminAssets/stylesheets/build.min.css': [
+                    './app/assets/stylesheets/build.min.css': [
                         './resources/bower_components/bootstrap/dist/css/bootstrap.css',
                         './resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.css',
                         './resources/bower_components/components-font-awesome/css/font-awesome.css',
@@ -74,7 +74,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['./resources/bower_components/components-font-awesome/fonts/*',
                             './resources/bower_components/bootstrap/fonts/*'],
-                        dest: './app/public/fonts/',
+                        dest: './app/assets/fonts/',
                         filter: 'isFile'
                     }
                 ]

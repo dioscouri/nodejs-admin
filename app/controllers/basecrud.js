@@ -150,6 +150,10 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.registerAction('doEdit', 'doEdit');
         this.registerAction('delete', 'doDelete');
         this.registerAction('doDelete', 'doDelete');
+        this.registerAction('import', 'xlsImport');
+        this.registerAction('bulkEdit', 'bulkEdit');
+        this.registerAction('bulkEditPreview', 'bulkEditPreview');
+        this.registerAction('doBulkEdit', 'doBulkEdit');
 
         callback();
     }

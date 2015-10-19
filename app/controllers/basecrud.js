@@ -367,7 +367,9 @@ class BaseCRUDController extends DioscouriCore.Controller {
             }
 
             this.data.createUrl = this.getActionUrl('create');
-            this.data.baseUrl   = this._baseUrl;
+            this.data.importUrl = this.getActionUrl('import');
+            this.data.bulkEditUrl = this.getActionUrl('bulkEdit');
+            this.data.baseUrl = this._baseUrl;
 
             /**
              * Set output view object
@@ -496,6 +498,251 @@ class BaseCRUDController extends DioscouriCore.Controller {
                 }
             }.bind(this));
         }
+    }
+
+    /**
+     * Import from Excel file
+     *
+     * @param readyCallback
+     */
+    xlsImport (readyCallback) {
+
+        if (this.request.method == 'GET') {
+            this.data.actionUrl = this.getActionUrl('import', this.item);
+            this.view(DioscouriCore.View.htmlView(this.getViewFilename('import')));
+            readyCallback();
+        } else {
+
+            async.waterfall([function (callback) {
+                var form = new multiparty.Form();
+
+                form.parse(this.request, function (err, fields, files) {
+                    if (err) return callback(err);
+
+                    callback(null, files.file[0].path);
+                });
+
+            }.bind(this), function (filePath, callback) {
+
+                excelParser.parse({
+                    inFile: filePath,
+                    worksheet: 1
+                }, function (err, records) {
+                    if (err) return callback(err);
+                    callback(null, records);
+                });
+
+            }.bind(this), function (records, callback) {
+
+                var fields = records.shift();
+                var items = [];
+
+                for (var i = 0; i < records.length; i++) {
+                    var item = {};
+
+                    for (var j = 0; j < fields.length; j++) {
+                        if (fields[j]) {
+                            item[fields[j]] = records[i][j]
+                        }
+                    }
+
+                    items.push(item);
+                }
+
+                async.eachLimit(items, 5, function (item, callback) {
+
+                    async.waterfall([function (callback) {
+                        if (item.id) {
+                            this.model.findById(item.id, function (err, item) {
+                                callback(err, item);
+                            });
+                        } else {
+                            callback(null, null);
+                        }
+                    }.bind(this), function (existingItem, callback) {
+                        if (existingItem) {
+                            /** Update existing item */
+                            for (var key in item) {
+                                if (item.hasOwnProperty(key)) {
+                                    existingItem[key] = item[key];
+                                }
+                            }
+                            callback(null, existingItem, false);
+                        } else {
+                            /** Create new item */
+                            delete item.id;
+                            callback(null, item, true);
+                        }
+                    }, function (item, isNew, callback) {
+
+                        this.model.validate(item, function (error, validationMessages) {
+                            if (error == null) {
+                                if (isNew) {
+
+                                    this.model.insert(item, function (error, item) {
+                                        if (error != null) {
+                                            this.flash.addMessage("Failed to save item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
+                                            this.terminate();
+                                            this.response.redirect(this.getActionUrl('list'));
+
+                                            return callback(error);
+                                        }
+                                        callback();
+                                    }.bind(this));
+                                } else {
+                                    item.save(function (error) {
+                                        if (error != null) {
+                                            this.flash.addMessage("Failed to save item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
+                                            this.terminate();
+                                            this.response.redirect(this.getActionUrl('list'));
+
+                                            return callback(error);
+                                        }
+                                        callback();
+                                    }.bind(this));
+                                }
+                            } else {
+                                var validationErrors = (error.messages != null) ? error.messages : validationMessages;
+                                this.flash.addMessage(validationErrors.join('<br />'), DioscouriCore.FlashMessageType.ERROR);
+                                callback();
+                            }
+                        }.bind(this));
+
+                    }.bind(this)], callback);
+
+                }.bind(this), callback);
+
+            }.bind(this)], function (err) {
+                this.flash.addMessage("Items successfully imported to the database!", DioscouriCore.FlashMessageType.SUCCESS);
+                this.terminate();
+                this.response.redirect(this.getActionUrl('list'));
+
+                readyCallback(err);
+            }.bind(this));
+        }
+    }
+
+    prepareBulkEditData (callback) {
+        var fields = [];
+
+        /**
+         * Async model will be useful for associations in a future
+         */
+        async.eachLimit(this.model.bulk_edit_fields, 2, function (field, callback) {
+
+            if (this.request.body[field.path + '_checkbox'] === 'on') {
+
+                fields.push({
+                    type: field.type,
+                    name: field.name,
+                    path: field.path,
+                    value: this.request.body[field.path]
+                });
+
+                callback();
+
+            } else {
+                callback();
+            }
+
+        }.bind(this), function (err) {
+            callback(err, fields);
+        });
+
+    }
+
+    /**
+     * Prepare Bulk fields
+     * @param readyCallback
+     */
+    bulkEdit (readyCallback) {
+
+        this.data.baseUrl = this._baseUrl;
+        this.data.bulkEditPreviewUrl = this.getActionUrl('bulkEditPreview');
+        this.data.bulk_edit_fields = this.model.bulk_edit_fields;
+        this.data.modelName = this.model.model.modelName;
+        this.data.itemsTotal = 'TODO'; // TODO: Use core count method
+
+        this.view(DioscouriCore.View.htmlView(this.getViewFilename('bulk_edit')));
+        readyCallback();
+    }
+
+    /**
+     * Prepare Bulk Edit preview screen
+     * @param readyCallback
+     */
+    bulkEditPreview (readyCallback) {
+
+        this.data.baseUrl = this._baseUrl;
+        this.data.bulkEditUrl = this.getActionUrl('bulkEdit');
+        this.data.doBulkEditUrl = this.getActionUrl('doBulkEdit');
+        this.data.modelName = this.model.model.modelName;
+        this.data.itemsTotal = 'TODO'; // TODO: Use core count method
+
+        this.prepareBulkEditData(function (err, fields) {
+            this.data.bulk_edit_preview = fields;
+
+            this.view(DioscouriCore.View.htmlView(this.getViewFilename('bulk_edit')));
+            readyCallback();
+        }.bind(this));
+    }
+
+    /**
+     * Apply Bulk Edit operation
+     * @param readyCallback
+     */
+    doBulkEdit (readyCallback) {
+
+        var fields = [];
+
+        this.model.bulk_edit_fields.forEach(function (field) {
+            if (typeof this.request.body[field.name] !== 'undefined') {
+
+                if (this.request.body[field.name] === 'true') {
+                    this.request.body[field.name] = true;
+                } else if (this.request.body[field.name] === 'false') {
+                    this.request.body[field.name] = false;
+                }
+
+                fields.push({
+                    path: field.path,
+                    value: this.request.body[field.name]
+                })
+            }
+        }.bind(this));
+
+        var pagination = {
+            currentPage: 1,
+            pageSize: 10000
+        };
+
+        this.model.getListFiltered(this.getViewFilters(), null, pagination, {}, function (error, locals) {
+            if (error != null) {
+                return readyCallback(error);
+            }
+
+            async.eachSeries(locals.items, function (item, callback) {
+
+                fields.forEach(function (field) {
+                    objectPath.set(item, field.path, field.value);
+                });
+
+                item.save(function (err) {
+                    if (err) this._logger.error(err);
+                    callback();
+                });
+
+            }.bind(this), function () {
+
+                this.flash.addMessage("Items successfully updated in the database!", DioscouriCore.FlashMessageType.SUCCESS);
+                this.terminate();
+                this.response.redirect(this.getActionUrl('list'));
+
+                readyCallback();
+
+            }.bind(this));
+
+        }.bind(this));
     }
 
     beforeSave(item) {

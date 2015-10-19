@@ -6,6 +6,7 @@
     "acl": "^0.4.9",
     "async": "^1.4.2",
     "bcrypt-nodejs": "0.0.3",
+    "excel-parser": "^0.2.2",
     "merge": "^1.2.0",
     "multiparty": "^4.1.2",
     "passport-local": "^1.0.0"

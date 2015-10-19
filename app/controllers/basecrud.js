@@ -261,11 +261,15 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param action
      * @param item
      */
-    getActionUrl(action, item) {
+    getActionUrl (action, item) {
         var result = this._baseUrl;
 
         switch (action) {
             case 'create':
+            case 'import':
+            case 'bulkEdit':
+            case 'bulkEditPreview':
+            case 'doBulkEdit':
                 result += '/' + action;
                 break;
             case 'edit':

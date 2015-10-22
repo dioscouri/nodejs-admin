@@ -42,14 +42,13 @@ class NavigationModel extends BaseModel {
      */
     defineSchema() {
 
-        var Types = this.mongoose.Schema.Types;
-
         var schemaObject = {
             name: {type: String, index: true},
             icon: {type: String},
             url: {type: String},
             parent: {type: String, index: true},
-            key: {type: String, index: true, unique: true}
+            key: {type: String, index: true, unique: true},
+            order: {type: Number}
         };
 
         // Creating DBO Schema

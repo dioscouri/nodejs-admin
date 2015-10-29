@@ -526,8 +526,8 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     create(readyCallback) {
-
-        this.data.actionUrl = this.getActionUrl('create');
+        this.data.actionUrl       = this.getActionUrl('create');
+        this.data.cancelActionUrl = this.getFilteredListUrl();
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('create')));
             readyCallback();
@@ -576,9 +576,10 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     edit(readyCallback) {
-        this.data.isEditMode = true;
-        this.data.actionUrl  = this.getActionUrl('edit', this.item);
-        this.data.item       = this.item;
+        this.data.isEditMode      = true;
+        this.data.actionUrl       = this.getActionUrl('edit', this.item);
+        this.data.item            = this.item;
+        this.data.cancelActionUrl = this.getActionUrl('view', this.item);
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('edit')));
             readyCallback();

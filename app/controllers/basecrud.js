@@ -190,7 +190,6 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
         if (!this.isAuthenticated()) {
             this.request.session.returnUrl = this.request.protocol + '://' + this.request.get('host') + this.request.originalUrl;
-            this.logger.log("Return Url: ", this.request.session.returnUrl);
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();
             this.response.redirect('/login');

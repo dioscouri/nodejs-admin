@@ -69,7 +69,6 @@ class Login extends DioscouriCore.Controller {
 
                 $this.terminate();
 
-                this.logger.log("LLL Return Url: ", this.request.session.returnUrl);
                 if ($this.request.session.returnUrl != null) {
                     $this.response.redirect(302, $this.request.session.returnUrl);
 

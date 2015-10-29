@@ -748,9 +748,9 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.data.editActionUrl = this.getActionUrl('edit', this.item);
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('view')));
-            this.setActionDeniedFlags(this.data, function(err){
-                readyCallback(err);
-            });
+            // TODO: Do we need this in nodejs-admin?
+            // this.setActionDeniedFlags(this.data, function(err){ readyCallback(err);});
+            readyCallback();
         } else {
             readyCallback(new Error("Action isn't supported"));
         }

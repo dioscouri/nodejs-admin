@@ -74,6 +74,19 @@ class AdminAclPermissions extends AdminBaseCrudController {
     }
 
     /**
+     * Returns view pagination object
+     * @override
+     * @returns {{}}
+     */
+    getViewPagination() {
+        return {
+            currentPage: 1,
+            pageSize: 999,
+            basePath: this.getActionUrl('list')
+        };
+    }
+
+    /**
      * Extract item from request
      *
      * @param item

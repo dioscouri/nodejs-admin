@@ -34,7 +34,7 @@ class AdminAclPermissions extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/acl_permission';
+        this._baseUrl = '/admin/acl_permissions';
 
         /**
          * Path to controller views

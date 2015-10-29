@@ -133,12 +133,52 @@ class BaseCRUDController extends DioscouriCore.Controller {
     }
 
     /**
+     * Getter for current item ID from the request
+     *
+     * @returns {*}
+     */
+    get itemId () {
+        var itemId = this.request.params.id ? this.request.params.id : this.request.params.action;
+
+        return itemId;
+    }
+
+    /**
      * Current item for CRUD
      *
      * @returns {{}}
      */
     get item() {
         return this._item;
+    }
+
+    /**
+     * Get name of current action
+     *
+     * @returns {null|string|*}
+     */
+    get actionName () {
+        var result = super.actionName;
+
+        /**
+         * Set default action name to view
+         */
+        if (this._allowedActions[result] == null && this.request.params.action != null) {
+            result = 'view';
+        }
+
+        return result;
+    }
+
+    /**
+     * List of fields for Bulk Edit Action
+     *
+     * @returns {[]}
+     */
+    get bulkEditFields() {
+        var result = this.model.bulk_edit_fields != null ? this.model.bulk_edit_fields : [];
+
+        return result;
     }
 
     /**
@@ -149,6 +189,8 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.data.navigation = require('../models/navigation.js').navigation;
 
         if (!this.isAuthenticated()) {
+            this.request.session.returnUrl = this.request.protocol + '://' + this.request.get('host') + this.request.originalUrl;
+            this.logger.log("Return Url: ", this.request.session.returnUrl);
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();
             this.response.redirect('/login');
@@ -171,6 +213,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     init(callback) {
         this.registerAction('list', 'load');
+        this.registerAction('new', 'create');
         this.registerAction('create', 'create');
         this.registerAction('doCreate', 'doCreate');
         this.registerAction('view', 'doView');
@@ -283,17 +326,8 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     getViewFilename(viewType) {
         var result = path.join(this._baseViewsDir || '', this._viewsPath || '', viewType + '.swig');
-        console.log('getViewFilename: ' + result);
-        return result;
-    }
 
-    /**
-     * List of fields for Bulk Edit Action
-     *
-     * @returns {[]}
-     */
-    get bulkEditFields() {
-        return this.model.bulkEditFields ? this.model.bulkEditFields : [];
+        return result;
     }
 
     /**
@@ -316,12 +350,14 @@ class BaseCRUDController extends DioscouriCore.Controller {
             case 'edit':
             case 'doEdit':
             case 'delete':
-            case 'view':
                 result += '/' + item.id.toString() + '/' + action;
+                break;
+            case 'view':
+                result += '/' + item.id.toString();
                 break;
             case 'list':
             default:
-                result += 's';
+                result += '';
                 break;
         }
 
@@ -434,9 +470,8 @@ class BaseCRUDController extends DioscouriCore.Controller {
         /**
          * Loading item
          */
-        if (this.request.params.action == 'edit' || this.request.params.action == 'doEdit' || this.request.params.action == 'view') {
-            var itemId = this.request.params.id;
-            this.model.findById(itemId, function (error, item) {
+        if (this.actionName == 'edit' || this.actionName == 'doEdit' || this.actionName == 'view') {
+            this.model.findById(this.itemId, function (error, item) {
                 if (error != null) {
                     this.flash.addMessage("Failed to edit item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
                     this.terminate();
@@ -765,7 +800,12 @@ class BaseCRUDController extends DioscouriCore.Controller {
         }
     }
 
-    prepareBulkEditData(callback) {
+    /**
+     * Prepare data for bulk edit
+     *
+     * @param callback
+     */
+    prepareBulkEditData (callback) {
         var fields = [];
 
         /**
@@ -888,10 +928,19 @@ class BaseCRUDController extends DioscouriCore.Controller {
         }.bind(this));
     }
 
+    /**
+     * Before Save Handler
+     *
+     * @param item
+     * @returns {*}
+     */
     beforeSave(item) {
         return item;
     }
 
+    /**
+     * Handler when item already saved
+     */
     onItemHasBeenSaved() {
         this.flash.addMessage("Item successfully updated in the database!", DioscouriCore.FlashMessageType.SUCCESS);
         this.terminate();
@@ -904,8 +953,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     doDelete(readyCallback) {
-        var itemId = this.request.params.id;
-        this.model.removeById(itemId, this.request.user._id, function (error, item) {
+        this.model.removeById(this.itemId, this.request.user._id, function (error, item) {
             if (error != null) {
                 this.flash.addMessage("Failed to delete item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
                 this.terminate();

@@ -43,7 +43,7 @@ class Notifications extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/notification';
+        this._baseUrl = '/admin/notifications';
 
         /**
          * Path to controller views

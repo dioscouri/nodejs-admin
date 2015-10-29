@@ -5,13 +5,14 @@
         <td>Name</td>
         <td>Created At</td>
         <td>Is Admin</td>
-        <td width="120px"></td>
+        <td width="180px"></td>
     </tr>
     </thead>
     <tbody>
     {% if items.length > 0 %}
         {% for row in items %}
             {% set id = row.id %}
+            {% set viewUrl = baseUrl + '/' + row.id %}
             {% set editUrl = baseUrl + '/' + row.id + '/edit' %}
             {% set deleteUrl = baseUrl + '/' + row.id + '/delete' %}
             <tr>
@@ -19,6 +20,7 @@
                 <td>{{ row.createdAt.toLocaleDateString() }}</td>
                 <td>{{ row.isAdmin }}</td>
                 <td>
+                    <a href="{{ viewUrl }}" class="btn btn-primary btn-xs">View</a>
                     <a href="{{ editUrl }}" class="btn btn-primary btn-xs">Edit</a>
                     <a href="javascript:void(0)"
                        onclick="if (confirm('Are you sure you want to delete this record?')) {document.location.href = '{{ deleteUrl }}';}"

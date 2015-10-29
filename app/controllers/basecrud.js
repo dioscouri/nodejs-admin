@@ -316,6 +316,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             case 'edit':
             case 'doEdit':
             case 'delete':
+            case 'view':
                 result += '/' + item.id.toString() + '/' + action;
                 break;
             case 'list':
@@ -534,8 +535,8 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     create(readyCallback) {
-
-        this.data.actionUrl = this.getActionUrl('create');
+        this.data.actionUrl       = this.getActionUrl('create');
+        this.data.cancelActionUrl = this.getFilteredListUrl();
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('create')));
             readyCallback();
@@ -584,9 +585,10 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     edit(readyCallback) {
-        this.data.isEditMode = true;
-        this.data.actionUrl  = this.getActionUrl('edit', this.item);
-        this.data.item       = this.item;
+        this.data.isEditMode      = true;
+        this.data.actionUrl       = this.getActionUrl('edit', this.item);
+        this.data.item            = this.item;
+        this.data.cancelActionUrl = this.getActionUrl('view', this.item);
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('edit')));
             readyCallback();
@@ -755,9 +757,9 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.data.editActionUrl   = this.getActionUrl('edit', this.item);
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('view')));
-            this.setActionDeniedFlags(this.data, function (err) {
-                readyCallback(err);
-            });
+            // TODO: Do we need this in nodejs-admin?
+            // this.setActionDeniedFlags(this.data, function(err){ readyCallback(err);});
+            readyCallback();
         } else {
             readyCallback(new Error("Action isn't supported"));
         }

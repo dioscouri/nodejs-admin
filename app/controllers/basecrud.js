@@ -307,6 +307,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             case 'edit':
             case 'doEdit':
             case 'delete':
+            case 'view':
                 result += '/' + item.id.toString() + '/' + action;
                 break;
             case 'list':

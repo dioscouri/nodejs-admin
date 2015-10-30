@@ -31,7 +31,7 @@ class AdminConfiguration extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/configuration';
+        this._baseUrl = '/admin/configurations';
 
         /**
          * Path to controller views

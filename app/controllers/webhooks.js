@@ -45,7 +45,7 @@ class AdminWebhooks extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/webhook';
+        this._baseUrl = '/admin/webhooks';
 
         /**
          * Path to controller views

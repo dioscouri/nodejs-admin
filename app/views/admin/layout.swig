@@ -18,32 +18,32 @@
 {% block header %}
   <header>
     <div class="headerwrapper">
-      {% include "../partials/header-left.swig" %}
-      {% include "../partials/header-right.swig" %}
+      {% include "./partials/header-left.swig" %}
+      {% include "./partials/header-right.swig" %}
     </div>
   </header>
 {% endblock %}
 <section>
   {# Reusable components (macro) #}
-  {% include "../partials/pagination-pages.swig" %}
-  {% include "../partials/pagination-rows.swig" %}
-  {% include "../partials/pagination-summary.swig" %}
-  {% include "../partials/sorting_column.swig" %}
-  {% include "../partials/search.swig" %}
-  {% include "../partials/resource-action-buttons.swig" %}
+  {% include "./partials/pagination-pages.swig" %}
+  {% include "./partials/pagination-rows.swig" %}
+  {% include "./partials/pagination-summary.swig" %}
+  {% include "./partials/sorting_column.swig" %}
+  {% include "./partials/search.swig" %}
+  {% include "./partials/resource-action-buttons.swig" %}
 
   {% block content %}
     <div class="mainwrapper">
       <div class="leftpanel">
-        {% include "../partials/profile-left.swig" %}
+        {% include "./partials/profile-left.swig" %}
         <h5 class="leftpanel-title">Navigation</h5>
-        {% include "../partials/left-menu-items.swig" %}
+        {% include "./partials/left-menu-items.swig" %}
       </div>
 
       <div class="mainpanel">
-        {% block pageheader %}{% include "../partials/pageheader.swig" %}{% endblock %}
+        {% block pageheader %}{% include "./partials/pageheader.swig" %}{% endblock %}
         <div class="contentpanel">
-          {% include "../partials/messages.swig" %}
+          {% include "./partials/messages.swig" %}
           {% block pagecontent %}{% endblock %}
         </div>
       </div>

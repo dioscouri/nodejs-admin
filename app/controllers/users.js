@@ -36,7 +36,7 @@ class AdminUsers extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/user';
+        this._baseUrl = '/admin/users';
 
         /**
          * Path to controller views

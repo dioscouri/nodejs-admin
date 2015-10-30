@@ -34,7 +34,7 @@ class AdminAclPermissions extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/acl_permission';
+        this._baseUrl = '/admin/acl_permissions';
 
         /**
          * Path to controller views
@@ -71,6 +71,19 @@ class AdminAclPermissions extends AdminBaseCrudController {
 
             }.bind(this)], readyCallback);
         }.bind(this));
+    }
+
+    /**
+     * Returns view pagination object
+     * @override
+     * @returns {{}}
+     */
+    getViewPagination() {
+        return {
+            currentPage: 1,
+            pageSize: 999,
+            basePath: this.getActionUrl('list')
+        };
     }
 
     /**

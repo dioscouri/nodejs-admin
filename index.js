@@ -82,6 +82,11 @@ class Loader extends DioscouriCore.AppBootstrap {
             console.error('ERROR: Failed to create symbolic links');
             console.error(error.message);
         }
+
+        /**
+         * Registering Templates ROOT
+         */
+        DioscouriCore.ModuleView.registerTemplatesRoot(__dirname, 2);
     }
 
     /**

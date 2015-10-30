@@ -31,7 +31,7 @@ class AdminAclRoles extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/acl_role';
+        this._baseUrl = '/admin/acl_roles';
 
         /**
          * Path to controller views

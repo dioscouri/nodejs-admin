@@ -47,7 +47,7 @@ class AdminAssets extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/asset';
+        this._baseUrl = '/admin/assets';
 
         /**
          * Path to controller views

@@ -53,30 +53,35 @@ class Login extends DioscouriCore.Controller {
      * @param dataReadyCallback
      */
     doLogin(dataReadyCallback) {
-        var that = this;
+        var $this = this;
 
         this.userModel.passport.authenticate('local', function (err, user, info) {
             if (err) return dataReadyCallback(err);
 
             if (!user) {
-                that.flash.addMessage(info.message, DioscouriCore.FlashMessageType.ERROR);
-                that.terminate();
-                that.response.redirect('/login');
+                $this.flash.addMessage(info.message, DioscouriCore.FlashMessageType.ERROR);
+                $this.terminate();
+                $this.response.redirect('/login');
                 return dataReadyCallback(err);
             }
-            that.request.logIn(user, function (err) {
+            $this.request.logIn(user, function (err) {
                 if (err) return dataReadyCallback(err);
 
-                that.terminate();
-                if (user.isAdmin) {
-                    that.response.redirect('/admin');
+                $this.terminate();
+
+                if ($this.request.session.returnUrl != null) {
+                    $this.response.redirect(302, $this.request.session.returnUrl);
+
+                    delete $this.request.session.returnUrl;
+                } else if (user.isAdmin) {
+                    $this.response.redirect('/admin');
                 } else {
-                    that.response.redirect('/');
+                    $this.response.redirect('/');
                 }
 
                 return dataReadyCallback(err);
             });
-        })(that.request);
+        })($this.request);
     }
 
     /**

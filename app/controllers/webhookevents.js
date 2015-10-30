@@ -36,7 +36,7 @@ class AdminWebhookEvents extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/webhookevent';
+        this._baseUrl = '/admin/webhookevents';
 
         /**
          * Path to controller views

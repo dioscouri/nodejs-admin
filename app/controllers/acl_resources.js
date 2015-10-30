@@ -31,7 +31,7 @@ class AdminAclResources extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/acl_resource';
+        this._baseUrl = '/admin/acl_resources';
 
         /**
          * Path to controller views

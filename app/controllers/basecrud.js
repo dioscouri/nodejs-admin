@@ -133,12 +133,52 @@ class BaseCRUDController extends DioscouriCore.Controller {
     }
 
     /**
+     * Getter for current item ID from the request
+     *
+     * @returns {*}
+     */
+    get itemId () {
+        var itemId = this.request.params.id ? this.request.params.id : this.request.params.action;
+
+        return itemId;
+    }
+
+    /**
      * Current item for CRUD
      *
      * @returns {{}}
      */
     get item() {
         return this._item;
+    }
+
+    /**
+     * Get name of current action
+     *
+     * @returns {null|string|*}
+     */
+    get actionName () {
+        var result = super.actionName;
+
+        /**
+         * Set default action name to view
+         */
+        if (this._allowedActions[result] == null && this.request.params.action != null) {
+            result = 'view';
+        }
+
+        return result;
+    }
+
+    /**
+     * List of fields for Bulk Edit Action
+     *
+     * @returns {[]}
+     */
+    get bulkEditFields() {
+        var result = this.model.bulk_edit_fields != null ? this.model.bulk_edit_fields : [];
+
+        return result;
     }
 
     /**
@@ -149,6 +189,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.data.navigation = require('../models/navigation.js').navigation;
 
         if (!this.isAuthenticated()) {
+            this.request.session.returnUrl = this.request.protocol + '://' + this.request.get('host') + this.request.originalUrl;
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();
             this.response.redirect('/login');
@@ -171,8 +212,10 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     init(callback) {
         this.registerAction('list', 'load');
+        this.registerAction('new', 'create');
         this.registerAction('create', 'create');
         this.registerAction('doCreate', 'doCreate');
+        this.registerAction('view', 'doView');
         this.registerAction('edit', 'edit');
         this.registerAction('doEdit', 'doEdit');
         this.registerAction('delete', 'doDelete');
@@ -282,7 +325,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     getViewFilename(viewType) {
         var result = path.join(this._baseViewsDir || '', this._viewsPath || '', viewType + '.swig');
-        console.log('getViewFilename: ' + result);
+
         return result;
     }
 
@@ -292,7 +335,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param action
      * @param item
      */
-    getActionUrl (action, item) {
+    getActionUrl(action, item) {
         var result = this._baseUrl;
 
         switch (action) {
@@ -308,13 +351,110 @@ class BaseCRUDController extends DioscouriCore.Controller {
             case 'delete':
                 result += '/' + item.id.toString() + '/' + action;
                 break;
+            case 'view':
+                result += '/' + item.id.toString();
+                break;
             case 'list':
             default:
-                result += 's';
+                result += '';
                 break;
         }
 
         return result;
+    }
+
+    /**
+     * Returns query string parameters respectively to filter parameters
+     * @returns {string}
+     */
+    getQueryStringFilterPart() {
+        //?filter[search]=s1&filter[pageSize]=1&filter[sortingField]=status&filter[sortingOrder]=desc
+        var filterParts = [];
+        var filter      = this.getCachedRequestFilter();
+        if (filter.search)
+            filterParts.push("filter[search]=" + encodeURIComponent(filter.search));
+        if (filter.pageSize)
+            filterParts.push("filter[pageSize]=" + filter.pageSize);
+        if (filter.sorting) {
+            filterParts.push("filter[sortingField]=" + encodeURIComponent(filter.sorting.field));
+            filterParts.push("filter[sortingOrder]=" + encodeURIComponent(filter.sorting.order));
+        }
+
+        var filterString = filterParts.join("&");
+        if (filterString.length > 0)
+            filterString = "?" + filterString;
+        return filterString;
+    }
+
+    /**
+     * Persists filter parameters for current base URL into the session
+     */
+    cacheRequestFilter() {
+        var query = this.request.query;
+
+        /**
+         * Handle GET request with query sortingField and sortingOrder
+         */
+        if (this.request.method == 'GET' && (this.request.params.action == 'list' || this.request.url.startsWith(this.getActionUrl('list')))) {
+            var filter = {};
+
+            if (this.request.params && this.request.params.page)
+                filter.page = this.request.params.page;
+
+            if (query.filter) {
+                filter.search = this.getSingleValue(query.filter.search);
+
+                if (query.filter.pageSize)
+                    filter.pageSize = parseInt(this.getSingleValue(query.filter.pageSize), 10);
+
+                if (query.filter.sortingField && query.filter.sortingOrder) {
+                    filter.sorting = {
+                        field: this.getSingleValue(query.filter.sortingField),
+                        order: this.getSingleValue(query.filter.sortingOrder),
+                        basePath: this.getActionUrl('list')
+                    };
+                }
+            }
+            this.request.session.filter                = this.request.session.filter || {};
+            this.request.session.filter[this._baseUrl] = filter;
+        }
+    }
+
+    /**
+     * Returns single value from value of a query string parameter in case the parameter has been specified more then one time
+     * @param stringOrArrayValue
+     * @returns {string}
+     */
+    getSingleValue(stringOrArrayValue) {
+        var singleValue = "";
+        if (!Array.isArray(stringOrArrayValue))
+            singleValue = stringOrArrayValue;
+        else if (stringOrArrayValue.length > 0)
+            singleValue = stringOrArrayValue[0];
+        return singleValue;
+    }
+
+    /**
+     * Returns cached filter parameters for current base URL
+     * @returns {*|{}}
+     */
+    getCachedRequestFilter() {
+        var filterCache = this.request.session.filter || {};
+        var filter      = filterCache[this._baseUrl] || {};
+        return filter;
+    }
+
+    /**
+     * Returns url for the "list" action with filter arguments in query string
+     * @returns {*}
+     */
+    getFilteredListUrl() {
+        var filter          = this.getCachedRequestFilter();
+        var filteredListUrl = this.getActionUrl('list');
+        if (filter.page)
+            filteredListUrl += "/page/" + filter.page;
+        filteredListUrl += this.getQueryStringFilterPart();
+        return filteredListUrl;
     }
 
     /**
@@ -323,33 +463,14 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     preLoad(readyCallback) {
-        var query = this.request.query;
 
-        /**
-         * Handle GET request with query setPageSize
-         */
-        if (this.request.method == 'GET' && query.filter && query.filter.pageSize) {
-            this.request.session.pageSize = parseInt(query.filter.pageSize, 10);
-        }
-
-        /**
-         * Handle GET request with query sortingField and sortingOrder
-         */
-        if (this.request.method == 'GET' && query.filter && query.filter.sortingField && query.filter.sortingOrder) {
-            this.request.session.sorting                = this.request.session.sorting || {};
-            this.request.session.sorting[this._baseUrl] = {
-                field: query.filter.sortingField,
-                order: query.filter.sortingOrder,
-                basePath: this.getActionUrl('list')
-            };
-        }
+        this.cacheRequestFilter();
 
         /**
          * Loading item
          */
-        if (this.request.params.action == 'edit' || this.request.params.action == 'doEdit') {
-            var itemId = this.request.params.id;
-            this.model.findById(itemId, function (error, item) {
+        if (this.actionName == 'edit' || this.actionName == 'doEdit' || this.actionName == 'view') {
+            this.model.findById(this.itemId, function (error, item) {
                 if (error != null) {
                     this.flash.addMessage("Failed to edit item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
                     this.terminate();
@@ -401,10 +522,10 @@ class BaseCRUDController extends DioscouriCore.Controller {
                 }
             }
 
-            this.data.createUrl = this.getActionUrl('create');
-            this.data.importUrl = this.getActionUrl('import');
+            this.data.createUrl   = this.getActionUrl('create');
+            this.data.importUrl   = this.getActionUrl('import');
             this.data.bulkEditUrl = this.getActionUrl('bulkEdit');
-            this.data.baseUrl = this._baseUrl;
+            this.data.baseUrl     = this._baseUrl;
 
             /**
              * Set output view object
@@ -448,8 +569,8 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     create(readyCallback) {
-
-        this.data.actionUrl = this.getActionUrl('create');
+        this.data.actionUrl       = this.getActionUrl('create');
+        this.data.cancelActionUrl = this.getFilteredListUrl();
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('create')));
             readyCallback();
@@ -498,9 +619,10 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     edit(readyCallback) {
-        this.data.isEditMode = true;
-        this.data.actionUrl  = this.getActionUrl('edit', this.item);
-        this.data.item       = this.item;
+        this.data.isEditMode      = true;
+        this.data.actionUrl       = this.getActionUrl('edit', this.item);
+        this.data.item            = this.item;
+        this.data.cancelActionUrl = this.getActionUrl('view', this.item);
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('edit')));
             readyCallback();
@@ -540,7 +662,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      *
      * @param readyCallback
      */
-    xlsImport (readyCallback) {
+    xlsImport(readyCallback) {
 
         if (this.request.method == 'GET') {
             this.data.actionUrl = this.getActionUrl('import', this.item);
@@ -570,7 +692,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             }.bind(this), function (records, callback) {
 
                 var fields = records.shift();
-                var items = [];
+                var items  = [];
 
                 for (var i = 0; i < records.length; i++) {
                     var item = {};
@@ -657,13 +779,38 @@ class BaseCRUDController extends DioscouriCore.Controller {
         }
     }
 
+    /**
+     * Initialize edit view
+     *
+     * @param readyCallback
+     */
+    doView(readyCallback) {
+        this.data.isViewMode      = true;
+        this.data.item            = this.item;
+        this.data.cancelActionUrl = this.getFilteredListUrl();
+        this.data.editActionUrl   = this.getActionUrl('edit', this.item);
+        if (this.request.method == 'GET') {
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('view')));
+            // TODO: Do we need this in nodejs-admin?
+            // this.setActionDeniedFlags(this.data, function(err){ readyCallback(err);});
+            readyCallback();
+        } else {
+            readyCallback(new Error("Action isn't supported"));
+        }
+    }
+
+    /**
+     * Prepare data for bulk edit
+     *
+     * @param callback
+     */
     prepareBulkEditData (callback) {
         var fields = [];
 
         /**
          * Async model will be useful for associations in a future
          */
-        async.eachLimit(this.model.bulk_edit_fields, 2, function (field, callback) {
+        async.eachLimit(this.bulkEditFields, 2, function (field, callback) {
 
             if (this.request.body[field.path + '_checkbox'] === 'on') {
 
@@ -690,13 +837,13 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * Prepare Bulk fields
      * @param readyCallback
      */
-    bulkEdit (readyCallback) {
+    bulkEdit(readyCallback) {
 
-        this.data.baseUrl = this._baseUrl;
+        this.data.baseUrl            = this._baseUrl;
         this.data.bulkEditPreviewUrl = this.getActionUrl('bulkEditPreview');
-        this.data.bulk_edit_fields = this.model.bulk_edit_fields;
-        this.data.modelName = this.model.model.modelName;
-        this.data.itemsTotal = 'TODO'; // TODO: Use core count method
+        this.data.bulkEditFields     = this.bulkEditFields;
+        this.data.modelName          = this.model.model.modelName;
+        this.data.itemsTotal         = 'TODO'; // TODO: Use core count method
 
         this.view(DioscouriCore.View.htmlView(this.getViewFilename('bulk_edit')));
         readyCallback();
@@ -706,13 +853,13 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * Prepare Bulk Edit preview screen
      * @param readyCallback
      */
-    bulkEditPreview (readyCallback) {
+    bulkEditPreview(readyCallback) {
 
-        this.data.baseUrl = this._baseUrl;
-        this.data.bulkEditUrl = this.getActionUrl('bulkEdit');
+        this.data.baseUrl       = this._baseUrl;
+        this.data.bulkEditUrl   = this.getActionUrl('bulkEdit');
         this.data.doBulkEditUrl = this.getActionUrl('doBulkEdit');
-        this.data.modelName = this.model.model.modelName;
-        this.data.itemsTotal = 'TODO'; // TODO: Use core count method
+        this.data.modelName     = this.model.model.modelName;
+        this.data.itemsTotal    = 'TODO'; // TODO: Use core count method
 
         this.prepareBulkEditData(function (err, fields) {
             this.data.bulk_edit_preview = fields;
@@ -726,11 +873,11 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * Apply Bulk Edit operation
      * @param readyCallback
      */
-    doBulkEdit (readyCallback) {
+    doBulkEdit(readyCallback) {
 
         var fields = [];
 
-        this.model.bulk_edit_fields.forEach(function (field) {
+        this.bulkEditFields.forEach(function (field) {
             if (typeof this.request.body[field.name] !== 'undefined') {
 
                 if (this.request.body[field.name] === 'true') {
@@ -780,10 +927,19 @@ class BaseCRUDController extends DioscouriCore.Controller {
         }.bind(this));
     }
 
+    /**
+     * Before Save Handler
+     *
+     * @param item
+     * @returns {*}
+     */
     beforeSave(item) {
         return item;
     }
 
+    /**
+     * Handler when item already saved
+     */
     onItemHasBeenSaved() {
         this.flash.addMessage("Item successfully updated in the database!", DioscouriCore.FlashMessageType.SUCCESS);
         this.terminate();
@@ -796,8 +952,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @param readyCallback
      */
     doDelete(readyCallback) {
-        var itemId = this.request.params.id;
-        this.model.removeById(itemId, this.request.user._id, function (error, item) {
+        this.model.removeById(this.itemId, this.request.user._id, function (error, item) {
             if (error != null) {
                 this.flash.addMessage("Failed to delete item! " + error.message, DioscouriCore.FlashMessageType.ERROR);
                 this.terminate();

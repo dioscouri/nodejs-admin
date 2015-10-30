@@ -35,7 +35,7 @@ class AdminQueueTasksArchive extends AdminBaseCrudController {
          * @type {string}
          * @private
          */
-        this._baseUrl = '/admin/queue_tasks_archive';
+        this._baseUrl = '/admin/queue_tasks_archives';
 
         /**
          * Path to controller views

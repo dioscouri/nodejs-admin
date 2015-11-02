@@ -9,12 +9,46 @@ jQuery(document).ready(function () {
             var checked = $(".bulk-actions .check-all").data("checked") === true;
             $(".bulk-actions .check-all").data("checked", !checked);
             $("[id^='checkbox_']:checkbox").prop("checked", !checked);
+            enableDisableBulkEditButton();
         });
 
         // Bulk delete button, under construction....
         $(".bulk-actions .bulk_delete").click(function () {
-            confirm("Are you sure?")
+            var form = $(".bulk-delete-form"),
+                selectedItems = $("[id^='checkbox_']:checkbox:checked");
+
+            form.find("hidden").remove();
+
+            if (selectedItems.length === 0) {
+                alert("No items selected for deletion");
+                return false;
+            }
+
+            if (confirm("Are you sure you want to delete the selected elements?")) {
+                selectedItems.each(function (index, item) {
+                    form.append('<input type="hidden" name="selectedItems" value="' + item.value + '">');
+                });
+                return true;
+            } else {
+                return false;
+            }
         });
+
+        $(document).on('change' , "[id^='checkbox_']:checkbox", function(){
+            enableDisableBulkEditButton();
+        });
+
+        function enableDisableBulkEditButton() {
+            var btnDelete = $(".bulk_delete"),
+                selectedItems = $("[id^='checkbox_']:checkbox:checked");
+
+            if (selectedItems.length === 0) {
+                btnDelete.prop('disabled', true);
+            } else {
+                btnDelete.prop('disabled', false);
+            }
+        }
+        enableDisableBulkEditButton();
     }
 
     /*

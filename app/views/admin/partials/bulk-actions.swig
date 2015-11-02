@@ -7,9 +7,11 @@
     </button>
     {% endif %}
     {% if options.bulkDelete %}
-    <button class="btn btn-white tooltips bulk_delete" type="button" data-toggle="tooltip" title="" data-original-title="Delete">
-        <i class="fa fa-trash-o"></i>
-    </button>
+    <form action="{{ bulkDeleteUrl }}" method="post" class="bulk-delete-form" style="display: inline">
+        <button class="btn btn-white tooltips bulk_delete" type="submit" data-toggle="tooltip" title="" data-original-title="Delete">
+            <i class="fa fa-trash-o"></i>
+        </button>
+    </form>
     {% endif %}
     {% if false %}
     <button class="btn btn-white tooltips" type="button" data-toggle="tooltip" title="" data-original-title="Edit only the checked resources">

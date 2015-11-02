@@ -224,6 +224,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.registerAction('bulkEdit', 'bulkEdit');
         this.registerAction('bulkEditPreview', 'bulkEditPreview');
         this.registerAction('doBulkEdit', 'doBulkEdit');
+        this.registerAction('bulkDelete', 'bulkDelete');
 
         callback();
     }
@@ -344,6 +345,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             case 'bulkEdit':
             case 'bulkEditPreview':
             case 'doBulkEdit':
+            case 'bulkDelete':
                 result += '/' + action;
                 break;
             case 'edit':
@@ -525,6 +527,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             this.data.createUrl   = this.getActionUrl('create');
             this.data.importUrl   = this.getActionUrl('import');
             this.data.bulkEditUrl = this.getActionUrl('bulkEdit');
+            this.data.bulkDeleteUrl = this.getActionUrl('bulkDelete');
             this.data.baseUrl     = this._baseUrl;
 
             /**
@@ -975,6 +978,40 @@ class BaseCRUDController extends DioscouriCore.Controller {
             // Send DATA_READY event
             readyCallback();
         }.bind(this));
+    }
+
+    /**
+     * Bulk Delete all selected items in table
+     * @param readyCallback
+     */
+    bulkDelete(readyCallback) {
+        var selectedItems = [];
+        if (this.request.body.selectedItems) {
+            selectedItems = _.isArray(this.request.body.selectedItems) ?
+                this.request.body.selectedItems : [this.request.body.selectedItems];
+        }
+
+        async.each(
+            selectedItems,
+            function(item, callback) {
+                this.model.removeById(item, this.request.user._id, function (error, item) {
+                    if (!error) {
+                        return callback(error);
+                    }
+                    callback();
+                }.bind(this));
+            }.bind(this),
+            function (err){
+                if (err) {
+                    this.flash.addMessage("Failed to delete item! " + err.message, DioscouriCore.FlashMessageType.ERROR);
+                } else {
+                    this.flash.addMessage("Items successfully removed from the database!", DioscouriCore.FlashMessageType.INFO);
+                }
+
+                this.terminate();
+                this.response.redirect(this.getActionUrl('list'));
+                readyCallback(err);
+            }.bind(this));
     }
 
 }

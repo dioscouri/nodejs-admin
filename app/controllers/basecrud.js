@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring lodash lib
+ */
+var _ = require('lodash');
+
+/**
  * Requiring core Path module
  */
 var path = require('path');

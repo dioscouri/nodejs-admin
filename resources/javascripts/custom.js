@@ -2,11 +2,29 @@ jQuery(document).ready(function () {
 
     "use strict";
 
+    // Bind bulk action buttons
+    if ($('.bulk-actions').length) {
+        // Select all rows from table
+        $(".bulk-actions .check-all").click(function () {
+            var checked = $(".bulk-actions .check-all").data("checked") === true;
+            $(".bulk-actions .check-all").data("checked", !checked);
+            $("[id^='checkbox_']:checkbox").prop("checked", !checked);
+        });
+
+        // Bulk delete button, under construction....
+        $(".bulk-actions .bulk_delete").click(function () {
+            confirm("Are you sure?")
+        });
+    }
+
+    /*
+    // We can't use this for all SELECT in app
     if (jQuery().select2) {
         jQuery("select").select2({
             minimumResultsForSearch: -1
         });
     }
+    */
 
     $('.bs-data-picker').datepicker({});
 

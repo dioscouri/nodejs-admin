@@ -3,19 +3,9 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-    {% include "../partials/pageheader.swig" with { 'pageTitle': 'Users Management'} %}
+  {{ pageheader({title: 'Users Management - Edit User', showSaveButton: true, showCloseButton: true}) }}
 {% endblock %}
 
 {% block pagecontent %}
-    <h1>Edit User</h1>
-
-    <div class="panel">
-        <div class="panel-body">
-
-            {% include "_form.swig" %}
-
-        </div>
-        <!-- panel-body -->
-    </div><!-- panel -->
-
+  {% include "_form.swig" %}
 {% endblock %}

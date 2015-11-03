@@ -2,6 +2,17 @@ jQuery(document).ready(function () {
 
     "use strict";
 
+    function enableDisableBulkEditButton() {
+        var btnDelete = $(".bulk_delete"),
+            selectedItems = $("[id^='checkbox_']:checkbox:checked");
+
+        if (selectedItems.length === 0) {
+            btnDelete.prop('disabled', true);
+        } else {
+            btnDelete.prop('disabled', false);
+        }
+    }
+
     // Bind bulk action buttons
     if ($('.bulk-actions').length) {
         // Select all rows from table
@@ -26,7 +37,7 @@ jQuery(document).ready(function () {
 
             if (confirm("Are you sure you want to delete the selected elements?")) {
                 selectedItems.each(function (index, item) {
-                    form.append('<input type="hidden" name="selectedItems" value="' + item.value + '">');
+                    form.append('<input type="hidden" name="selectedItems" value="' + $(item).data('item-id') + '">');
                 });
                 return true;
             } else {
@@ -38,16 +49,6 @@ jQuery(document).ready(function () {
             enableDisableBulkEditButton();
         });
 
-        function enableDisableBulkEditButton() {
-            var btnDelete = $(".bulk_delete"),
-                selectedItems = $("[id^='checkbox_']:checkbox:checked");
-
-            if (selectedItems.length === 0) {
-                btnDelete.prop('disabled', true);
-            } else {
-                btnDelete.prop('disabled', false);
-            }
-        }
         enableDisableBulkEditButton();
     }
 

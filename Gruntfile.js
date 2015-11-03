@@ -57,6 +57,7 @@ module.exports = function (grunt) {
                 files: {
                     './app/assets/stylesheets/build.min.css': [
                         './resources/stylesheets/chain/style.default.css',
+                        './resources/stylesheets/bootstrap-override.css',
                         './resources/stylesheets/chain/bootstrap-wysihtml5.css',
                         './resources/stylesheets/chain/bootstrap-timepicker.min.css',
                         './resources/stylesheets/chain/select2.min.css',

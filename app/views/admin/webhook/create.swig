@@ -3,13 +3,9 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-    {% include "../partials/pageheader.swig" with { 'pageTitle': 'Webhooks Management - Create New Webhook'} %}
+  {{ pageheader({title: 'Webhook Management - Create Webhook', showSaveButton: true, showCloseButton: true}) }}
 {% endblock %}
 
 {% block pagecontent %}
-    <div class="panel">
-        <div class="panel-body">
-            {% include "_form.swig" %}
-        </div>
-    </div>
+  {% include "_form.swig" %}
 {% endblock %}

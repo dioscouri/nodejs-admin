@@ -3,7 +3,7 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-  {{ pageheader({title: 'Users Management - View User', showEditButton: true, showCloseButton: true}) }}
+  {{ pageheader({title: 'Webhook Management - View Webhook', showEditButton: true, showCloseButton: true}) }}
 {% endblock %}
 
 {% block pagecontent %}

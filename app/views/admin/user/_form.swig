@@ -1,51 +1,42 @@
-<form action="{{ actionUrl }}" method="post" class="form-horizontal form-bordered">
+<form name="itemForm" action="{{ actionUrl }}" method="post">
 
-    <div class="form-group">
-        <div class="col-xs-offset-9 col-xs-3">
-            <div class="btn-toolbar pull-right">
-                <div class="btn-group">
-                    <button type="submit" id="submitButton" class="btn btn-success">Save</button>
-                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        {#<span class="sr-only">Toggle Dropdown</span>#}
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" onclick="javascript:save('save&CreateAnother');">Save & Create Another</a></li>
-                        {% if isEditMode %}
-                            <li><a href="#" onclick="javascript:save('saveAs');">Save As</a></li>
-                        {% endif %}
-                        <li><a href="#" onclick="javascript:save('save&Close');">Save & Close</a></li>
-                    </ul>
-                </div>
+  <div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-2">
+      <h5 class="sm-title">Detail Tabs</h5>
+      <ul class="nav nav-pills nav-stacked nav-msg">
+        <li role="presentation" class="active">
+          <a href="#tab-basic" aria-controls="tab-basic" role="tab" data-toggle="tab">Basic</a>
+        </li>
+        {#<li role="presentation">#}
+        {#<a href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">Tab 2</a>#}
+        {#</li>#}
+        {#<li role="presentation">#}
+        {#<a href="#tab-3" aria-controls="tab-3" role="tab" data-toggle="tab">Tab 3</a>#}
+        {#</li>#}
+        {#<li role="presentation">#}
+        {#<a href="#tab-4" aria-controls="tab-4" role="tab" data-toggle="tab">Tab 4</a>#}
+        {#</li>#}
+      </ul>
 
-                <div class="btn-group">
-                    <button type="button" class="btn btn-success" onclick="document.location.href = '/admin/users'">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
+      {#<h5 class="sm-title">Actions</h5>#}
+      {#<a href="" class="btn btn-default btn-block btn-create-msg">Action 1</a>#}
+      {#<a href="" class="btn btn-default btn-block btn-create-msg">Action 2</a>#}
+
+      {#<h5 class="sm-title">Sub-Pages</h5>#}
+      {#<ul class="nav nav-pills nav-stacked nav-msg">#}
+      {#<li>#}
+      {#<a href="#">#}
+      {#Audit Log#}
+      {#<p class="small">The history of changes to this resource</p>#}
+      {#</a>#}
+      {#</li>#}
+      {#</ul>#}
+
     </div>
-
-    <div class="form-group">
-        <div class="tabbable">
-            <ul class="nav nav-pills nav-stacked col-md-3">
-                <li class="active"><a href="#mainProps" data-toggle="tab">Main properties</a></li>
-                <li><a href="#extraProps" data-toggle="tab">Extra properties</a></li>
-            </ul>
-            <div class="tab-content col-md-9">
-                {% include "tabs/mainProps.swig" %}
-                {% include "tabs/extraProps.swig" %}
-            </div>
-        </div>
+    <div class="col-sm-9 col-md-9 col-lg-10">
+      <div class="tab-content">
+        {% include "tabs/basicProps.swig" %}
+      </div>
     </div>
-
-    <script>
-        function save(action) {
-            $('#saveAction').val(action);
-            $("#submitButton").click();
-        }
-    </script>
-
-    <input type="hidden" id="saveAction" name="saveAction" value="save"/>
+  </div>
 </form>

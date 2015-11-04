@@ -1,6 +1,6 @@
 <div class="header-left">
   <a href="/admin" class="logo">
-    <img src="/assets/images/logo.png" alt=""/>
+    {#<img src="/assets/images/logo.png" alt=""/>#}
   </a>
 
   <div class="pull-right">

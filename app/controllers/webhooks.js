@@ -99,6 +99,19 @@ class AdminWebhooks extends AdminBaseCrudController {
         }.bind(this));
     }
 
+    /**
+     * View item
+     *
+     * @param readyCallback
+     */
+    doView(readyCallback) {
+        super.doView(function (err) {
+            if (err) return readyCallback(err);
+
+            this.loadEvents(readyCallback);
+        }.bind(this));
+    }
+
     loadEvents(readyCallback) {
         async.parallel([
             function (callback) {

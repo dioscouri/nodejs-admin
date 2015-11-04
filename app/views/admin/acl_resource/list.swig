@@ -9,7 +9,7 @@
 {% block pagecontent %}
     <h1>Acl Resources Management</h1>
 
-    <a href="{{ createUrl }}">[create]</a>
+    <a href="{{ createActionUrl }}">[create]</a>
     <br/>
     <table class="table table-striped table-bordered">
         <thead>

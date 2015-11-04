@@ -32,6 +32,8 @@
     {% include "./partials/search.swig" %}
     {% include "./partials/resource-action-buttons.swig" %}
     {% include "./partials/bulk-actions.swig" %}
+    {% include "./partials/quickfilter.swig" %}
+    {% include "./partials/pageheader.swig" %}
 
     {% block content %}
     <div class="mainwrapper">

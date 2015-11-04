@@ -9,7 +9,7 @@
     <ul class="media-list dropdown-list">
       <li class="media">
         <span class="badge badge-success">New</span>
-        <img class="img-circle pull-left noti-thumb" src="/assets/images/photos/user1.png" alt="">
+        {#<img class="img-circle pull-left noti-thumb" src="/assets/images/photos/user1.png" alt="">#}
 
         <div class="media-body">
           <strong>Nusja Nawancali</strong>
@@ -19,7 +19,7 @@
         </div>
       </li>
       <li class="media">
-        <img class="img-circle pull-left noti-thumb" src="/assets/images/photos/user1.png" alt="">
+        {#<img class="img-circle pull-left noti-thumb" src="/assets/images/photos/user1.png" alt="">#}
 
         <div class="media-body">
           <strong>Nusja Nawancali</strong>

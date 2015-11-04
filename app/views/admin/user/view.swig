@@ -3,67 +3,34 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-    {% include "../partials/pageheader.swig" with { 'pageTitle': 'View User'} %}
+  {{ pageheader({title: 'Users Management - View User', showEditButton: true, showCloseButton: true}) }}
 {% endblock %}
 
 {% block pagecontent %}
-    <h1>View User</h1>
+  <div class="row">
 
-    <div class="panel">
-        <div class="panel-body">
+    <div class="col-sm-3 col-md-3 col-lg-2">
+      <h5 class="sm-title">Detail Tabs</h5>
+      <ul class="nav nav-pills nav-stacked nav-msg">
+        <li role="presentation" class="active">
+          <a href="#tab-basic" aria-controls="tab-basic" role="tab" data-toggle="tab">Basic</a>
+        </li>
+      </ul>
+    </div>
 
-            <div class="form-group">
-                <div class="col-xs-offset-9 col-xs-3">
-                    <div class="btn-toolbar pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-success" onclick="document.location.href = '/admin/users'">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="col-sm-9 col-md-9 col-lg-10">
+      <div class="tab-content">
+        {% include "tabs/basicProps.swig" %}
+      </div>
+    </div>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group mb15">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                        <input type="text" class="form-control" name="email" value="{{ item.email }}" disabled>
-                    </div>
-                    <!-- input-group -->
-                </div>
-                <div class="col-sm-6">
-                    <div class="input-group mb15">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
-                        <input type="text" class="form-control" name="_id" value="{{ item._id.toString() }}" disabled>
-                    </div>
-                    <!-- input-group -->
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group mb15">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" class="form-control" name="firstName" placeholder="Enter Firstname"
-                               value="{{ item.name.first }}" disabled>
-                    </div>
-                    <!-- input-group -->
-                </div>
-                <div class="col-sm-6">
-                    <div class="input-group mb15">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" class="form-control" name="lastName" placeholder="Enter Lastname"
-                               value="{{ item.name.last }}" disabled>
-                    </div>
-                    <!-- input-group -->
-                </div>
-            </div>
-            <!-- row -->
-            <br/>
-
-        </div>
-        <!-- panel-body -->
-    </div><!-- panel -->
+  </div>
 
 {% endblock %}
+
+{% block page_js %}
+  <script>
+    $(".tab-content :input").attr('disabled', true);
+  </script>
+{% endblock %}
+

@@ -2,11 +2,64 @@ jQuery(document).ready(function () {
 
     "use strict";
 
+    function enableDisableBulkEditButton() {
+        var btnDelete = $(".bulk_delete"),
+            selectedItems = $("[id^='checkbox_']:checkbox:checked");
+
+        if (selectedItems.length === 0) {
+            btnDelete.prop('disabled', true);
+        } else {
+            btnDelete.prop('disabled', false);
+        }
+    }
+
+    // Bind bulk action buttons
+    if ($('.bulk-actions').length) {
+        // Select all rows from table
+        $(".bulk-actions .check-all").click(function () {
+            var checked = $(".bulk-actions .check-all").data("checked") === true;
+            $(".bulk-actions .check-all").data("checked", !checked);
+            $("[id^='checkbox_']:checkbox").prop("checked", !checked);
+            enableDisableBulkEditButton();
+        });
+
+        // Bulk delete button, under construction....
+        $(".bulk-actions .bulk_delete").click(function () {
+            var form = $(".bulk-delete-form"),
+                selectedItems = $("[id^='checkbox_']:checkbox:checked");
+
+            form.find("hidden").remove();
+
+            if (selectedItems.length === 0) {
+                alert("No items selected for deletion");
+                return false;
+            }
+
+            if (confirm("Are you sure you want to delete the selected elements?")) {
+                selectedItems.each(function (index, item) {
+                    form.append('<input type="hidden" name="selectedItems" value="' + $(item).data('item-id') + '">');
+                });
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        $(document).on('change' , "[id^='checkbox_']:checkbox", function(){
+            enableDisableBulkEditButton();
+        });
+
+        enableDisableBulkEditButton();
+    }
+
+    /*
+    // We can't use this for all SELECT in app
     if (jQuery().select2) {
         jQuery("select").select2({
             minimumResultsForSearch: -1
         });
     }
+    */
 
     $('.bs-data-picker').datepicker({});
 

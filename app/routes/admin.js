@@ -10,10 +10,14 @@ module.exports = function () {
         // System Log route
         'get|/admin/system_logs': 'system_logs.js',
         'get|/admin/system_logs/page/:page': 'system_logs.js',
+        'get|/admin/system_logs/:action': 'system_logs.js',
+        'get|/admin/system_logs/:id/:action': 'system_logs.js',
 
         // Audit Log routes
         'get|/admin/audit_logs': 'audit_logs.js',
         'get|/admin/audit_logs/page/:page': 'audit_logs.js',
+        'get|/admin/audit_logs/:action': 'audit_logs.js',
+        'get|/admin/audit_logs/:id/:action': 'audit_logs.js',
 
         // System notifications routes
         'get|/admin/notifications': 'notifications.js',

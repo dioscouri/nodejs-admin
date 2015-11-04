@@ -3,50 +3,84 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-    {% include "../partials/pageheader.swig" with { 'pageTitle': 'Webhook Events (view)'} %}
+  {% include "../partials/pageheader.swig" with { 'pageTitle': 'Webhook Events'} %}
 {% endblock %}
 
 {% block pagecontent %}
 
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="btn-group pull-right">
-                <button type="submit" class="btn btn-success" onclick="document.location.href = '{{ createUrl }}'">
-                    Create New
-                </button>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-2">
+      <p>
+        <a href="{{ createActionUrl }}" class="btn btn-success btn-block btn-create-msg">Create New</a>
+      </p>
+
+      {{ search() }}
+
+      <br/>
+
     </div>
 
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <td width="25%">Name</td>
-            <td width="25%">Key</td>
-            <td width="120px"></td>
-        </tr>
-        </thead>
-        <tbody>
-        {% if items.length > 0 %}
-            {% for row in items %}
-                {% set editUrl = baseUrl + '/' + row.id + '/edit' %}
-                {% set deleteUrl = baseUrl + '/' + row.id + '/delete' %}
-                <tr>
-                    <td>{{ row.name }}</td>
-                    <td>{{ row.key }}</td>
-                    <td>
-                        <a href="{{ editUrl }}" class="btn btn-primary btn-xs">Edit</a>
-                        <a href="javascript:void(0)" class="btn btn-danger btn-xs"
-                           onclick="if (confirm('Are you sure you want to delete this record?')) {document.location.href = '{{ deleteUrl }}';}">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="6"><h3 class="text-muted">There are no webhook events.</h3></td>
-            </tr>
-        {% endif %}
-        </tbody>
-    </table>
+    <div class="col-sm-9 col-md-9 col-lg-10">
+      <div class="msg-header">
+        <div class="pull-right">
+          <h5 class="sm-title text-right">{{ pagination_summary() }}</h5>
+          {{ pagination_pages() }}
+        </div>
+
+        {{ bulk_actions({check: true, bulkDelete: true}) }}
+
+      </div>
+
+      <div class="list-group media-list msg-list">
+        <div class="list-group-item list-group-sorting">
+          <div class="">
+            Sort by:
+            {{ sorting_column({title: 'Created', field: 'createdAt'}) }}
+            {{ sorting_column({title: 'Name', field: 'name'}) }}
+          </div>
+        </div>
+
+        {% for item in items %}
+          {% set editActionUrl = baseUrl + '/' + item.id + '/edit' %}
+          {% set viewActionUrl = baseUrl + '/' + item.id %}
+          {% set deleteActionUrl = baseUrl + '/' + item.id + '/delete' %}
+
+          <div class="list-group-item">
+
+            <div class="ckbox ckbox-primary pull-left">
+              <input type="checkbox" id="checkbox_{{ item.id }}" data-item-id="{{ item.id }}">
+              <label for="checkbox_{{ item.id }}"></label>
+            </div>
+
+            <div class="list-group-item-body">
+
+              <div class="pull-right media-option">
+                {{ resource_action_buttons({editActionUrl: editActionUrl, deleteActionUrl: deleteActionUrl}) }}
+              </div>
+
+              <a href="{{ viewActionUrl }}">
+                <h4 class="sender">
+                  {{ item.name }} - {{ item.key }}
+                </h4>
+              </a>
+
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+
+      <div class="list-group-footer">
+        <div class="pull-right">
+          {{ pagination_rows() }}
+        </div>
+        <div class="pull-left">
+          {{ pagination_pages() }}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 
 {% endblock %}

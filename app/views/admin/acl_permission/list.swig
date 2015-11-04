@@ -45,7 +45,7 @@
                                     {% if checked %} checked data-permission_id="{{ permission_id }}" {% endif %}
                                    data-role="{{ role._id.toString() }}" data-resource="{{ resource._id.toString() }}"
                                    data-action="{{ action }}" data-base_url="{{ baseUrl }}"
-                                   data-create_url="{{ createUrl }}">
+                                   data-create_url="{{ createActionUrl }}">
                         </td>
                     {% endfor %}
                 </tr>

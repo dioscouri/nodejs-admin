@@ -2,34 +2,15 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         uglify: {
-            site_build_js: {
+            site_custom_js: {
                 options: {
-                    beautify: true,
+                    beautify: false,
                     preserveComments: false
-
                 },
                 files: {
                     './app/assets/javascripts/build.min.js': [
-                        './resources/bower_components/jquery/dist/jquery.js',
-                        './resources/bower_components/jquery-ui/jquery-ui.js',
-                        './resources/bower_components/bootstrap/dist/js/bootstrap.js',
-                        './resources/bower_components/PACE/pace.js',
-                        './resources/javascripts/custom.js',
-                        './resources/bower_components/select2/dist/js/select2.js',
                         './resources/javascripts/jqBootstrapValidation-1.3.7-customized.js',
-                        './resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js',
-                        './resources/bower_components/ckeditor/adapters/jquery.js'
-                    ]
-                }
-            },
-            build_lt_ie_9_js: {
-                options: {
-                    beautify: false
-                },
-                files: {
-                    './app/assets/javascripts/build_lt_ie_9_js.min.js': [
-                        './resources/bower_components/respond/dest/respond.src.js',
-                        './resources/bower_components/html5shiv/dist/html5shiv.js'
+                        './resources/javascripts/custom.js'
                     ]
                 }
             }
@@ -40,10 +21,28 @@ module.exports = function (grunt) {
             },
             dist: {
                 src: [
-                    './app/assets/javascripts/build.min.js',
-                    './resources/bower_components/ckeditor/ckeditor.js'
+                    './resources/javascripts/chain/jquery-1.11.1.min.js',
+                    './resources/javascripts/chain/jquery-migrate-1.2.1.min.js',
+                    './resources/javascripts/chain/jquery-ui-1.10.3.min.js',
+                    './resources/javascripts/chain/bootstrap.min.js',
+                    './resources/javascripts/chain/modernizr.min.js',
+                    './resources/javascripts/chain/pace.min.js',
+                    './resources/javascripts/chain/retina.min.js',
+                    './resources/javascripts/chain/select2.full.min.js',
+                    './resources/javascripts/chain/jquery.cookies.js',
+                    './resources/javascripts/chain/bootstrap-timepicker.min.js',
+                    './resources/javascripts/chain/wysihtml5-0.3.0.min.js',
+                    './resources/javascripts/chain/bootstrap-wysihtml5.js',
+                    './app/assets/javascripts/build.min.js'
                 ],
                 dest: './app/assets/javascripts/build.min.js'
+            },
+            respond_html5shiv: {
+                src: [
+                    './resources/javascripts/chain/respond.min.js',
+                    './resources/javascripts/chain/html5shiv.js'
+                ],
+                dest: './app/assets/javascripts/build_lt_ie_9_js.min.js'
             }
         },
         cssmin: {
@@ -54,13 +53,12 @@ module.exports = function (grunt) {
             target: {
                 files: {
                     './app/assets/stylesheets/build.min.css': [
-                        './resources/bower_components/bootstrap/dist/css/bootstrap.css',
-                        './resources/bower_components/jquery-ui/themes/smoothness/jquery-ui.css',
-                        './resources/bower_components/components-font-awesome/css/font-awesome.css',
-                        './resources/bower_components/select2/dist/css/select2.css',
-                        './resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
-
-                        './resources/stylesheets/style.default.css',
+                        './resources/stylesheets/chain/style.default.css',
+                        './resources/stylesheets/bootstrap-override.css',
+                        './resources/stylesheets/chain/bootstrap-wysihtml5.css',
+                        './resources/stylesheets/chain/bootstrap-timepicker.min.css',
+                        './resources/stylesheets/chain/select2.min.css',
+                        './resources/stylesheets/chain/select2-bootstrap.css',
                         './resources/stylesheets/custom.css'
                     ]
                 }
@@ -78,7 +76,15 @@ module.exports = function (grunt) {
                         filter: 'isFile'
                     }
                 ]
-            }
+            },
+            ckeditor: {
+                expand: true,
+                cwd: './resources/javascripts/ckeditor/',
+                src: ['**'],
+                dest: './app/assets/javascripts/ckeditor/'
+
+            },
+            // {expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
         },
         clean: ['./resources/tmp']
     });

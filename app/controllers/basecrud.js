@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring lodash lib
+ */
+var _ = require('lodash');
+
+/**
  * Requiring core Path module
  */
 var path = require('path');
@@ -137,7 +142,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      *
      * @returns {*}
      */
-    get itemId () {
+    get itemId() {
         var itemId = this.request.params.id ? this.request.params.id : this.request.params.action;
 
         return itemId;
@@ -157,7 +162,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      *
      * @returns {null|string|*}
      */
-    get actionName () {
+    get actionName() {
         var result = super.actionName;
 
         /**
@@ -224,6 +229,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.registerAction('bulkEdit', 'bulkEdit');
         this.registerAction('bulkEditPreview', 'bulkEditPreview');
         this.registerAction('doBulkEdit', 'doBulkEdit');
+        this.registerAction('bulkDelete', 'bulkDelete');
 
         callback();
     }
@@ -344,6 +350,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
             case 'bulkEdit':
             case 'bulkEditPreview':
             case 'doBulkEdit':
+            case 'bulkDelete':
                 result += '/' + action;
                 break;
             case 'edit':
@@ -522,10 +529,11 @@ class BaseCRUDController extends DioscouriCore.Controller {
                 }
             }
 
-            this.data.createUrl   = this.getActionUrl('create');
-            this.data.importUrl   = this.getActionUrl('import');
-            this.data.bulkEditUrl = this.getActionUrl('bulkEdit');
-            this.data.baseUrl     = this._baseUrl;
+            this.data.createActionUrl     = this.getActionUrl('create');
+            this.data.importActionUrl     = this.getActionUrl('import');
+            this.data.bulkEditActionUrl   = this.getActionUrl('bulkEdit');
+            this.data.bulkDeleteActionUrl = this.getActionUrl('bulkDelete');
+            this.data.baseUrl             = this._baseUrl;
 
             /**
              * Set output view object
@@ -804,7 +812,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      *
      * @param callback
      */
-    prepareBulkEditData (callback) {
+    prepareBulkEditData(callback) {
         var fields = [];
 
         /**
@@ -839,11 +847,11 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     bulkEdit(readyCallback) {
 
-        this.data.baseUrl            = this._baseUrl;
-        this.data.bulkEditPreviewUrl = this.getActionUrl('bulkEditPreview');
-        this.data.bulkEditFields     = this.bulkEditFields;
-        this.data.modelName          = this.model.model.modelName;
-        this.data.itemsTotal         = 'TODO'; // TODO: Use core count method
+        this.data.baseUrl                  = this._baseUrl;
+        this.data.bulkEditPreviewActionUrl = this.getActionUrl('bulkEditPreview');
+        this.data.bulkEditFields           = this.bulkEditFields;
+        this.data.modelName                = this.model.model.modelName;
+        this.data.itemsTotal               = 'TODO'; // TODO: Use core count method
 
         this.view(DioscouriCore.View.htmlView(this.getViewFilename('bulk_edit')));
         readyCallback();
@@ -855,11 +863,11 @@ class BaseCRUDController extends DioscouriCore.Controller {
      */
     bulkEditPreview(readyCallback) {
 
-        this.data.baseUrl       = this._baseUrl;
-        this.data.bulkEditUrl   = this.getActionUrl('bulkEdit');
-        this.data.doBulkEditUrl = this.getActionUrl('doBulkEdit');
-        this.data.modelName     = this.model.model.modelName;
-        this.data.itemsTotal    = 'TODO'; // TODO: Use core count method
+        this.data.baseUrl             = this._baseUrl;
+        this.data.bulkEditActionUrl   = this.getActionUrl('bulkEdit');
+        this.data.doBulkEditActionUrl = this.getActionUrl('doBulkEdit');
+        this.data.modelName           = this.model.model.modelName;
+        this.data.itemsTotal          = 'TODO'; // TODO: Use core count method
 
         this.prepareBulkEditData(function (err, fields) {
             this.data.bulk_edit_preview = fields;
@@ -943,7 +951,16 @@ class BaseCRUDController extends DioscouriCore.Controller {
     onItemHasBeenSaved() {
         this.flash.addMessage("Item successfully updated in the database!", DioscouriCore.FlashMessageType.SUCCESS);
         this.terminate();
-        this.response.redirect(this.getActionUrl('list'));
+
+        switch (this.request.body.saveAction) {
+            case 'save&CreateAnother':
+                this.response.redirect(this.getActionUrl('create'));
+                break;
+            case 'save&Close':
+            default:
+                this.response.redirect(this.getActionUrl('list'));
+                break;
+        }
     }
 
     /**
@@ -975,6 +992,40 @@ class BaseCRUDController extends DioscouriCore.Controller {
             // Send DATA_READY event
             readyCallback();
         }.bind(this));
+    }
+
+    /**
+     * Bulk Delete all selected items in table
+     * @param readyCallback
+     */
+    bulkDelete(readyCallback) {
+        var selectedItems = [];
+        if (this.request.body.selectedItems) {
+            selectedItems = _.isArray(this.request.body.selectedItems) ?
+                this.request.body.selectedItems : [this.request.body.selectedItems];
+        }
+
+        async.each(
+            selectedItems,
+            function (item, callback) {
+                this.model.removeById(item, this.request.user._id, function (error, item) {
+                    if (!error) {
+                        return callback(error);
+                    }
+                    callback();
+                }.bind(this));
+            }.bind(this),
+            function (err) {
+                if (err) {
+                    this.flash.addMessage("Failed to delete item! " + err.message, DioscouriCore.FlashMessageType.ERROR);
+                } else {
+                    this.flash.addMessage("Items successfully removed from the database!", DioscouriCore.FlashMessageType.INFO);
+                }
+
+                this.terminate();
+                this.response.redirect(this.getActionUrl('list'));
+                readyCallback(err);
+            }.bind(this));
     }
 
 }

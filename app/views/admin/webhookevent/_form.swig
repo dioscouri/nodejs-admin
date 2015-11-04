@@ -1,27 +1,19 @@
-<form action="{{ actionUrl }}" method="post" class="form-horizontal form-bordered">
+<form class="form-horizontal" name="itemForm" action="{{ actionUrl }}" method="post">
 
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="name">Name</label>
+  <div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-2">
+      <h5 class="sm-title">Detail Tabs</h5>
+      <ul class="nav nav-pills nav-stacked nav-msg">
+        <li role="presentation" class="active">
+          <a href="#tab-basic" aria-controls="tab-basic" role="tab" data-toggle="tab">Basic</a>
+        </li>
+      </ul>
 
-    <div class="col-sm-10">
-      <input type="text" id="name" name="name" class="form-control" value="{{ item.name }}" required/>
     </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 control-label" for="key">Key</label>
-
-    <div class="col-sm-10">
-      <input type="text" id="key" name="key" class="form-control" value="{{ item.key }}" required/>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 control-label"></label>
-
-    <div class="col-sm-10">
-      <button type="submit" class="btn btn-success">Save</button>
-      <button type="button" class="btn btn-default">Cancel</button>
+    <div class="col-sm-9 col-md-9 col-lg-10">
+      <div class="tab-content">
+        {% include "tabs/basicTab.swig" %}
+      </div>
     </div>
   </div>
 </form>

@@ -1,31 +1,21 @@
-<form action="{{ actionUrl }}" method="post" class="form-horizontal form-bordered">
-    <div class="form-group">
-        <label class="col-sm-2 control-label">Event</label>
+<form name="itemForm" class="form-horizontal" action="{{ actionUrl }}" method="post">
 
-        <div class="col-sm-10">
-            <select class="width100p" data-placeholder="Choose One" name="webhookEventId" required>
-                <option></option>
-                {% for event in webhookevents %}
-                    <option value="{{ event.id }}"
-                            {% if item.webhookEventId == event.id %}selected{% endif %}>{{ event.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-2 control-label">Url</label>
+  <div class="row">
 
-        <div class="col-sm-10">
-            <input type="text" placeholder="Webhook URL" name="url" class="form-control" value="{{ item.url }}"
-                   required/>
-        </div>
+    <div class="col-sm-3 col-md-3 col-lg-2">
+      <h5 class="sm-title">Detail Tabs</h5>
+      <ul class="nav nav-pills nav-stacked nav-msg">
+        <li role="presentation" class="active">
+          <a href="#tab-basic" aria-controls="tab-basic" role="tab" data-toggle="tab">Basic</a>
+        </li>
+      </ul>
     </div>
-    <div class="form-group">
-        <label class="col-sm-2 control-label"></label>
 
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-success">Save</button>
-            <button type="button" class="btn btn-default">Cancel</button>
-        </div>
+    <div class="col-sm-9 col-md-9 col-lg-10">
+      <div class="tab-content">
+        {% include "tabs/basicProps.swig" %}
+      </div>
     </div>
+
+  </div>
 </form>

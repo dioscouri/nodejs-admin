@@ -58,6 +58,7 @@
 </section>
 
 <script src="/adminAssets/javascripts/build.min.js"></script>
+<script src="/adminAssets/javascripts/ckeditor/ckeditor.js"></script>
 
 {% block page_js %}{% endblock %}
 </body>

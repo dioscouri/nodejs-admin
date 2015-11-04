@@ -33,9 +33,6 @@ module.exports = function (grunt) {
                     './resources/javascripts/chain/bootstrap-timepicker.min.js',
                     './resources/javascripts/chain/wysihtml5-0.3.0.min.js',
                     './resources/javascripts/chain/bootstrap-wysihtml5.js',
-                    './resources/javascripts/chain/ckeditor/ckeditor.js',
-                    './resources/javascripts/chain/ckeditor/adapters/jquery.js',
-
                     './app/assets/javascripts/build.min.js'
                 ],
                 dest: './app/assets/javascripts/build.min.js'
@@ -79,7 +76,15 @@ module.exports = function (grunt) {
                         filter: 'isFile'
                     }
                 ]
-            }
+            },
+            ckeditor: {
+                expand: true,
+                cwd: './resources/javascripts/ckeditor/',
+                src: ['**'],
+                dest: './app/assets/javascripts/ckeditor/'
+
+            },
+            // {expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
         },
         clean: ['./resources/tmp']
     });

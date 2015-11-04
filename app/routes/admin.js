@@ -14,6 +14,8 @@ module.exports = function () {
         // Audit Log routes
         'get|/admin/audit_logs': 'audit_logs.js',
         'get|/admin/audit_logs/page/:page': 'audit_logs.js',
+        'get|/admin/audit_logs/:action': 'audit_logs.js',
+        'get|/admin/audit_logs/:id/:action': 'audit_logs.js',
 
         // System notifications routes
         'get|/admin/notifications': 'notifications.js',

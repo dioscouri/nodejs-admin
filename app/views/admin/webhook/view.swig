@@ -20,7 +20,7 @@
 
     <div class="col-sm-9 col-md-9 col-lg-10">
       <div class="tab-content">
-        {% include "tabs/basicProps.swig" with {'viewMode': 'true'} %}
+        {% include "tabs/basicProps.swig" %}
       </div>
     </div>
 

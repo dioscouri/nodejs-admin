@@ -296,18 +296,9 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @returns {{}}
      */
     getViewSorting() {
-        //var sorting = {};
-        //var cacheObj = this.request.query.filter;
-        //if (cacheObj && cacheObj.sortingField && cacheObj.sortingOrder) {
-        //    sorting = {
-        //        field: cacheObj.sortingField,
-        //        order: cacheObj.sortingOrder,
-        //        basePath: this.getActionUrl('list')
-        //    };
-        //}
-        //return sorting;
-        var sorting = this.request.session.sorting || {};
-        return sorting[this._baseUrl] || {};
+        var filter = this.getCachedRequestFilter();
+        var sorting = filter.sorting || {};
+        return sorting;
     }
 
     /**

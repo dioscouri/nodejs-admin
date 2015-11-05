@@ -52,6 +52,7 @@
             <div class="list-group-item-body">
 
               <div class="pull-right media-option">
+                <small>{{ moment(item.updatedAt).calendar() }}</small>
                 {{ resource_action_buttons({editActionUrl: editActionUrl, deleteActionUrl: deleteActionUrl}) }}
               </div>
 

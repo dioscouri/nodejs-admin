@@ -76,6 +76,7 @@
             <div class="list-group-item-body">
 
               <div class="pull-right media-option">
+                <small>{{ moment(item.updatedAt).calendar() }}</small>
                 {{ resource_action_buttons({editActionUrl: editActionUrl, deleteActionUrl: deleteActionUrl}) }}
               </div>
 
@@ -89,12 +90,6 @@
                 {% if item.isAdmin %}
                   <span class="label label-success">Admin</span>
                 {% endif %}
-
-                {#<span class="label label-default">Default</span>#}
-                {#<span class="label label-primary">Primary</span>#}
-                {#<span class="label label-info">Info</span>#}
-                {#<span class="label label-warning">Warning</span>#}
-                {#<span class="label label-danger">Danger</span>#}
               </p>
 
             </div>

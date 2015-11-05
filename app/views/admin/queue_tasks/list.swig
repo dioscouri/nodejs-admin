@@ -52,6 +52,7 @@
             <div class="list-group-item-body">
 
               <div class="pull-right media-option">
+                <small>{{ moment(item.delay).calendar() }}</small>
                 {{ resource_action_buttons({deleteActionUrl: deleteActionUrl}) }}
               </div>
 

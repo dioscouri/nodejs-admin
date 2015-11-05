@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring Core Library
+ */
+var DioscouriCore = process.mainModule.require('dioscouri-core');
+
+/**
  * Base model
  */
 var BaseModel = require('./base');

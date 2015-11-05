@@ -3,7 +3,7 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-  {% include "../partials/pageheader.swig" with { 'pageTitle': 'Users Management'} %}
+  {{ pageheader({title: 'Users'}) }}
 {% endblock %}
 
 {% block pagecontent %}

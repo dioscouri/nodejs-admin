@@ -26,6 +26,14 @@ class AdminAclRoles extends AdminBaseCrudController {
         this._model = require('../models/acl_roles.js');
 
         /**
+         * Mongoose Searchable fields
+         *
+         * @type {string[]}
+         * @private
+         */
+        this._modelSearchableFields = ['name'];
+
+        /**
          * Context of the controller
          *
          * @type {string}

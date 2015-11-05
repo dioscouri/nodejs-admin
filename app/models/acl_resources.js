@@ -1,9 +1,20 @@
 'use strict';
 
 /**
+ * Requiring Core Library
+ */
+var DioscouriCore = process.mainModule.require('dioscouri-core');
+
+/**
  * Base model
  */
 var BaseModel = require('./base');
+
+/**
+ * Async library
+ * @type {async|exports|module.exports}
+ */
+var async = require('async');
 
 /**
  *  Resources model

@@ -3,7 +3,7 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-  {% include "../partials/pageheader.swig" with { 'pageTitle': 'Webhook Events'} %}
+  {{ pageheader({title: 'Webhook Events'}) }}
 {% endblock %}
 
 {% block pagecontent %}

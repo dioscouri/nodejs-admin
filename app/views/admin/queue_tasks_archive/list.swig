@@ -3,7 +3,7 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-  {% include "../partials/pageheader.swig" with { 'pageTitle': 'Queue Archieve'} %}
+  {{ pageheader({title: 'Queue Archieve'}) }}
 {% endblock %}
 
 {% block pagecontent %}

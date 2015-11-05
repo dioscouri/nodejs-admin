@@ -181,7 +181,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
      * @returns {[]}
      */
     get bulkEditFields() {
-        var result = this.model.bulk_edit_fields != null ? this.model.bulk_edit_fields : [];
+        var result = this.model.bulkEditFields != null ? this.model.bulkEditFields : [];
 
         return result;
     }
@@ -674,7 +674,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
         if (this.request.method == 'GET') {
             this.data.actionUrl = this.getActionUrl('import', this.item);
-            this.view(DioscouriCore.View.htmlView(this.getViewFilename('import')));
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('import')));
             readyCallback();
         } else {
 
@@ -853,7 +853,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.data.modelName                = this.model.model.modelName;
         this.data.itemsTotal               = 'TODO'; // TODO: Use core count method
 
-        this.view(DioscouriCore.View.htmlView(this.getViewFilename('bulk_edit')));
+        this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('bulk_edit')));
         readyCallback();
     }
 
@@ -872,7 +872,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
         this.prepareBulkEditData(function (err, fields) {
             this.data.bulk_edit_preview = fields;
 
-            this.view(DioscouriCore.View.htmlView(this.getViewFilename('bulk_edit')));
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('bulk_edit')));
             readyCallback();
         }.bind(this));
     }

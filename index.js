@@ -188,6 +188,30 @@ class Loader extends DioscouriCore.AppBootstrap {
             url: '/admin/configurations',
             order: 106
         });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'ACL',
+            icon: 'fa-lock',
+            order: 106
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Permissions',
+            url: '/admin/acl_permissions',
+            parent: 'ACL'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Resources',
+            url: '/admin/acl_resources',
+            parent: 'ACL'
+        });
+
+        Loader.Admin.Models.Navigation.create({
+            name: 'Roles',
+            url: '/admin/acl_roles',
+            parent: 'ACL'
+        });
     }
 
     /**

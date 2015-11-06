@@ -252,7 +252,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
     /**
      * Returns view pagination
      *
-     * @returns {{}}
+     * @returns {Number}
      */
     getViewPageCurrent() {
         if (this.request.params && this.request.params.page) {
@@ -264,16 +264,15 @@ class BaseCRUDController extends DioscouriCore.Controller {
     /**
      * Returns view page size
      *
-     * @returns {{}}
+     * @returns {Number}
      */
-    getViewPageSize() {
-        var defaultPageSize = 10;
-        //var cacheObj = this.request.query.filter;
-        var cacheObj = this.request.session;
-        if (cacheObj && cacheObj.pageSize != null) {
-            return parseInt(cacheObj.pageSize, defaultPageSize);
+    getViewPageSize () {
+        var filter = this.getCachedRequestFilter();
+
+        if (filter.pageSize) {
+            return parseInt(filter.pageSize);
         } else {
-            return defaultPageSize;
+            return 10;
         }
     }
 
@@ -522,7 +521,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
             this.data.createActionUrl     = this.getActionUrl('create');
             this.data.importActionUrl     = this.getActionUrl('import');
-            this.data.bulkEditActionUrl   = this.getActionUrl('bulkEdit');
+            this.data.bulkEditActionUrl   = this.getActionUrl('bulkEdit') + this.getQueryStringFilterPart();
             this.data.bulkDeleteActionUrl = this.getActionUrl('bulkDelete');
             this.data.baseUrl             = this._baseUrl;
 
@@ -698,7 +697,7 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
                     for (var j = 0; j < fields.length; j++) {
                         if (fields[j]) {
-                            item[fields[j]] = records[i][j]
+                            item[fields[j].replace('\n', ' ').trim()] = records[i][j]
                         }
                     }
 

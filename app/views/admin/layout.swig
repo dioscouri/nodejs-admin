@@ -29,6 +29,7 @@
   {% include "./partials/pagination-rows.swig" %}
   {% include "./partials/pagination-summary.swig" %}
   {% include "./partials/sorting_column.swig" %}
+  {% include "./partials/sorting.swig" %}
   {% include "./partials/search.swig" %}
   {% include "./partials/resource-action-buttons.swig" %}
   {% include "./partials/bulk-actions.swig" %}

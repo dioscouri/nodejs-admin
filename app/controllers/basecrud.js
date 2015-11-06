@@ -519,6 +519,12 @@ class BaseCRUDController extends DioscouriCore.Controller {
                 }
             }
 
+            /**
+             * Used in sorting() macro in SWIG
+             */
+            this.data.filter = this.data.filter || {};
+            this.data.filter.sorting = sorting;
+
             this.data.createActionUrl     = this.getActionUrl('create');
             this.data.importActionUrl     = this.getActionUrl('import');
             this.data.bulkEditActionUrl   = this.getActionUrl('bulkEdit') + this.getQueryStringFilterPart();

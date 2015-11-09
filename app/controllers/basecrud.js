@@ -43,9 +43,16 @@ var async = require('async');
 var objectPath = require('object-path');
 
 /**
+ * Secured Controller
+ *
+ * @type {*|exports|module.exports}
+ */
+var SecuredController = require('./securedcontroller.js');
+
+/**
  *  Admin base CRUD controller
  */
-class BaseCRUDController extends DioscouriCore.Controller {
+class BaseCRUDController extends SecuredController {
 
     /**
      * Controller constructor

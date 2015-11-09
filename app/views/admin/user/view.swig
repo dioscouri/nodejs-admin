@@ -15,12 +15,16 @@
         <li role="presentation" class="active">
           <a href="#tab-basic" aria-controls="tab-basic" role="tab" data-toggle="tab">Basic</a>
         </li>
+        <li role="presentation">
+          <a href="#tab-permissions" aria-controls="tab-basic" role="tab" data-toggle="tab">Permissions</a>
+        </li>
       </ul>
     </div>
 
     <div class="col-sm-9 col-md-9 col-lg-10">
       <div class="tab-content">
         {% include "tabs/basicProps.swig" %}
+        {% include "tabs/permissionsTab.swig" %}
       </div>
     </div>
 

@@ -3,7 +3,7 @@ jQuery(document).ready(function () {
     "use strict";
 
     function enableDisableBulkEditButton() {
-        var btnDelete = $(".bulk_delete"),
+        var btnDelete     = $(".bulk_delete"),
             selectedItems = $("[id^='checkbox_']:checkbox:checked");
 
         if (selectedItems.length === 0) {
@@ -25,7 +25,7 @@ jQuery(document).ready(function () {
 
         // Bulk delete button, under construction....
         $(".bulk-actions .bulk_delete").click(function () {
-            var form = $(".bulk-delete-form"),
+            var form          = $(".bulk-delete-form"),
                 selectedItems = $("[id^='checkbox_']:checkbox:checked");
 
             form.find("hidden").remove();
@@ -45,7 +45,7 @@ jQuery(document).ready(function () {
             }
         });
 
-        $(document).on('change' , "[id^='checkbox_']:checkbox", function(){
+        $(document).on('change', "[id^='checkbox_']:checkbox", function () {
             enableDisableBulkEditButton();
         });
 
@@ -53,13 +53,13 @@ jQuery(document).ready(function () {
     }
 
     /*
-    // We can't use this for all SELECT in app
-    if (jQuery().select2) {
-        jQuery("select").select2({
-            minimumResultsForSearch: -1
-        });
-    }
-    */
+     // We can't use this for all SELECT in app
+     if (jQuery().select2) {
+     jQuery("select").select2({
+     minimumResultsForSearch: -1
+     });
+     }
+     */
 
     $('.bs-data-picker').datepicker({});
 
@@ -452,4 +452,8 @@ $(document).ready(function () {
 
         $('#bulk-edit-form form').submit();
     });
+});
+
+$(document).ready(function () {
+    $('.user-roles-select').select2();
 });

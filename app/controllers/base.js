@@ -39,6 +39,8 @@ class AdminBaseController extends DioscouriCore.Controller {
 
             callback();
         } else {
+            this.data.loggedUser = this.request.user;
+
             callback();
         }
     }

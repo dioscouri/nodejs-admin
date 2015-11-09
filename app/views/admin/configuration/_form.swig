@@ -5,10 +5,12 @@
             <ul class="nav nav-pills nav-stacked col-md-3">
                 <li class="active"><a href="#mandrill" data-toggle="tab">Mandrill</a></li>
                 <li><a href="#pkgcloud" data-toggle="tab">pkg Cloud</a></li>
+                <li><a href="#frontui" data-toggle="tab">Front UI</a></li>
             </ul>
             <div class="tab-content col-md-9">
                 {% include "tabs/mandrill.swig" %}
                 {% include "tabs/pkgCloud.swig" %}
+                {% include "tabs/frontUi.swig" %}
 
             </div>
         </div>

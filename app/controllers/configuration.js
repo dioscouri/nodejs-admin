@@ -64,6 +64,11 @@ class AdminConfiguration extends AdminBaseCrudController {
             region: this.request.body.pkgcloudRegion
         };
 
+        result.frontui = {
+            requireLogin: this.request.body.requireLogin === "on",
+            enableRegistration: this.request.body.enableRegistration === "on"
+        };
+
         return result;
     }
 

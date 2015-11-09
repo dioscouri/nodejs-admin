@@ -208,6 +208,8 @@ class BaseCRUDController extends DioscouriCore.Controller {
 
             callback();
         } else {
+            this.data.loggedUser = this.request.user;
+
             callback();
         }
     }

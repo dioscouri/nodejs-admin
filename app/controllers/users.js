@@ -68,6 +68,8 @@ class AdminUsers extends AdminBaseCrudController {
         result.name.first = this.request.body.firstName;
         result.name.last  = this.request.body.lastName;
 
+        result.roles = this.request.body.roles || [];
+
         return result;
     }
 
@@ -144,6 +146,60 @@ class AdminUsers extends AdminBaseCrudController {
         this.response.redirect(this.getActionUrl(redirectToAction, this._item));
     }
 
+    /**
+     * Create item
+     *
+     * @param readyCallback
+     */
+    create(readyCallback) {
+        super.create(function (err) {
+            if (err) {
+                return readyCallback(err);
+            }
+
+            this.loadRoles(readyCallback);
+        }.bind(this));
+    }
+
+    /**
+     * Edit item
+     *
+     * @param readyCallback
+     */
+    edit(readyCallback) {
+        super.edit(function (err) {
+            if (err) return readyCallback(err);
+
+            this.loadRoles(readyCallback);
+        }.bind(this));
+    }
+
+    /**
+     * View item
+     *
+     * @param readyCallback
+     */
+    doView(readyCallback) {
+        super.doView(function (err) {
+            if (err) return readyCallback(err);
+
+            this.loadRoles(readyCallback);
+        }.bind(this));
+    }
+
+    /**
+     * Load Users Roles
+     * @param readyCallback
+     */
+    loadRoles(readyCallback) {
+        require('../models/acl_roles.js').getAll(function (err, roles) {
+            if (err) return callback();
+
+            this.data.roles = roles;
+
+            readyCallback();
+        }.bind(this));
+    }
 }
 
 /**

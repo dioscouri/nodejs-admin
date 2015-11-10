@@ -16,11 +16,22 @@ var BaseModel = require('./base');
 var LocalStrategy = require('passport-local').Strategy;
 
 /**
+ * Ldap passport strategy
+ */
+var LdapStrategy = require('passport-ldapauth');
+
+/**
  * Requiring Crypto modules
  *
  * @type {*}
  */
 var bcrypt = require('bcrypt-nodejs');
+
+/**
+ * Async library
+ * @type {async|exports|module.exports}
+ */
+var async = require('async');
 
 /**
  *  User model
@@ -56,6 +67,7 @@ class UserModel extends BaseModel {
                 "last": String,
                 "first": String
             },
+            "roles": [String],
             notifications: []
         };
 
@@ -129,7 +141,7 @@ class UserModel extends BaseModel {
                     callback(null, isMatch);
                 }
             });
-        }
+        };
 
         // Registering schema and initializing model
         this.registerSchema(UserDBOSchema);
@@ -152,10 +164,10 @@ class UserModel extends BaseModel {
     registerPassportHandlers(passport) {
         var userModel = this;
 
-        // Initizlizing passport
+        // Initializing passport
         this._passport = passport;
 
-        this._logger.info('## Registering LocalStrategy for Authentification.');
+        this._logger.info('## Registering Authentication Strategies.');
         passport.serializeUser(function (user, done) {
             done(null, user.id);
         });
@@ -167,22 +179,69 @@ class UserModel extends BaseModel {
                     return done(err);
                 }
 
-                require('./acl_permissions').acl.addUserRoles(user._id.toString(), 'user');
-
-                if (user.isAdmin) {
-                    require('./acl_permissions').acl.addUserRoles(user._id.toString(), 'admin');
-                }
+                (user.roles || []).forEach(function (role) {
+                    DioscouriCore.ApplicationFacade.instance.server.acl.addUserRoles(user._id.toString(), role);
+                });
 
                 done(null, user);
             });
         });
 
         /**
-         * Sign in using Email and Password.
+         * TODO: Make strategies configurable from Admin UI
+         */
+
+        /**
+         * LDAP: Sign in using Email and Password.
+         */
+        passport.use(new LdapStrategy({
+            usernameField: 'email',
+            server: {
+                url: 'ldaps://ldap.cohengroup.us:636',
+                bindDn: 'CN=appadmin,CN=Managed Service Accounts,DC=GENERALVISION,DC=LOCAL',
+                bindCredentials: 'aEcVUNc5ve!7Vk',
+                searchBase: 'dc=generalvision,dc=local',
+                searchFilter: '(mail={{username}})',
+                tlsOptions: {
+                    rejectUnauthorized: false
+                }
+            }
+        }, function (user, done) {
+
+            userModel._logger.debug('Trying to Authenticate user %s.', require('util').inspect(user));
+
+            async.waterfall([function (callback) {
+
+                // Try find user in the local database
+                userModel.findOne({email: user.mail}, callback);
+
+            }, function (databaseUser, callback) {
+
+                if (!databaseUser) {
+                    // Create local user if it's not exist
+                    userModel.insert({
+                        email: user.mail,
+                        name: {
+                            first: user.displayName
+                        },
+                        isAdmin: false
+                    }, callback);
+                } else {
+                    callback(null, databaseUser);
+                }
+
+            }], done);
+        }));
+
+        /**
+         * Local: Sign in using Email and Password.
          */
         passport.use(new LocalStrategy({usernameField: 'email'}, function (email, password, done) {
+
             email = email.toLowerCase();
-            userModel._logger.debug('Trying to Authentificate user %s.', email);
+
+            userModel._logger.debug('Trying to Authenticate user %s.', email);
+
             userModel.findOne({email: email}, function (err, user) {
                 if (!user) {
                     return done(null, false, {message: 'Email ' + email + ' not found'});
@@ -197,11 +256,45 @@ class UserModel extends BaseModel {
         }));
     }
 
+    authenticate(request, callback) {
+        var userModel = this;
+
+        async.waterfall([function (callback) {
+
+            userModel.passport.authenticate('ldapauth', function (err, user, info) {
+
+                if (err) {
+                    userModel._logger.warn(err.dn);
+                    userModel._logger.warn(err.code);
+                    userModel._logger.warn(err.name);
+                    userModel._logger.warn(err.message);
+                    return callback(err);
+                }
+
+                callback(null, user, info);
+
+            })(request);
+
+        }, function (user, info, callback) {
+
+            if (user) return callback(null, user);
+
+            userModel.passport.authenticate('local', function (err, user, info) {
+
+                if (err) return callback(err);
+
+                callback(null, user, info);
+
+            })(request);
+
+        }], callback);
+    }
+
     /**
      * Validate item
      *
      * @param item
-     * @param callback
+     * @param validationCallback
      */
     validate(item, validationCallback) {
         var validationMessages = [];
@@ -233,13 +326,10 @@ class UserModel extends BaseModel {
         }
     }
 
-;
-
-
     /**
      * Send registration confirmation email for this user
      *
-     * @param userId
+     * @param userEmail
      * @param callback
      */
     sendRegistrationConfirmationEmail(userEmail, callback) {

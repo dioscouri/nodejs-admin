@@ -45,6 +45,22 @@ class AdminWebhookEvents extends AdminBaseCrudController {
          * @private
          */
         this._viewsPath = 'webhookevent';
+
+        /**
+         * ACL resource name
+         *
+         * @type {string}
+         * @private
+         */
+        this._aclResourceName = 'webhookevent';
+
+        /**
+         * Protected Actions
+         *
+         * @type {string[]}
+         * @private
+         */
+        this._protected = ['edit', 'delete'];
     }
 }
 

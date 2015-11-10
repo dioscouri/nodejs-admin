@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring Core Library
+ */
+var DioscouriCore = process.mainModule.require('dioscouri-core');
+
+/**
  * Requiring base Controller
  */
 var AdminBaseCrudController = require('./basecrud.js');
@@ -51,7 +56,7 @@ class AdminAclPermissions extends AdminBaseCrudController {
 
             async.parallel([function (callback) {
 
-                require('../models/acl_resources.js').getAll(function (err, resources) {
+                DioscouriCore.ApplicationFacade.instance.registry.load('Application.Models.ACLResources').getAll(function (err, resources) {
                     if (err) return callback();
 
                     this.data.resources = resources;

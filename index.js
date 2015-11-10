@@ -57,7 +57,6 @@ class Loader extends DioscouriCore.AppBootstrap {
         this.applicationFacade.registry.push('Admin.Controllers.BaseAuth', Loader.Admin.Controllers.BaseAuth);
         this.applicationFacade.registry.push('Admin.Controllers.BaseCRUD', Loader.Admin.Controllers.BaseCRUD);
         this.applicationFacade.registry.push('Admin.Models.ACLPermissions', Loader.Admin.Models.ACLPermissions);
-        this.applicationFacade.registry.push('Admin.Models.ACLResources', Loader.Admin.Models.ACLResources);
         this.applicationFacade.registry.push('Admin.Models.ACLRoles', Loader.Admin.Models.ACLRoles);
         this.applicationFacade.registry.push('Admin.Models.Base', Loader.Admin.Models.Base);
         this.applicationFacade.registry.push('Admin.Models.Configuration', Loader.Admin.Models.Configuration);
@@ -234,7 +233,6 @@ Loader.Admin = {
     },
     Models: {
         ACLPermissions: require('./app/models/acl_permissions.js'),
-        ACLResources: require('./app/models/acl_resources.js'),
         ACLRoles: require('./app/models/acl_roles.js'),
         Base: require('./app/models/base.js'),
         Configuration: require('./app/models/configuration.js'),

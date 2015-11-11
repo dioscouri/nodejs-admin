@@ -20,6 +20,12 @@ class AclPermissionModel extends BaseModel {
     constructor(listName) {
         // We must call super() in child class to have access to 'this' in a constructor
         super(listName);
+
+        /**
+         * ACL instance
+         * @type {null}
+         */
+        this.acl = null;
     }
 
     /**
@@ -40,6 +46,22 @@ class AclPermissionModel extends BaseModel {
         //Creating DBO Schema
         var AclPermissionDBOSchema = this.createSchema(schemaObject);
 
+        AclPermissionDBOSchema.post('save', function (permission) {
+            require('./acl_roles').findById(permission.aclRole, function(err, role) {
+                if (err) return console.log(err);
+
+                this.acl.allow(role.name, permission.aclResource, permission.actionName);
+            }.bind(this));
+        }.bind(this));
+
+        AclPermissionDBOSchema.post('remove', function (permission) {
+            require('./acl_roles').findById(permission.aclRole, function(err, role) {
+                if (err) return console.log(err);
+
+                this.acl.removeAllow(role.name, permission.aclResource, permission.actionName);
+            }.bind(this));
+        }.bind(this));
+
         // Registering schema and initializing model
         this.registerSchema(AclPermissionDBOSchema);
     }
@@ -55,7 +77,7 @@ class AclPermissionModel extends BaseModel {
         this.acl = new aclModule(new aclModule.memoryBackend());
 
         this.model.find({})
-            .populate('aclRole', 'name') // TODO ???
+            .populate('aclRole', 'name')
             .exec(function (err, permissions) {
                 if (err) return callback(err);
 

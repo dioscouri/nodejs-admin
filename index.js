@@ -201,12 +201,6 @@ class Loader extends DioscouriCore.AppBootstrap {
         });
 
         Loader.Admin.Models.Navigation.create({
-            name: 'Resources',
-            url: '/admin/acl_resources',
-            parent: 'ACL'
-        });
-
-        Loader.Admin.Models.Navigation.create({
             name: 'Roles',
             url: '/admin/acl_roles',
             parent: 'ACL'

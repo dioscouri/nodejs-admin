@@ -32,7 +32,7 @@ class Loader extends DioscouriCore.AppBootstrap {
          * @type {string}
          * @private
          */
-        this._moduleVersion = '1.1.3';
+        this._moduleVersion = '1.1.4';
     }
 
     /**

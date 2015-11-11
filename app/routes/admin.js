@@ -28,11 +28,6 @@ module.exports = function () {
         'get,post|/admin/users/:action': 'users.js',
         'get,post|/admin/users/:id/:action': 'users.js',
 
-        // ACL Resources management routes
-        'get|/admin/acl_resources': 'acl_resources.js',
-        'get,post|/admin/acl_resources/:action': 'acl_resources.js',
-        'get,post|/admin/acl_resources/:id/:action': 'acl_resources.js',
-
         // ACL Roles management routes
         'get|/admin/acl_roles': 'acl_roles.js',
         'get,post|/admin/acl_roles/:action': 'acl_roles.js',

@@ -45,8 +45,21 @@ class ConfigurationModel extends BaseModel {
                 region: {type: String}
             },
             frontui: {
-                requireLogin: {type: Boolean, default: false},
-                enableRegistration: {type: Boolean, default: true}
+                requireLogin: {type: Boolean, 'default': false},
+                enableRegistration: {type: Boolean, 'default': true}
+            },
+            authentication: {
+                local: {
+                    enabled: {type: Boolean},
+                },
+                ldap: {
+                    enabled: {type: Boolean},
+                    url: {type: String},
+                    bindDn: {type: String},
+                    bindCredentials: {type: String},
+                    searchBase: {type: String},
+                    searchFilter: {type: String}
+                }
             }
         };
 

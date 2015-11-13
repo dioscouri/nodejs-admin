@@ -187,73 +187,77 @@ class UserModel extends BaseModel {
             });
         });
 
-        /**
-         * TODO: Make strategies configurable from Admin UI
-         */
+        var ldapAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.ldap;
 
-        /**
-         * LDAP: Sign in using Email and Password.
-         */
-        passport.use(new LdapStrategy({
-            usernameField: 'email',
-            server: {
-                url: 'ldaps://ldap.cohengroup.us:636',
-                bindDn: 'CN=appadmin,CN=Managed Service Accounts,DC=GENERALVISION,DC=LOCAL',
-                bindCredentials: 'aEcVUNc5ve!7Vk',
-                searchBase: 'dc=generalvision,dc=local',
-                searchFilter: '(mail={{username}})',
-                tlsOptions: {
-                    rejectUnauthorized: false
-                }
-            }
-        }, function (user, done) {
-
-            userModel._logger.debug('Trying to Authenticate user %s.', require('util').inspect(user));
-
-            async.waterfall([function (callback) {
-
-                // Try find user in the local database
-                userModel.findOne({email: user.mail}, callback);
-
-            }, function (databaseUser, callback) {
-
-                if (!databaseUser) {
-                    // Create local user if it's not exist
-                    userModel.insert({
-                        email: user.mail,
-                        name: {
-                            first: user.displayName
-                        },
-                        isAdmin: false
-                    }, callback);
-                } else {
-                    callback(null, databaseUser);
-                }
-
-            }], done);
-        }));
-
-        /**
-         * Local: Sign in using Email and Password.
-         */
-        passport.use(new LocalStrategy({usernameField: 'email'}, function (email, password, done) {
-
-            email = email.toLowerCase();
-
-            userModel._logger.debug('Trying to Authenticate user %s.', email);
-
-            userModel.findOne({email: email}, function (err, user) {
-                if (!user) {
-                    return done(null, false, {message: 'Email ' + email + ' not found'});
-                }
-                user.comparePassword(password, function (err, isMatch) {
-                    if (isMatch) {
-                        return done(null, user);
+        if (ldapAuth && ldapAuth.enabled === true) {
+            /**
+             * LDAP: Sign in using Email and Password.
+             */
+            passport.use(new LdapStrategy({
+                usernameField: 'email',
+                server: {
+                    url: ldapAuth.url,
+                    bindDn: ldapAuth.bindDn,
+                    bindCredentials: ldapAuth.bindCredentials,
+                    searchBase: ldapAuth.searchBase,
+                    searchFilter: ldapAuth.searchFilter,
+                    tlsOptions: {
+                        rejectUnauthorized: false
                     }
-                    done(null, false, {message: 'Invalid email or password.'});
+                }
+            }, function (user, done) {
+
+                userModel._logger.debug('Trying to Authenticate user %s.', require('util').inspect(user));
+
+                async.waterfall([function (callback) {
+
+                    // Try find user in the local database
+                    userModel.findOne({email: user.mail}, callback);
+
+                }, function (databaseUser, callback) {
+
+                    if (!databaseUser) {
+                        // Create local user if it's not exist
+                        userModel.insert({
+                            email: user.mail,
+                            name: {
+                                first: user.displayName
+                            },
+                            isAdmin: false
+                        }, callback);
+                    } else {
+                        callback(null, databaseUser);
+                    }
+
+                }], done);
+            }));
+        }
+
+        var localAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.local;
+
+        if (localAuth && localAuth.enabled === true) {
+            /**
+             * Local: Sign in using Email and Password.
+             */
+            passport.use(new LocalStrategy({usernameField: 'email'}, function (email, password, done) {
+
+                email = email.toLowerCase();
+
+                userModel._logger.debug('Trying to Authenticate user %s.', email);
+
+                userModel.findOne({email: email}, function (err, user) {
+                    if (!user) {
+                        return done(null, false, {message: 'Email ' + email + ' not found'});
+                    }
+                    user.comparePassword(password, function (err, isMatch) {
+                        if (isMatch) {
+                            return done(null, user);
+                        }
+                        done(null, false, {message: 'Invalid email or password.'});
+                    });
                 });
-            });
-        }));
+            }));
+        }
     }
 
     authenticate(request, callback) {
@@ -261,31 +265,48 @@ class UserModel extends BaseModel {
 
         async.waterfall([function (callback) {
 
-            userModel.passport.authenticate('ldapauth', function (err, user, info) {
+            var ldapAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.ldap;
 
-                if (err) {
-                    userModel._logger.warn(err.dn);
-                    userModel._logger.warn(err.code);
-                    userModel._logger.warn(err.name);
-                    userModel._logger.warn(err.message);
-                    return callback(err);
-                }
+            if (ldapAuth && ldapAuth.enabled === true) {
 
-                callback(null, user, info);
+                userModel.passport.authenticate('ldapauth', function (err, user, info) {
 
-            })(request);
+                    if (err) {
+                        userModel._logger.warn(err.dn);
+                        userModel._logger.warn(err.code);
+                        userModel._logger.warn(err.name);
+                        userModel._logger.warn(err.message);
+                        return callback(err);
+                    }
+
+                    callback(null, user, info);
+
+                })(request);
+
+            } else {
+
+                callback();
+            }
 
         }, function (user, info, callback) {
 
             if (user) return callback(null, user);
 
-            userModel.passport.authenticate('local', function (err, user, info) {
+            var localAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.local;
 
-                if (err) return callback(err);
+            if (localAuth && localAuth.enabled === true) {
 
-                callback(null, user, info);
+                userModel.passport.authenticate('local', function (err, user, info) {
 
-            })(request);
+                    if (err) return callback(err);
+
+                    callback(null, user, info);
+
+                })(request);
+            } else {
+
+                callback(null, null, {message: 'Unable to authenticate. User not found or password is wrong.'});
+            }
 
         }], callback);
     }

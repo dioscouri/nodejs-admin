@@ -69,6 +69,20 @@ class AdminConfiguration extends AdminBaseCrudController {
             enableRegistration: this.request.body.enableRegistration === "on"
         };
 
+        result.authentication = {
+            local: {
+                enabled: !!this.request.body.localEnabled
+            },
+            ldap: {
+                enabled: !!this.request.body.ldapEnabled,
+                url: this.request.body.ldapUrl,
+                bindDn: this.request.body.ldapBindDn,
+                bindCredentials: this.request.body.ldapBindCredentials,
+                searchBase: this.request.body.ldapSearchBase,
+                searchFilter: this.request.body.ldapSearchFilter
+            }
+        };
+
         return result;
     }
 

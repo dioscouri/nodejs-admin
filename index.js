@@ -47,10 +47,6 @@ class Loader extends DioscouriCore.AppBootstrap {
         // Loading models
         this.applicationFacade.loadModels(__dirname + '/app/models');
 
-        // Init Passport
-        var userModel = require('./app/models/user.js');
-        this.applicationFacade.server.initPassport(userModel);
-
         this.applicationFacade.server.initAcl(require('./app/models/acl_permissions'));
 
         // Initializing Library Exports
@@ -205,6 +201,13 @@ class Loader extends DioscouriCore.AppBootstrap {
             url: '/admin/acl_roles',
             parent: 'ACL'
         });
+
+        Loader.Admin.Models.Configuration.readConf(function (config) {
+            this.applicationFacade.config.mergeConfig(config);
+
+            var userModel = require('./app/models/user.js');
+            this.applicationFacade.server.initPassport(userModel);
+        }.bind(this));
     }
 
     /**

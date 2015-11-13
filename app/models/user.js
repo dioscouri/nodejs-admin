@@ -283,7 +283,7 @@ class UserModel extends BaseModel {
 
             } else {
 
-                callback();
+                callback(null, null, null);
             }
 
         }, function (user, info, callback) {

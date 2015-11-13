@@ -189,7 +189,7 @@ class UserModel extends BaseModel {
 
         var authentication = DioscouriCore.ApplicationFacade.instance.config.env.authentication;
 
-        if (authentication.ldap.enabled === true) {
+        if (authentication && authentication.ldap && authentication.ldap.enabled === true) {
             /**
              * LDAP: Sign in using Email and Password.
              */
@@ -234,7 +234,7 @@ class UserModel extends BaseModel {
         }
 
         // Local strategy enabled by default but can be disabled in Configuration
-        if (authentication.local.enabled === true) {
+        if (!authentication || !authentication.local || authentication.local.enabled !== false) {
             /**
              * Local: Sign in using Email and Password.
              */
@@ -266,7 +266,7 @@ class UserModel extends BaseModel {
 
         async.waterfall([function (callback) {
 
-            if (authentication.ldap.enabled === true) {
+            if (authentication && authentication.ldap && authentication.ldap.enabled === true) {
 
                 userModel.passport.authenticate('ldapauth', function (err, user, info) {
 
@@ -291,7 +291,8 @@ class UserModel extends BaseModel {
 
             if (user) return callback(null, user);
 
-            if (authentication.local.enabled === true) {
+            // Local strategy enabled by default but can be disabled in Configuration
+            if (!authentication || !authentication.local || authentication.local.enabled !== false) {
 
                 userModel.passport.authenticate('local', function (err, user, info) {
 

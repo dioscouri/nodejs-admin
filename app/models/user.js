@@ -187,9 +187,9 @@ class UserModel extends BaseModel {
             });
         });
 
-        var ldapAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.ldap;
+        var authentication = DioscouriCore.ApplicationFacade.instance.config.env.authentication;
 
-        if (ldapAuth && ldapAuth.enabled === true) {
+        if (authentication && authentication.ldap && authentication.ldap.enabled === true) {
             /**
              * LDAP: Sign in using Email and Password.
              */
@@ -233,9 +233,7 @@ class UserModel extends BaseModel {
             }));
         }
 
-        var localAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.local;
-
-        if (localAuth && localAuth.enabled === true) {
+        if (authentication && authentication.ldap && authentication.ldap.enabled !== false) {
             /**
              * Local: Sign in using Email and Password.
              */
@@ -263,11 +261,11 @@ class UserModel extends BaseModel {
     authenticate(request, callback) {
         var userModel = this;
 
+        var authentication = DioscouriCore.ApplicationFacade.instance.config.env.authentication;
+
         async.waterfall([function (callback) {
 
-            var ldapAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.ldap;
-
-            if (ldapAuth && ldapAuth.enabled === true) {
+            if (authentication && authentication.ldap && authentication.ldap.enabled === true) {
 
                 userModel.passport.authenticate('ldapauth', function (err, user, info) {
 
@@ -292,9 +290,7 @@ class UserModel extends BaseModel {
 
             if (user) return callback(null, user);
 
-            var localAuth = DioscouriCore.ApplicationFacade.instance.config.env.authentication.local;
-
-            if (localAuth && localAuth.enabled === true) {
+            if (authentication && authentication.local && authentication.local.enabled !== false) {
 
                 userModel.passport.authenticate('local', function (err, user, info) {
 

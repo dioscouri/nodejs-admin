@@ -82,7 +82,12 @@ class ConfigurationModel extends BaseModel {
     readConf(callback) {
         this.model.find({}).exec(function (err, configuration) {
             if (err) return console.log('Unable to get Configuration. ' + err.message);
-            if (configuration.length === 0) return console.log('Configuration entry was not found in the Database.');
+
+            if (configuration.length === 0) {
+                this._configuration = {};
+                console.log('Configuration entry was not found in the Database.');
+                return callback(this._configuration);
+            }
 
             this._configuration = configuration[0];
             console.log('#### Configuration loaded');

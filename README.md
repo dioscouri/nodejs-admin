@@ -18,3 +18,12 @@
 
 5. Assign created roles to users using a `Permissions` tab in a user edit UI
 
+#### List Export Setup
+
+1. Configure Export fields and aliases (future column names) in your CRUD Controller:  
+    
+    ```
+    this._xlsExportFields = [{field: '_id', column: 'ID'}, {field: 'name', column: 'Doctor Name'}];
+    ```
+
+2. Use `exportActionUrl` in views to export

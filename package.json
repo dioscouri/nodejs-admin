@@ -11,8 +11,9 @@
     "merge": "^1.2.0",
     "multiparty": "^4.1.2",
     "object-path": "^0.9.2",
+    "passport-ldapauth": "^0.4.0",
     "passport-local": "^1.0.0",
-    "passport-ldapauth": "^0.4.0"
+    "xlsx": "^0.8.0"
   },
   "devDependencies": {
     "dioscouri-core": "git+https://github.com/dioscouri/nodejs-lib.git",

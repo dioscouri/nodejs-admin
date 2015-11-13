@@ -43,6 +43,13 @@ var async = require('async');
 var objectPath = require('object-path');
 
 /**
+ * Excel library
+ *
+ * @type {CFB|exports|module.exports}
+ */
+var XLSX = require('xlsx');
+
+/**
  * Secured Controller
  *
  * @type {*|exports|module.exports}
@@ -235,6 +242,7 @@ class BaseCRUDController extends SecuredController {
         this.registerAction('delete', 'doDelete');
         this.registerAction('doDelete', 'doDelete');
         this.registerAction('import', 'xlsImport');
+        this.registerAction('export', 'xlsExport');
         this.registerAction('bulkEdit', 'bulkEdit');
         this.registerAction('bulkEditPreview', 'bulkEditPreview');
         this.registerAction('doBulkEdit', 'doBulkEdit');
@@ -275,7 +283,7 @@ class BaseCRUDController extends SecuredController {
      *
      * @returns {Number}
      */
-    getViewPageSize () {
+    getViewPageSize() {
         var filter = this.getCachedRequestFilter();
 
         if (filter.pageSize) {
@@ -304,7 +312,7 @@ class BaseCRUDController extends SecuredController {
      * @returns {{}}
      */
     getViewSorting() {
-        var filter = this.getCachedRequestFilter();
+        var filter  = this.getCachedRequestFilter();
         var sorting = filter.sorting || {};
         return sorting;
     }
@@ -346,6 +354,7 @@ class BaseCRUDController extends SecuredController {
         switch (action) {
             case 'create':
             case 'import':
+            case 'export':
             case 'bulkEdit':
             case 'bulkEditPreview':
             case 'doBulkEdit':
@@ -531,11 +540,12 @@ class BaseCRUDController extends SecuredController {
             /**
              * Used in sorting() macro in SWIG
              */
-            this.data.filter = this.data.filter || {};
+            this.data.filter         = this.data.filter || {};
             this.data.filter.sorting = sorting;
 
             this.data.createActionUrl     = this.getActionUrl('create');
             this.data.importActionUrl     = this.getActionUrl('import');
+            this.data.exportActionUrl     = this.getActionUrl('export') + this.getQueryStringFilterPart();
             this.data.bulkEditActionUrl   = this.getActionUrl('bulkEdit') + this.getQueryStringFilterPart();
             this.data.bulkDeleteActionUrl = this.getActionUrl('bulkDelete');
             this.data.baseUrl             = this._baseUrl;
@@ -790,6 +800,69 @@ class BaseCRUDController extends SecuredController {
                 readyCallback(err);
             }.bind(this));
         }
+    }
+
+    /**
+     * Export items to Excel file
+     *
+     * @param readyCallback
+     */
+    xlsExport(readyCallback) {
+
+        var fields = this._xlsExportFields.map(function (field) {
+            return field.field
+        });
+
+        var data = [
+            this._xlsExportFields.map(function (field) {
+                return field.column
+            })
+        ];
+
+        var pagination = {
+            currentPage: 1,
+            pageSize: 10000
+        };
+
+        this.model.getListFiltered(this.getViewFilters(), null, pagination, {}, function (error, locals) {
+            if (error != null) {
+                return readyCallback(error);
+            }
+
+            locals.items.forEach(function (item) {
+                data.push(fields.map(function (field) {
+                    return item[field]
+                }));
+            });
+
+            var workbook = {
+                SheetNames: ['Worksheet 1'],
+                Sheets: {
+                    'Worksheet 1': require('../lib/xls').sheet_from_array_of_arrays(data)
+                }
+            };
+
+            var tmpFilePath = path.resolve(require('os').tmpdir(), 'export_' + (new Date()).getTime() + '.xlsx');
+
+            XLSX.writeFile(workbook, tmpFilePath);
+
+            this.terminate();
+
+            this.response.sendFile(tmpFilePath, {
+                headers: {
+                    'Content-Disposition': 'attachment; filename="' + this.model._list + '_export.xlsx"'
+                }
+            }, function (err) {
+                if (err) console.log(err);
+
+                require('fs').unlink(tmpFilePath, function (err) {
+                    if (err) console.log(err);
+
+                    readyCallback();
+                })
+            });
+
+        }.bind(this));
     }
 
     /**

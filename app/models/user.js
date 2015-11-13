@@ -196,11 +196,11 @@ class UserModel extends BaseModel {
             passport.use(new LdapStrategy({
                 usernameField: 'email',
                 server: {
-                    url: ldapAuth.url,
-                    bindDn: ldapAuth.bindDn,
-                    bindCredentials: ldapAuth.bindCredentials,
-                    searchBase: ldapAuth.searchBase,
-                    searchFilter: ldapAuth.searchFilter,
+                    url: authentication.ldap.url,
+                    bindDn: authentication.ldap.bindDn,
+                    bindCredentials: authentication.ldap.bindCredentials,
+                    searchBase: authentication.ldap.searchBase,
+                    searchFilter: authentication.ldap.searchFilter,
                     tlsOptions: {
                         rejectUnauthorized: false
                     }

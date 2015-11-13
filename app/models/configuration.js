@@ -50,10 +50,10 @@ class ConfigurationModel extends BaseModel {
             },
             authentication: {
                 local: {
-                    enabled: {type: Boolean},
+                    enabled: {type: Boolean, 'default': true}
                 },
                 ldap: {
-                    enabled: {type: Boolean},
+                    enabled: {type: Boolean, 'default': false},
                     url: {type: String},
                     bindDn: {type: String},
                     bindCredentials: {type: String},

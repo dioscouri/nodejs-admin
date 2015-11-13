@@ -233,7 +233,8 @@ class UserModel extends BaseModel {
             }));
         }
 
-        if (authentication && authentication.ldap && authentication.ldap.enabled !== false) {
+        // Local strategy enabled by default but can be disabled in Configuration
+        if (!authentication || !authentication.local || authentication.local.enabled === true) {
             /**
              * Local: Sign in using Email and Password.
              */
@@ -290,7 +291,8 @@ class UserModel extends BaseModel {
 
             if (user) return callback(null, user);
 
-            if (authentication && authentication.local && authentication.local.enabled !== false) {
+            // Local strategy enabled by default but can be disabled in Configuration
+            if (!authentication || !authentication.local || authentication.local.enabled === true) {
 
                 userModel.passport.authenticate('local', function (err, user, info) {
 

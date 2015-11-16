@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * Requiring Core Library
+ */
+var DioscouriCore = process.mainModule.require('dioscouri-core');
+
+/**
  * Requiring base Controller
  */
 var AdminBaseCrudController = require('./basecrud.js');
@@ -66,8 +71,13 @@ class AdminConfiguration extends AdminBaseCrudController {
 
         result.frontui = {
             requireLogin: this.request.body.requireLogin === "on",
+            enableLogin: this.request.body.enableLogin === "on",
             enableRegistration: this.request.body.enableRegistration === "on"
         };
+
+        if (result.frontui.requireLogin) {
+            result.frontui.enableLogin = true;
+        }
 
         result.authentication = {
             local: {
@@ -95,6 +105,9 @@ class AdminConfiguration extends AdminBaseCrudController {
             if (this.data.items.length === 0) {
                 this.response.redirect(this.getActionUrl('create'));
             } else {
+                this._model.readConf(function (config) {
+                    DioscouriCore.ApplicationFacade.instance.config.mergeConfig(config);
+                });
                 this.response.redirect(this.getActionUrl('edit', this.data.items[0]));
             }
         }.bind(this));

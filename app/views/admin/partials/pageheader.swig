@@ -13,6 +13,14 @@
         <h4 class="pull-left">{% if options.title %}{{ options.title }}{% else %}Blank Page{% endif %}</h4>
 
         <div class="pull-right">
+          {% if options.showImportButton %}
+            <a href="{{ importActionUrl }}" class="btn btn-default">Import</a>
+          {% endif %}
+
+          {% if options.showExportButton %}
+            <a href="{{ exportActionUrl }}" class="btn btn-default">Export</a>
+          {% endif %}
+
           {% if options.showSaveButton %}
               <a class="btn btn-default" href="#" onclick="javascript:save('save&CreateAnother');">Save & Create Another</a>
               <a class="btn btn-primary" href="#" onclick="javascript:save('save&Close');">Save & Close</a>

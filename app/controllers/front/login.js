@@ -89,7 +89,7 @@ class Login extends DioscouriCore.Controller {
     doLogin (dataReadyCallback) {
         var that = this;
 
-        this.userModel.passport.authenticate('local', function(err, user, info) {
+        this.userModel.authenticate(this.request, function (err, user, info) {
             if (err) return dataReadyCallback(err);
 
             if (!user) {
@@ -110,7 +110,7 @@ class Login extends DioscouriCore.Controller {
 
                 return dataReadyCallback(err);
             });
-        })(that.request);
+        });
     }
 
     /**

@@ -6,6 +6,7 @@ module.exports = function () {
         'get|/admin': 'index.js',
 
         'get,post|/admin/login': 'login.js',
+        'get|/admin/logout': 'login.js',
 
         // System Log route
         'get|/admin/system_logs': 'system_logs.js',

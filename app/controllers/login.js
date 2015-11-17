@@ -16,7 +16,7 @@ class Login extends DioscouriCore.Controller {
      * @param callback
      */
     init(callback) {
-        this.registerAction('/logout', 'doLogout');
+        this.registerAction('/admin/logout', 'doLogout');
 
         // Including User Model
         this.userModel = require('../models/user.js');
@@ -94,7 +94,7 @@ class Login extends DioscouriCore.Controller {
         this.request.logout();
 
         this.terminate();
-        this.response.redirect('/login');
+        this.response.redirect('/admin/login');
 
         dataReadyCallback(null);
     }

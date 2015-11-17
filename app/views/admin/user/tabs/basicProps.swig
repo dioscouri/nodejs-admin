@@ -1,4 +1,4 @@
-<div class="tab-pane active" id="mainProps">
+<div class="tab-pane active" id="tab-basic">
 
   <h4>Basic info</h4>
 

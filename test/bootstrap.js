@@ -76,6 +76,7 @@ describe('Bootstrap', function () {
             assert.notEqual(BootstrapLoader.Admin.Models.User, null);
             assert.notEqual(BootstrapLoader.Admin.Models.Webhook, null);
             assert.notEqual(BootstrapLoader.Admin.Models.WebhookEvent, null);
+            assert.notEqual(BootstrapLoader.Admin.Models.APIKey, null);
 
             done();
         });
@@ -105,6 +106,7 @@ describe('Bootstrap', function () {
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.WebhookEvent'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.ACLPermissions'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.ACLPermissions'), null);
+            assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.APIKey'), null);
 
             done();
         });

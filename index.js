@@ -66,6 +66,7 @@ class Loader extends DioscouriCore.AppBootstrap {
         this.applicationFacade.registry.push('Admin.Models.Webhook', Loader.Admin.Models.Webhook);
         this.applicationFacade.registry.push('Admin.Models.WebhookEvent', Loader.Admin.Models.WebhookEvent);
         this.applicationFacade.registry.push('Admin.Models.Asset', Loader.Admin.Models.Asset);
+        this.applicationFacade.registry.push('Admin.Models.APIKey', Loader.Admin.Models.APIKey);
 
         // Checking Symbolic links
         var fs = require('fs');
@@ -242,7 +243,8 @@ Loader.Admin = {
         User: require('./app/models/user.js'),
         Webhook: require('./app/models/webhook.js'),
         WebhookEvent: require('./app/models/webhookevent.js'),
-        Asset: require('./app/models/asset.js')
+        Asset: require('./app/models/asset.js'),
+        APIKey: require('./app/models/api_key.js')
     }
 };
 

@@ -237,6 +237,7 @@ class BaseCRUDController extends SecuredController {
         this.registerAction('create', 'create');
         this.registerAction('doCreate', 'doCreate');
         this.registerAction('view', 'doView');
+        this.registerAction('audit', 'doAudit');
         this.registerAction('edit', 'edit');
         this.registerAction('doEdit', 'doEdit');
         this.registerAction('delete', 'doDelete');
@@ -364,6 +365,7 @@ class BaseCRUDController extends SecuredController {
             case 'edit':
             case 'doEdit':
             case 'delete':
+            case 'audit':
                 result += '/' + item.id.toString() + '/' + action;
                 break;
             case 'view':
@@ -875,6 +877,7 @@ class BaseCRUDController extends SecuredController {
         this.data.item            = this.item;
         this.data.cancelActionUrl = this.getFilteredListUrl();
         this.data.editActionUrl   = this.getActionUrl('edit', this.item);
+        this.data.auditActionUrl  = this.getActionUrl('audit', this.item);
         if (this.request.method == 'GET') {
             this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('view')));
             // TODO: Do we need this in nodejs-admin?
@@ -883,6 +886,60 @@ class BaseCRUDController extends SecuredController {
         } else {
             readyCallback(new Error("Action isn't supported"));
         }
+    }
+
+    /**
+     * Show Audit logs
+     *
+     * @param readyCallback
+     */
+    doAudit(readyCallback) {
+
+        var filters    = this.getViewFilters();
+        var pagination = this.getViewPagination();
+        var sorting    = this.getViewSorting();
+
+        filters.inField = [{
+            fieldName: 'resource',
+            fieldValue:  this.model._list
+        }, {
+            fieldName: 'resourceId',
+            fieldValue:  this.itemId
+        }];
+
+        // Use Audit model
+        this._model = require('../models/log_audit');
+
+        this.model.getListFiltered(filters, '', pagination, sorting, function (error, data) {
+            if (error != null) {
+                return readyCallback(error);
+            }
+
+            // Set page data
+            if (data != null) {
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        this.data[key] = data[key];
+                    }
+                }
+            }
+
+            /**
+             * Used in sorting() macro in SWIG
+             */
+            this.data.filter                  = {sorting: sorting};
+            this.data.filter.sorting.basePath = pagination.basePath = this.data.baseUrl = this._baseUrl + '/' + this.itemId + '/audit';
+
+            this.data.viewActionUrl = this.getActionUrl('view', {id: this.itemId});
+
+            /**
+             * Set output view object
+             */
+            this.view(DioscouriCore.ModuleView.htmlView(this.getViewFilename('audit'), this.data, error));
+
+            // Send DATA_READY event
+            readyCallback();
+        }.bind(this));
     }
 
     /**

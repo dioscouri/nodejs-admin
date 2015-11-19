@@ -36,6 +36,7 @@
   {% include "./partials/quickfilter.swig" %}
   {% include "./partials/pageheader.swig" %}
   {% include "./partials/item-select-checkbox.swig" %}
+  {% include "./partials/audit-logs.swig" %}
 
   {% block content %}
     <div class="mainwrapper">

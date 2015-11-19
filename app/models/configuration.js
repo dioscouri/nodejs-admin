@@ -45,8 +45,9 @@ class ConfigurationModel extends BaseModel {
                 region: {type: String}
             },
             frontui: {
-                requireLogin: {type: Boolean, 'default': false},
-                enableRegistration: {type: Boolean, 'default': true}
+                requireLogin: {type: Boolean, default: false},
+                enableLogin: {type: Boolean, default: true},
+                enableRegistration: {type: Boolean, default: true}
             },
             authentication: {
                 local: {

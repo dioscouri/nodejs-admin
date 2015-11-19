@@ -55,15 +55,20 @@ class AdminAclPermissions extends AdminBaseCrudController {
             if (err) return readyCallback(err);
 
             async.parallel([function (callback) {
+                // TODO: Maybe we can improve this to not use try-catch
+                try {
+                    DioscouriCore.ApplicationFacade.instance.registry.load('Application.Models.ACLResources').getAll(function (err, resources) {
+                        if (err) return callback();
 
-                DioscouriCore.ApplicationFacade.instance.registry.load('Application.Models.ACLResources').getAll(function (err, resources) {
-                    if (err) return callback();
+                        this.data.resources = resources;
 
-                    this.data.resources = resources;
-
+                        callback();
+                    }.bind(this));
+                } catch (ex) {
+                    console.error(ex);
+                    this.data.resources = [];
                     callback();
-                }.bind(this));
-
+                }
             }.bind(this), function (callback) {
 
                 require('../models/acl_roles.js').getAll(function (err, roles) {

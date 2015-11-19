@@ -322,7 +322,7 @@ class UserModel extends BaseModel {
             validationMessages.push('Email cannot be empty');
         }
 
-        if (item.password == '') {
+        if (!item._id && item.password == '') {
             validationMessages.push('Password cannot be empty');
         }
 

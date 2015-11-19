@@ -1,7 +1,6 @@
 ## nodejs-admin application
 
-[![Build Status](https://travis-ci.org/dioscouri/nodejs-admin.svg?branch=feature-travis-build)](https://travis-ci.org/dioscouri/nodejs-admin)
-
+[![Build Status](https://travis-ci.org/dioscouri/nodejs-admin.svg?branch=master)](https://travis-ci.org/dioscouri/nodejs-admin)
 
 #### ACL Setup
 
@@ -20,8 +19,8 @@
 
 #### List Export Setup
 
-1. Configure Export fields and aliases (future column names) in your CRUD Controller:  
-    
+1. Configure Export fields and aliases (future column names) in your CRUD Controller:
+
     ```
     this._xlsExportFields = [{field: '_id', column: 'ID'}, {field: 'name', column: 'Doctor Name'}];
     ```

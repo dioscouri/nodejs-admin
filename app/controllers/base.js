@@ -28,7 +28,7 @@ class AdminBaseController extends DioscouriCore.Controller {
             this.request.session.returnUrl = this.request.protocol + '://' + this.request.get('host') + this.request.originalUrl;
             this.flash.addMessage("You must be logged in to access Admin UI!", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();
-            this.response.redirect('/login');
+            this.response.redirect('/admin/login');
 
             callback();
         } else if (!this.isAdminUser()) {

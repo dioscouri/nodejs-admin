@@ -67,9 +67,8 @@ class AdminUsers extends AdminBaseCrudController {
         result.name       = {};
         result.name.first = this.request.body.firstName;
         result.name.last  = this.request.body.lastName;
-
+        result.isAdmin  = this.request.body.isAdmin === "on";
         result.roles = this.request.body.roles || [];
-
         return result;
     }
 

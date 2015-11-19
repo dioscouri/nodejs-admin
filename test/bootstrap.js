@@ -65,7 +65,6 @@ describe('Bootstrap', function () {
         it('Models must be initialized', function (done) {
             assert.notEqual(BootstrapLoader.Admin.Models, null);
             assert.notEqual(BootstrapLoader.Admin.Models.ACLPermissions, null);
-            assert.notEqual(BootstrapLoader.Admin.Models.ACLResources, null);
             assert.notEqual(BootstrapLoader.Admin.Models.ACLRoles, null);
             assert.notEqual(BootstrapLoader.Admin.Models.Base, null);
             assert.notEqual(BootstrapLoader.Admin.Models.Configuration, null);
@@ -77,6 +76,7 @@ describe('Bootstrap', function () {
             assert.notEqual(BootstrapLoader.Admin.Models.User, null);
             assert.notEqual(BootstrapLoader.Admin.Models.Webhook, null);
             assert.notEqual(BootstrapLoader.Admin.Models.WebhookEvent, null);
+            assert.notEqual(BootstrapLoader.Admin.Models.APIKey, null);
 
             done();
         });
@@ -93,7 +93,6 @@ describe('Bootstrap', function () {
         // Models initialization test
         it('Models must be initialized', function (done) {
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.ACLPermissions'), null);
-            assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.ACLResources'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.ACLRoles'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.Base'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.LogAudit'), null);
@@ -107,6 +106,7 @@ describe('Bootstrap', function () {
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.WebhookEvent'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.ACLPermissions'), null);
             assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.ACLPermissions'), null);
+            assert.notEqual(DioscouriCore.ApplicationFacade.instance.registry.load('Admin.Models.APIKey'), null);
 
             done();
         });

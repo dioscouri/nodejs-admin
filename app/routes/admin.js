@@ -6,6 +6,7 @@ module.exports = function () {
         'get|/admin': 'index.js',
 
         'get,post|/admin/login': 'login.js',
+        'get|/admin/logout': 'login.js',
 
         // System Log route
         'get|/admin/system_logs': 'system_logs.js',
@@ -69,6 +70,12 @@ module.exports = function () {
         'get|/admin/assets': 'assets.js',
         'get|/admin/assets/page/:page': 'assets.js',
         'get,post|/admin/assets/:action': 'assets.js',
-        'get,post|/admin/assets/:id/:action': 'assets.js'
+        'get,post|/admin/assets/:id/:action': 'assets.js',
+
+        // API Keys routes
+        'get|/admin/api_keys': '/api_keys.js',
+        'get|/admin/api_keys/page/:page': 'api_keys.js',
+        'get,post|/admin/api_keys/:action': 'api_keys.js',
+        'get,post|/admin/api_keys/:id/:action': 'api_keys.js'
     };
 };

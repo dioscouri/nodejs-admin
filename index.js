@@ -227,7 +227,8 @@ class Loader extends DioscouriCore.AppBootstrap {
 Loader.Admin = {
     Controllers: {
         BaseAuth: require('./app/controllers/base.js'),
-        BaseCRUD: require('./app/controllers/basecrud.js')
+        BaseCRUD: require('./app/controllers/basecrud.js'),
+        BaseAPI: require('./app/controllers/baseapi.js')
     },
     Models: {
         ACLPermissions: require('./app/models/acl_permissions.js'),

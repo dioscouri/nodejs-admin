@@ -68,6 +68,11 @@ class Login extends DioscouriCore.Controller {
         // Set page data
         this.data.header = "Sign In";
         this.data.title = "TCG Intranet";
+        this.data.frontUiConfig = frontUiConfig;
+        this.data.enableRegistration = false;
+        if (frontUiConfig && frontUiConfig.enableRegistration === true) {
+            this.data.enableRegistration = true;
+        }
 
         // Render login on GET and do Login on POST
         if (this.request.method == 'GET') {

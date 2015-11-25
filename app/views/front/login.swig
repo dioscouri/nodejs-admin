@@ -58,9 +58,11 @@
                 </form>
 
             </div>
+            {% if enableRegistration %}
             <div class="panel-footer">
                 <a href="signup" class="btn btn-primary btn-block">Not yet a Member? Create Account Now</a>
             </div>
+            {% endif %}
         </div>
     </section>
 </body>

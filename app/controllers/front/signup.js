@@ -69,7 +69,12 @@ class Signup extends DioscouriCore.Controller {
     load (dataReadyCallback) {
         var frontUiConfig = this._config && this._config._configuration && this._config._configuration.frontui;
 
-        if (frontUiConfig && frontUiConfig.enableRegistration === false) {
+        var enableRegistration = false;
+        if (frontUiConfig && frontUiConfig.enableRegistration === true) {
+            enableRegistration = true;
+        }
+        
+        if (!enableRegistration) {
             this.flash.addMessage("Signup is not enabled", DioscouriCore.FlashMessageType.ERROR);
             this.terminate();
             this.response.redirect('/');

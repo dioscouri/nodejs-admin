@@ -107,11 +107,7 @@ class Login extends DioscouriCore.Controller {
                 if (err) return dataReadyCallback(err);
 
                 that.terminate();
-                if (user.isAdmin) {
-                    that.response.redirect('/admin');
-                } else {
-                    that.response.redirect('/');
-                }
+                that.response.redirect('/');
 
                 return dataReadyCallback(err);
             });

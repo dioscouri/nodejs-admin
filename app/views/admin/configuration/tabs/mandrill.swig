@@ -1,4 +1,4 @@
-<div class="tab-pane active" id="mandrill">
+<div class="tab-pane" id="mandrill">
 
     <h4>Mandrill settings</h4>
 

@@ -33,6 +33,9 @@ class ConfigurationModel extends BaseModel {
     defineSchema() {
 
         var schemaObject = {
+            project: {
+                name: {type: String}
+            },
             mandrill: {
                 apiKey: {type: String},
                 fromName: {type: String},

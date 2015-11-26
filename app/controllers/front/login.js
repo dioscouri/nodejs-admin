@@ -67,7 +67,7 @@ class Login extends DioscouriCore.Controller {
 
         // Set page data
         this.data.header = "Sign In";
-        this.data.title = "TCG Intranet";
+        this.data.title = this._config._configuration.project && this._config._configuration.project.name;
         this.data.frontUiConfig = frontUiConfig;
         this.data.enableRegistration = false;
         if (frontUiConfig && frontUiConfig.enableRegistration === true) {

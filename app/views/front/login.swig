@@ -23,8 +23,7 @@
                     <h1>{% if title %}{{ title }}{% else %}Login{% endif %}</h1>
                 </div>
                 <br />
-                <h4 class="text-center mb5">Already a Member?</h4>
-                <p class="text-center">Sign in to your account</p>
+                <h4 class="text-center mb5">Sign in to your account</h4>
 
                 {% include "../admin/partials/messages.swig" %}
                 <div class="mb30"></div>

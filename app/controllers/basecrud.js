@@ -132,6 +132,7 @@ class BaseCRUDController extends DioscouriCore.Controllers.CRUDController {
     preInit(callback) {
 
         this.data.navigation = require('../models/navigation.js').navigation;
+        this.data.originalUrl = this.request.originalUrl;
 
         if (!this.isAuthenticated()) {
             this.request.session.returnUrl = this.request.protocol + '://' + this.request.get('host') + this.request.originalUrl;

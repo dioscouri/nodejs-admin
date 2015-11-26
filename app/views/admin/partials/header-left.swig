@@ -1,11 +1,13 @@
 <div class="header-left">
-  <a href="/admin" class="logo">
-    {#<img src="/assets/images/logo.png" alt=""/>#}
-  </a>
-
-  <div class="pull-right">
-    <a href="" class="menu-collapse">
-      <i class="fa fa-bars"></i>
+    <a href="/" class="logo">
+        {# Eventually, add a logo input for the global config
+        <img src="/assets/images/logo.png" alt="{% if globalConfig && globalConfig.project && globalConfig.project.name %}{{ globalConfig.project.name }}{% endif %}" />
+        #}
+        <span style="color: white;">{% if globalConfig && globalConfig.project && globalConfig.project.name %}{{ globalConfig.project.name }}<br/>{% endif %} <small>Admin</small></span>
     </a>
-  </div>
+    <div class="pull-right">
+        <a href="" class="menu-collapse">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
 </div>

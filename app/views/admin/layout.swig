@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="description" content="">
 
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% if pageTitle %}{{ pageTitle }}{% else %}{% endif %} {% if globalConfig && globalConfig.project && globalConfig.project.name %} | {{ globalConfig.project.name }}{% endif %}</title>
 
   <link href="/adminAssets/stylesheets/build.min.css" rel="stylesheet">
 

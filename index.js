@@ -246,6 +246,9 @@ Loader.Admin = {
         WebhookEvent: require('./app/models/webhookevent.js'),
         Asset: require('./app/models/asset.js'),
         APIKey: require('./app/models/api_key.js')
+    },
+    Middlewares: {
+        CheckForRequireLogin: require('./app/lib/middlewares/checkRequireLogin.js')
     }
 };
 

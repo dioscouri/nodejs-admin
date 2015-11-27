@@ -107,7 +107,14 @@ class Login extends DioscouriCore.Controller {
                 if (err) return dataReadyCallback(err);
 
                 that.terminate();
-                that.response.redirect('/');
+
+                if (that.request.session && that.request.session.returnUrl) {
+                    that.response.redirect(302, that.request.session.returnUrl);
+
+                    delete $this.request.session.returnUrl;
+                } else {
+                    that.response.redirect('/');
+                }
 
                 return dataReadyCallback(err);
             });

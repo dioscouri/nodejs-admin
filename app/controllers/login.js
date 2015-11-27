@@ -61,7 +61,7 @@ class Login extends DioscouriCore.Controller {
             if (!user) {
                 $this.flash.addMessage(info.message, DioscouriCore.FlashMessageType.ERROR);
                 $this.terminate();
-                $this.response.redirect('/login');
+                $this.response.redirect('/admin/login');
                 return dataReadyCallback(err);
             }
             $this.request.logIn(user, function (err) {

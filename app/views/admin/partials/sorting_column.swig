@@ -1,13 +1,13 @@
 {% macro sorting_column(options) %}
-  {% if sorting.field == options.field %}
+  {% if filter.sorting.field == options.field %}
     <a class="btn btn-link sorting"
-       href="{{ sorting.basePath }}?filter[sortingField]={{ options.field }}&filter[sortingOrder]={% if sorting.order == 'asc' %}desc{% else %}asc{% endif %}"
+       href="{{ sorting.basePath }}?filter[sortingField]={{ options.field }}&filter[sortingOrder]={% if filter.sorting.order == 'asc' %}desc{% else %}asc{% endif %}"
             >
-      {{ options.title }} ({{ sorting.order }})
+      {{ options.title }} ({{ filter.sorting.order }})
     </a>
   {% else %}
     <a class="btn btn-link sorting"
-       href="{{ sorting.basePath }}?filter[sortingField]={{ options.field }}&filter[sortingOrder]=asc"
+       href="{{ filter.sorting.basePath }}?filter[sortingField]={{ options.field }}&filter[sortingOrder]=asc"
             >
       {{ options.title }}
     </a>

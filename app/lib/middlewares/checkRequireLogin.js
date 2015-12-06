@@ -14,6 +14,11 @@ var DioscouriCore = process.mainModule.require('dioscouri-core');
  * @returns {*}
  */
 function checkRequireLogin (request, response, next) {
+    // Do not check for favicon.ico
+    if (request.originalUrl.indexOf('favicon.ico') > -1) {
+        return next();
+    }
+
     // Do not check for API routes
     if (request.originalUrl.indexOf('/api/') > -1) {
         return next();

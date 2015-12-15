@@ -3,47 +3,88 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-    {% include "../partials/pageheader.swig" with { 'pageTitle': 'Assets Management'} %}
+  {{ pageheader({title: 'Assets'}) }}
 {% endblock %}
 
 {% block pagecontent %}
-<h1>Assets Management</h1>
 
-    <a href="{{ createUrl }}">[create]</a>
-    <br />
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th class="col-sm-3">Name</th>
-                <th class="col-sm-8">URL</th>
-                <th class="col-sm-1">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if items.length > 0 %}
-                {% for row in items %}
-                    {% set id = row.id %}
-                    {% set editUrl = baseUrl + '/' + row.id + '/edit' %}
-                    {% set deleteUrl = baseUrl + '/' + row.id + '/delete' %}
-                    <tr>
-                        <td>{{ row.name }}</td>
-                        <td>{{ row.cdnUrl }}</td>
-                        <td class="table-action">
-                            <a href="{{ editUrl }}" data-toggle="tooltip" title="Edit" class="tooltips"
-                               data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="delete-row tooltips"
-                               data-original-title="Delete"
-                               onclick="if (confirm('Are you sure you want to delete this record?')) {document.location.href = '{{ deleteUrl }}';}"><i
-                                    class="fa fa-trash-o"></i></a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="6"><h3 class="text-muted">There are no Asset yet.</h3></td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
+  <div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-2">
+      <p>
+        <a href="{{ createActionUrl }}" class="btn btn-success btn-block btn-create-msg">Create New</a>
+      </p>
+
+      {{ search() }}
+
+      <br/>
+
+    </div>
+
+    <div class="col-sm-9 col-md-9 col-lg-10">
+      <div class="msg-header">
+        <div class="pull-right">
+          <h5 class="sm-title text-right">{{ pagination_summary() }}</h5>
+          {{ pagination_pages() }}
+        </div>
+
+        {{ bulk_actions({check: true, bulkDelete: true}) }}
+
+      </div>
+
+      <div class="list-group media-list msg-list">
+        <div class="list-group-item list-group-sorting">
+          <div class="">
+            Sort by:
+            {{ sorting_column({title: 'Name', field: 'name'}) }}
+          </div>
+        </div>
+
+        {% for item in items %}
+          {% set editActionUrl = baseUrl + '/' + item.id + '/edit' %}
+          {% set viewActionUrl = baseUrl + '/' + item.id %}
+          {% set deleteActionUrl = baseUrl + '/' + item.id + '/delete' %}
+
+          <div class="list-group-item">
+
+            {{ item_select_checkbox() }}
+
+            <div class="list-group-item-body">
+
+              <div class="pull-right media-option">
+                {{ resource_action_buttons({editActionUrl: editActionUrl, deleteActionUrl: deleteActionUrl}) }}
+              </div>
+
+              <a href="{{ viewActionUrl }}">
+                <h4 class="sender">
+                  {{ item.name }}
+                </h4>
+              </a>
+
+              {% if item.cdnUrl %}
+                <p>
+                  <a href="{{ item.cdnUrl }}" target="_blank">
+                    {{ item.cdnUrl }}
+                  </a>
+                </p>
+              {% endif %}
+
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+
+      <div class="list-group-footer">
+        <div class="pull-right">
+          {{ pagination_rows() }}
+        </div>
+        <div class="pull-left">
+          {{ pagination_pages() }}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 
 {% endblock %}

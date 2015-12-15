@@ -221,18 +221,20 @@ jQuery(document).ready(function () {
         }
     }
 
-    // [AdminUI] Acl Resource Edit page
-    $('.add_resource_action').click(function (e) {
+    // [AdminUI] Doctors Documents Edit page
+    $('.add_doctor_document').click(function (e) {
         e.preventDefault();
-        $('#resource-actions').append('<div class="form-group">' +
+        $('#doctor-documents').append('<div class="form-group">' +
             '<div class="col-sm-offset-4 col-sm-4">' +
-            '<input type="text" class="form-control" name="actions"><a href="#" class="remove_resource_action">Remove action</a>' +
+            '<input type="file" class="form-control" name="documents"></div>' +
+            '<div class="col-sm-4"><a href="#" class="remove_doctor_document">Remove document</a>' +
+            '</div>' +
             '</div>' +
             '</div>');
     });
 
-    // [AdminUI] Acl Resource Edit page
-    $('#resource-actions').on('click', '.remove_resource_action', function (e) {
+    // [AdminUI] Doctors Documents Edit page
+    $('#doctor-documents').on('click', '.remove_doctor_document', function (e) {
         e.preventDefault();
         $(this).parent('div').parent('div').remove();
     });

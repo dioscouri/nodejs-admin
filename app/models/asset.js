@@ -34,9 +34,9 @@ class AssetModel extends BaseModel {
 
         // User Schema Object
         var schemaObject = {
-            name: {type: String, unique: true, required: true},
+            name: {type: String, unique: true},
             assetType: {type: String, index: true},
-            fileName: {type: String, index: true},
+            fileName: {type: String, index: true, required: true},
             cdnUrl: {type: String, index: true}
         };
 

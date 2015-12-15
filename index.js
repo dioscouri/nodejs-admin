@@ -203,6 +203,13 @@ class Loader extends DioscouriCore.AppBootstrap {
             parent: 'ACL'
         });
 
+        Loader.Admin.Models.Navigation.create({
+            name: 'Assets',
+            icon: 'fa-file-text',
+            url: '/admin/assets',
+            order: 107
+        });
+
         Loader.Admin.Models.Configuration.readConf(function (config) {
             this.applicationFacade.config.mergeConfig(config);
 

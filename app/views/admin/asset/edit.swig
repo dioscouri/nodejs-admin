@@ -3,9 +3,9 @@
 {% block title %}{{ header }}{% endblock %}
 
 {% block pageheader %}
-    {% include "../partials/pageheader.swig" with { 'pageTitle': 'Edit Asset'} %}
+  {{ pageheader({title: 'Assets Management - Edit Asset', showSaveButton: true, showCloseButton: true}) }}
 {% endblock %}
 
 {% block pagecontent %}
-    {% include "_form.swig" %}
+  {% include "_form.swig" %}
 {% endblock %}

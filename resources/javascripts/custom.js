@@ -459,8 +459,9 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('.user-roles-select').select2();
 
-    $(".select2-autocomplete").each(function () {
-        console.log($(this).data('resource'));
+    $('.select2-autocomplete').each(function () {
+
+        if ($(this).data('initialised')) return;
 
         $(this).select2({
             ajax: {
@@ -480,5 +481,7 @@ $(document).ready(function () {
             },
             minimumInputLength: 1
         });
+
+        $(this).data('initialised', true);
     });
 });

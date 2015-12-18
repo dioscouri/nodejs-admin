@@ -458,30 +458,4 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('.user-roles-select').select2();
-
-    $('.select2-autocomplete').each(function () {
-
-        if ($(this).data('initialised')) return;
-
-        $(this).select2({
-            ajax: {
-                url: '/' + $(this).data('resource') + '/autocomplete',
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        'filter[search]': params.term // search term
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data.items
-                    };
-                }
-            },
-            minimumInputLength: 1
-        });
-
-        $(this).data('initialised', true);
-    });
 });

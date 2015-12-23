@@ -48,7 +48,6 @@ class AclRoleModel extends BaseModel {
             "name": String,
             "last_modified_by": {type: Types.ObjectId, ref: 'user'}
         };
-        console.log(schemaObject);
 
         //Creating DBO Schema
         var AclRoleDBOSchema = this.createSchema(schemaObject);

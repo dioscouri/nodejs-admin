@@ -62,6 +62,7 @@
 
 <script src="/adminAssets/javascripts/build.min.js"></script>
 <script src="/adminAssets/javascripts/ckeditor/ckeditor.js"></script>
+<script src="/assets/js/common.js"></script>
 
 {% block page_js %}{% endblock %}
 </body>

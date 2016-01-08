@@ -6,6 +6,32 @@
 var BaseModel = require('./base');
 
 /**
+ * Core fs library
+ *
+ * @type {exports|module.exports}
+ */
+var fs = require('fs');
+
+/**
+ * Swig template engine
+ *
+ * @type {*}
+ */
+var swig = require('swig');
+
+/**
+ * HTML -> Text conversion helper
+ *
+ * @type {*|exports|module.exports}
+ */
+var htmlToText = require('html-to-text');
+
+/**
+ * Application core
+ */
+var DioscouriCore = process.mainModule.require('dioscouri-core');
+
+/**
  *  Notification model
  */
 class NotificationModel extends BaseModel {
@@ -95,25 +121,35 @@ class NotificationModel extends BaseModel {
                 return callback(error, notification);
             }
 
-            console.log('Notify user ' + userDetails.fullName);
-
             // Notifying user via email
             if (userDetails != null && userDetails.isNotificationAllowed(notification.notificationType)) {
                 console.warn('Notifying user %s with %s via email', notification.targetUser, notification.notificationType)
 
-                var swig     = require('swig');
-                var swigHtml = swig.compileFile("app/views/emails/notifications/html/newnotification.swig");
-                var swigText = swig.compileFile("app/views/emails/notifications/text/newnotification.swig");
+                var templateFile = DioscouriCore.ApplicationFacade.instance.basePath + '/app/views/emails/newnotification.swig';
 
-                var mailer = new DioscouriCore.Mailer();
-                mailer.send([userDetails.email],
-                    {html: swigHtml(notification), text: swigText(notification)},
-                    {subject: "New Notification"});
+                fs.access(templateFile, fs.F_OK | fs.R_OK, err => {
+                    if (err) {
+                        // Use template file from nodejs-admin
+                        templateFile = '../views/emails/newnotification.swig'
+                    }
 
+                    htmlToText.fromFile(templateFile, function (err, text) {
+                        if (err) return console.error(err);
 
-                callback(null, notification);
+                        var mailer = new DioscouriCore.Mailer();
+
+                        mailer.send([userDetails.email], {
+                            html: swig.renderFile(templateFile, {notification: notification}),
+                            text: text
+                        }, {
+                            subject: 'New Notification'
+                        });
+
+                        callback(null, notification);
+                    });
+                });
+
             } else {
-                console.log('User not found or notifications not allowed');
                 callback(null, notification);
             }
         });

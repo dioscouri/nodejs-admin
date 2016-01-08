@@ -117,7 +117,7 @@ class UserModel extends BaseModel {
 
             if (notificationType != null && this.notifications != null) {
                 for (var i = 0; i < this.notifications.length; i++) {
-                    if (this.notifications[i].toLowerCase() == notificationType.toLowerCase()) {
+                    if (this.notifications[i].toLowerCase() === 'all' || this.notifications[i].toLowerCase() == notificationType.toLowerCase()) {
                         return true;
                     }
                 }

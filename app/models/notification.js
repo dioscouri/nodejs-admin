@@ -32,6 +32,7 @@ class NotificationModel extends BaseModel {
             resourceId: {type: String, index: true},
             originator: {type: Types.ObjectId, ref: 'user', index: true},
             targetUser: {type: Types.ObjectId, ref: 'user', index: true},
+            priority: {type: String, 'default': 'warning'},
             message: {type: String},
             modifiedAt: {type: Date, 'default': Date.now, index: true},
             createdAt: {type: Date, 'default': Date.now, index: true},
@@ -58,6 +59,7 @@ class NotificationModel extends BaseModel {
      * @param {Object} notification.notificationType - Type of notification. Ex: BROKEN_REFERENCE, MISSING_TITLE, etc.
      * @param {Object} notification.resourceType - Name of resource (name of Mongoose list).
      * @param {Object} notification.resourceId - ID of resource instance.
+     * @param {Object} [notification.priority] - Priority, default: 'warning'.
      * @param {Object} [notification.message] - Text message.
      * @param {Object} [notification.originator] - User who have modified the instance.
      * @param {Object} [notification.targetUser] - User to notify.

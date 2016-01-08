@@ -11,6 +11,13 @@ var DioscouriCore = process.mainModule.require('dioscouri-core');
 var AdminBaseCrudController = require('./basecrud.js');
 
 /**
+ * Async library
+ *
+ * @type {async|exports|module.exports}
+ */
+var async = require('async');
+
+/**
  *  AdminUsers controller
  */
 class AdminUsers extends AdminBaseCrudController {
@@ -67,8 +74,8 @@ class AdminUsers extends AdminBaseCrudController {
         result.name       = {};
         result.name.first = this.request.body.firstName;
         result.name.last  = this.request.body.lastName;
-        result.isAdmin  = this.request.body.isAdmin === "on";
-        result.roles = this.request.body.roles || [];
+        result.isAdmin    = this.request.body.isAdmin === "on";
+        result.roles      = this.request.body.roles || [];
         return result;
     }
 
@@ -156,7 +163,7 @@ class AdminUsers extends AdminBaseCrudController {
                 return readyCallback(err);
             }
 
-            this.loadRoles(readyCallback);
+            this.loadResources(readyCallback);
         }.bind(this));
     }
 
@@ -169,7 +176,7 @@ class AdminUsers extends AdminBaseCrudController {
         super.edit(function (err) {
             if (err) return readyCallback(err);
 
-            this.loadRoles(readyCallback);
+            this.loadResources(readyCallback);
         }.bind(this));
     }
 
@@ -182,22 +189,51 @@ class AdminUsers extends AdminBaseCrudController {
         super.doView(function (err) {
             if (err) return readyCallback(err);
 
-            this.loadRoles(readyCallback);
+            this.loadResources(readyCallback);
         }.bind(this));
+    }
+
+    loadResources(readyCallback) {
+        async.parallel([callback => {
+
+            this.loadRoles(callback);
+
+        }, callback => {
+
+            this.loadNotificationTypes(callback);
+
+        }], readyCallback);
     }
 
     /**
      * Load Users Roles
+     *
      * @param readyCallback
      */
     loadRoles(readyCallback) {
-        require('../models/acl_roles.js').getAll(function (err, roles) {
+        require('../models/acl_roles.js').getAll((err, roles) => {
             if (err) return callback();
 
             this.data.roles = roles;
 
             readyCallback();
-        }.bind(this));
+        });
+    }
+
+    /**
+     * Load Notifications types
+     *
+     * @param readyCallback
+     */
+    loadNotificationTypes(readyCallback) {
+
+        require('../models/notification.js').model.find().distinct('notificationType', (err, notificationTypes) => {
+            if (err) return callback();
+
+            this.data.notificationTypes = notificationTypes;
+
+            readyCallback();
+        });
     }
 }
 

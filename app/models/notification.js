@@ -95,6 +95,8 @@ class NotificationModel extends BaseModel {
                 return callback(error, notification);
             }
 
+            console.log('Notify user ' + userDetails.fullName);
+
             // Notifying user via email
             if (userDetails != null && userDetails.isNotificationAllowed(notification.notificationType)) {
                 console.warn('Notifying user %s with %s via email', notification.targetUser, notification.notificationType)
@@ -111,6 +113,7 @@ class NotificationModel extends BaseModel {
 
                 callback(null, notification);
             } else {
+                console.log('User not found or notifications not allowed');
                 callback(null, notification);
             }
         });

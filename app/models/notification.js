@@ -35,7 +35,7 @@ class NotificationModel extends BaseModel {
             message: {type: String},
             modifiedAt: {type: Date, 'default': Date.now, index: true},
             createdAt: {type: Date, 'default': Date.now, index: true},
-            isRead: {type: Boolean, index: true}
+            isRead: {type: Boolean, 'default': false, index: true}
         };
 
         // Creating DBO Schema
@@ -54,24 +54,30 @@ class NotificationModel extends BaseModel {
     /**
      * Send notification to some user
      *
-     * @param notification
+     * @param {Object} notification - Notification object.
+     * @param {Object} notification.notificationType - Type of notification. Ex: BROKEN_REFERENCE, MISSING_TITLE, etc.
+     * @param {Object} notification.resourceType - Name of resource (name of Mongoose list).
+     * @param {Object} notification.resourceId - ID of resource instance.
+     * @param {Object} [notification.message] - Text message.
+     * @param {Object} [notification.originator] - User who have modified the instance.
+     * @param {Object} [notification.targetUser] - User to notify.
+     *
      * @param callback
      */
     sendNotification(notification, callback) {
 
-        // Add default fields
-        notification.createdAt = new Date();
-        notification.isRead    = false;
-
         var itemObject = new this.model(notification);
-        itemObject.save(function (err) {
-            if (err != null) {
-                callback(err);
-            } else {
+
+        itemObject.save(err => {
+            if (err) return callback(err);
+
+            if (notification.targetUser) {
                 // Processing with email notification
                 this.sendUserEmailNotification(itemObject, callback);
+            } else {
+                callback(null, itemObject);
             }
-        }.bind(this));
+        });
     }
 
     /**

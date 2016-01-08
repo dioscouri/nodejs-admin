@@ -1,4 +1,4 @@
-<div class="tab-pane" id="tab-tags">
+<div class="tab-pane" id="tab-notifications">
 
   <div class="panel panel-default">
     <div class="panel-heading">

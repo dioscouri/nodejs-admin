@@ -13,6 +13,13 @@ var BaseModel = require('./base');
 var fs = require('fs');
 
 /**
+ * Core path library
+ *
+ * @type {posix|exports|module.exports}
+ */
+var path = require('path');
+
+/**
  * Swig template engine
  *
  * @type {*}
@@ -130,7 +137,7 @@ class NotificationModel extends BaseModel {
                 fs.access(templateFile, fs.F_OK | fs.R_OK, err => {
                     if (err) {
                         // Use template file from nodejs-admin
-                        templateFile = '../views/emails/newnotification.swig'
+                        templateFile = path.resolve(__dirname, '..', 'views/emails/newnotification.swig');
                     }
 
                     htmlToText.fromFile(templateFile, function (err, text) {

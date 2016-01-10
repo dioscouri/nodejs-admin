@@ -42,37 +42,46 @@
           {% set viewActionUrl = baseUrl + '/' + item.id %}
           {% set deleteActionUrl = baseUrl + '/' + item.id + '/delete' %}
 
-          {% set originatorName = '-' %}
-          {% if row.originator != null %}
-            {% set originatorName = row.originator.fullName %}
-          {% endif %}
-          {% set targetUserName = '-' %}
-          {% if row.targetUser != null %}
-            {% set targetUserName = row.targetUser.fullName %}
-          {% endif %}
-
           <div class="list-group-item">
 
             {{ item_select_checkbox() }}
 
             <div class="list-group-item-body">
 
-              <div class="pull-right media-option">
-                <small>{{ moment(item.createdAt).calendar() }}</small>
-                {{ resource_action_buttons({deleteActionUrl: deleteActionUrl}) }}
+              <div class="pull-right media-option clearfix">
+
+                <div class="text-right">
+                  {% if item.notificationType %}
+                    <div class="label label-{{ item.priority }}">{{ item.notificationType }}</div>
+                  {% endif %}
+
+                  {{ resource_action_buttons({viewActionUrl: viewActionUrl, deleteActionUrl: deleteActionUrl}) }}
+                </div>
+
+                <p class="help-block">
+                  <small>{{ moment(item.createdAt).calendar() }}</small>
+                </p>
+
               </div>
 
               <a href="{{ viewActionUrl }}">
                 <h4 class="sender">
-                  {{ item.notificationType }} - {{ item.resourceType }}
+                  {{ item.resourceType }}
                 </h4>
               </a>
 
-              By: <strong>{{ originatorName }}</strong>
+              <p class="text-{{ item.priority }}">{{ item.message }}</p>
               <br>
-              Target User: <strong>{{ targetUserName }}</strong>
-              <br>
-              <pre>{{ item.message }}</pre>
+
+              {% if item.originator %}
+                By: <strong>{{ originator.fullName }}</strong>
+                <br>
+              {% endif %}
+              {% if item.targetUser %}
+                Target User: <strong>{{ targetUser.fullName }}</strong>
+                <br>
+              {% endif %}
+
             </div>
           </div>
         {% endfor %}

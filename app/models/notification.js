@@ -6,6 +6,32 @@
 var BaseModel = require('./base');
 
 /**
+ * Core fs library
+ *
+ * @type {exports|module.exports}
+ */
+var fs = require('fs');
+
+/**
+ * Core path library
+ *
+ * @type {posix|exports|module.exports}
+ */
+var path = require('path');
+
+/**
+ * HTML -> Text conversion helper
+ *
+ * @type {*|exports|module.exports}
+ */
+var htmlToText = require('html-to-text');
+
+/**
+ * Application core
+ */
+var DioscouriCore = process.mainModule.require('dioscouri-core');
+
+/**
  *  Notification model
  */
 class NotificationModel extends BaseModel {
@@ -32,10 +58,11 @@ class NotificationModel extends BaseModel {
             resourceId: {type: String, index: true},
             originator: {type: Types.ObjectId, ref: 'user', index: true},
             targetUser: {type: Types.ObjectId, ref: 'user', index: true},
+            priority: {type: String, 'default': 'warning'},
             message: {type: String},
             modifiedAt: {type: Date, 'default': Date.now, index: true},
             createdAt: {type: Date, 'default': Date.now, index: true},
-            isRead: {type: Boolean, index: true}
+            isRead: {type: Boolean, 'default': false, index: true}
         };
 
         // Creating DBO Schema
@@ -54,24 +81,31 @@ class NotificationModel extends BaseModel {
     /**
      * Send notification to some user
      *
-     * @param notification
+     * @param {Object} notification - Notification object.
+     * @param {Object} notification.notificationType - Type of notification. Ex: BROKEN_REFERENCE, MISSING_TITLE, etc.
+     * @param {Object} notification.resourceType - Name of resource (name of Mongoose list).
+     * @param {Object} notification.resourceId - ID of resource instance.
+     * @param {Object} [notification.priority] - Priority, default: 'warning'.
+     * @param {Object} [notification.message] - Text message.
+     * @param {Object} [notification.originator] - User who have modified the instance.
+     * @param {Object} [notification.targetUser] - User to notify.
+     *
      * @param callback
      */
     sendNotification(notification, callback) {
 
-        // Add default fields
-        notification.createdAt = new Date();
-        notification.isRead    = false;
-
         var itemObject = new this.model(notification);
-        itemObject.save(function (err) {
-            if (err != null) {
-                callback(err);
-            } else {
+
+        itemObject.save(err => {
+            if (err) return callback(err);
+
+            if (notification.targetUser) {
                 // Processing with email notification
                 this.sendUserEmailNotification(itemObject, callback);
+            } else {
+                callback(null, itemObject);
             }
-        }.bind(this));
+        });
     }
 
     /**
@@ -89,19 +123,34 @@ class NotificationModel extends BaseModel {
 
             // Notifying user via email
             if (userDetails != null && userDetails.isNotificationAllowed(notification.notificationType)) {
-                console.warn('Notifying user %s with %s via email', notification.targetUser, notification.notificationType)
+                console.warn('Notifying user %s with %s via email', notification.targetUser, notification.notificationType);
 
-                var swig     = require('swig');
-                var swigHtml = swig.compileFile("app/views/emails/notifications/html/newnotification.swig");
-                var swigText = swig.compileFile("app/views/emails/notifications/text/newnotification.swig");
+                var templateFile = DioscouriCore.ApplicationFacade.instance.basePath + '/app/views/emails/newnotification.swig';
 
-                var mailer = new DioscouriCore.Mailer();
-                mailer.send([userDetails.email],
-                    {html: swigHtml(notification), text: swigText(notification)},
-                    {subject: "New Notification"});
+                fs.access(templateFile, fs.F_OK | fs.R_OK, err => {
+                    if (err) {
+                        // Use template file from nodejs-admin
+                        templateFile = path.resolve(__dirname, '..', 'views/emails/newnotification.swig');
+                    }
 
+                    htmlToText.fromFile(templateFile, function (err, text) {
+                        if (err) return console.error(err);
 
-                callback(null, notification);
+                        var mailer = new DioscouriCore.Mailer();
+
+                        var swig = require('swig');
+
+                        mailer.send([userDetails.email], {
+                            html: swig.renderFile(templateFile, {notification: notification}),
+                            text: text
+                        }, {
+                            subject: 'New Notification'
+                        });
+
+                        callback(null, notification);
+                    });
+                });
+
             } else {
                 callback(null, notification);
             }

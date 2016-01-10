@@ -54,17 +54,6 @@ class NavigationModel extends BaseModel {
         // Creating DBO Schema
         var NavigationDBOSchema = this.createSchema(schemaObject);
 
-        NavigationDBOSchema.pre('save', function (next) {
-
-            if (this.parent) {
-                this.key = this.parent + '-' + this.name;
-            } else {
-                this.key = this.name;
-            }
-
-            next();
-        });
-
         // Registering schema and initializing model
         this.registerSchema(NavigationDBOSchema);
     }
@@ -76,6 +65,13 @@ class NavigationModel extends BaseModel {
      * @param callback
      */
     create(element, callback) {
+
+        if (element.parent) {
+            element.key = element.parent + '-' + element.name;
+        } else {
+            element.key = element.name;
+        }
+
         var itemObject = new this.model(element);
 
         itemObject.save(function (err) {

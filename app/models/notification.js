@@ -20,13 +20,6 @@ var fs = require('fs');
 var path = require('path');
 
 /**
- * Swig template engine
- *
- * @type {*}
- */
-var swig = require('swig');
-
-/**
  * HTML -> Text conversion helper
  *
  * @type {*|exports|module.exports}
@@ -130,7 +123,7 @@ class NotificationModel extends BaseModel {
 
             // Notifying user via email
             if (userDetails != null && userDetails.isNotificationAllowed(notification.notificationType)) {
-                console.warn('Notifying user %s with %s via email', notification.targetUser, notification.notificationType)
+                console.warn('Notifying user %s with %s via email', notification.targetUser, notification.notificationType);
 
                 var templateFile = DioscouriCore.ApplicationFacade.instance.basePath + '/app/views/emails/newnotification.swig';
 
@@ -144,6 +137,8 @@ class NotificationModel extends BaseModel {
                         if (err) return console.error(err);
 
                         var mailer = new DioscouriCore.Mailer();
+
+                        var swig = require('swig');
 
                         mailer.send([userDetails.email], {
                             html: swig.renderFile(templateFile, {notification: notification}),

@@ -86,6 +86,7 @@ class NavigationModel extends BaseModel {
                     callback();
                 });
             } else {
+                this.buildNavigation();
                 callback();
             }
         });

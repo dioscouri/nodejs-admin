@@ -66,18 +66,29 @@ class NavigationModel extends BaseModel {
      */
     create(element, callback) {
 
+        if (typeof callback !== 'function') callback = () => {};
+
         if (element.parent) {
             element.key = element.parent + '-' + element.name;
         } else {
             element.key = element.name;
         }
 
-        var itemObject = new this.model(element);
+        this.model.find({key: element.key}, (err, item) => {
+            if (err) return callback(err);
 
-        itemObject.save(function (err) {
-            if (callback) callback(err);
-            this.buildNavigation();
-        }.bind(this));
+            if (!item) {
+                var itemObject = new this.model(element);
+
+                itemObject.save((err) => {
+                    if (err) callback(err);
+                    this.buildNavigation();
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        });
     }
 
     /**

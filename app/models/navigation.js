@@ -74,7 +74,7 @@ class NavigationModel extends BaseModel {
             element.key = element.name;
         }
 
-        this.model.find({key: element.key}, (err, item) => {
+        this.model.findOne({key: element.key}, (err, item) => {
             if (err) return callback(err);
 
             if (!item) {
@@ -86,7 +86,6 @@ class NavigationModel extends BaseModel {
                     callback();
                 });
             } else {
-                console.log(item);
                 callback();
             }
         });

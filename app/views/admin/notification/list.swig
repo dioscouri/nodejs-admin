@@ -70,6 +70,9 @@
                 </h4>
               </a>
 
+              <p class="text-{{ item.priority }}">{{ item.message }}</p>
+              <br>
+
               {% if item.originator %}
                 By: <strong>{{ originator.fullName }}</strong>
                 <br>
@@ -78,7 +81,7 @@
                 Target User: <strong>{{ targetUser.fullName }}</strong>
                 <br>
               {% endif %}
-              <p class="text-{{ item.priority }}">{{ item.message }}</p>
+
             </div>
           </div>
         {% endfor %}

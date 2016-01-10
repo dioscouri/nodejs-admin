@@ -23,6 +23,7 @@ module.exports = function () {
         // System notifications routes
         'get|/admin/notifications': 'notifications.js',
         'get|/admin/notifications/page/:page': 'notifications.js',
+        'get|/admin/notifications/:id': 'notifications.js',
         'get|/admin/notifications/:id/:action': 'notifications.js',
 
         // User management routes

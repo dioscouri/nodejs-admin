@@ -86,7 +86,7 @@ class NavigationModel extends BaseModel {
                     callback();
                 });
             } else {
-                console.log('item: ' + item._id);
+                console.log(item);
                 callback();
             }
         });

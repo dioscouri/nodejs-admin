@@ -27,6 +27,13 @@ var path = require('path');
 var htmlToText = require('html-to-text');
 
 /**
+ * Async helper
+ *
+ * @type {async|exports|module.exports}
+ */
+var async = require('async');
+
+/**
  * Application core
  */
 var DioscouriCore = process.mainModule.require('dioscouri-core');
@@ -60,7 +67,6 @@ class NotificationModel extends BaseModel {
             targetUser: {type: Types.ObjectId, ref: 'user', index: true},
             priority: {type: String, 'default': 'warning'},
             message: {type: String},
-            modifiedAt: {type: Date, 'default': Date.now, index: true},
             createdAt: {type: Date, 'default': Date.now, index: true},
             isRead: {type: Boolean, 'default': false, index: true}
         };
@@ -68,14 +74,76 @@ class NotificationModel extends BaseModel {
         // Creating DBO Schema
         var NotificationDBOSchema = this.createSchema(schemaObject);
 
-        NotificationDBOSchema.pre('save', function (next) {
-            this.modifiedAt = new Date();
+        NotificationDBOSchema.post('save', item => {
 
-            next();
+            // Update instance validation status
+            this.updateResourceValidationStatus(item.resourceType, item.resourceId);
+        });
+
+        NotificationDBOSchema.post('remove', item => {
+
+            // Update instance validation status
+            this.updateResourceValidationStatus(item.resourceType, item.resourceId);
         });
 
         // Registering schema and initializing model
         this.registerSchema(NotificationDBOSchema);
+    }
+
+    /**
+     * Update resource instance validation status
+     *
+     * @param resourceType
+     * @param resourceId
+     * @param callback
+     */
+    updateResourceValidationStatus(resourceType, resourceId, callback) {
+
+        if (typeof callback != 'function') callback = () => {};
+
+        async.waterfall([callback => {
+
+            // Find all notifications for this resource instance
+            this.mongoose.model('notifications').findAll({
+                resourceType: resourceType,
+                resourceId: resourceId
+            }, (err, items) => {
+
+                if (err) return callback(err);
+
+                var validationStatuses = ['danger', 'warning', 'info', 'success'];
+                var validationStatus   = '';
+
+                items.forEach(item => {
+                    if (validationStatus == '' ||
+                        validationStatuses.indexOf(item.priority) < validationStatuses.indexOf(validationStatus)) {
+                        validationStatus = item.priority;
+                    }
+                });
+
+                callback(null, validationStatus);
+            });
+
+        }, (validationStatus, callback) => {
+
+            // Get item
+            var Model = this.mongoose.model(resourceType);
+
+            Model.findById(resourceId).exec((err, item) => {
+                if (err) return callback(err);
+                if (!item) return callback();
+
+                if (item.validationStatus != validationStatus) {
+                    // Update validationStatus without hooks
+                    Model.where({_id: resourceId}).update({validationStatus: validationStatus}, callback);
+                } else {
+                    callback();
+                }
+            });
+        }], err => {
+            this.logger.error('NotificationModel::updateResourceValidationStatus: ' + err.message);
+            callback(err);
+        });
     }
 
     /**

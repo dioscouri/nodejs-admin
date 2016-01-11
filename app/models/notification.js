@@ -104,7 +104,7 @@ class NotificationModel extends BaseModel {
         async.waterfall([callback => {
 
             // Find all notifications for this resource instance
-            this.mongoose.model('notifications').findAll({
+            this.mongoose.model('notifications').find({
                 resourceType: resourceType,
                 resourceId: resourceId
             }, (err, items) => {
@@ -141,7 +141,7 @@ class NotificationModel extends BaseModel {
                 }
             });
         }], err => {
-            this.logger.error('NotificationModel::updateResourceValidationStatus: ' + err.message);
+            if (err) this.logger.error('NotificationModel::updateResourceValidationStatus: ' + err.message);
             callback(err);
         });
     }

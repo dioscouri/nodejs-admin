@@ -290,11 +290,13 @@ jQuery(document).ready(function () {
 
     var sortingLinks = $('a.sorting');
     if (sortingLinks.length > 0) {
-        if(sortingLinks.attr('href').indexOf('sorting') > -1) {
-            sortingLinks.attr('href', sortingLinks.attr('href') + window.location.search.substr(1));
-        } else {
-            sortingLinks.attr('href', sortingLinks.attr('href') + window.location.search);
-        }
+        $.each(sortingLinks, function(index, value) {
+            if(value.attr('href').indexOf('sorting') > -1) {
+                value.attr('href', value.attr('href') + window.location.search.substr(1));
+            } else {
+                value.attr('href', value.attr('href') + window.location.search);
+            }
+        });
     }
 
     var bulkEdit = $('a[class="bulk-edit"]');

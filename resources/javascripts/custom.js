@@ -288,17 +288,6 @@ jQuery(document).ready(function () {
         });
     }
 
-    var sortingLinks = $('a.sorting');
-    if (sortingLinks.length > 0) {
-        $.each(sortingLinks, function(index, value) {
-            if(value.attr('href').indexOf('sorting') > -1) {
-                value.attr('href', value.attr('href') + window.location.search.substr(1));
-            } else {
-                value.attr('href', value.attr('href') + window.location.search);
-            }
-        });
-    }
-
     var bulkEdit = $('a[class="bulk-edit"]');
     if (bulkEdit.length > 0) {
         bulkEdit.attr('href', bulkEdit.attr('href') + window.location.search);

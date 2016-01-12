@@ -288,7 +288,7 @@ jQuery(document).ready(function () {
         });
     }
 
-    var sortingLinks = $('a[class="sorting"]');
+    var sortingLinks = $('a.sorting');
     if (sortingLinks.length > 0) {
         sortingLinks.attr('href', sortingLinks.attr('href') + window.location.search);
     }

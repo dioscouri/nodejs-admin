@@ -290,7 +290,11 @@ jQuery(document).ready(function () {
 
     var sortingLinks = $('a.sorting');
     if (sortingLinks.length > 0) {
-        sortingLinks.attr('href', sortingLinks.attr('href') + window.location.search);
+        if(sortingLinks.attr('href').indexOf('sorting') > -1) {
+            sortingLinks.attr('href', sortingLinks.attr('href') + window.location.search.substr(1));
+        } else {
+            sortingLinks.attr('href', sortingLinks.attr('href') + window.location.search);
+        }
     }
 
     var bulkEdit = $('a[class="bulk-edit"]');

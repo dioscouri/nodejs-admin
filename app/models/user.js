@@ -195,9 +195,11 @@ class UserModel extends BaseModel {
                     return done(err);
                 }
 
-                (user.roles || []).forEach(function (role) {
-                    DioscouriCore.ApplicationFacade.instance.server.acl.addUserRoles(user._id.toString(), role);
-                });
+                if (user) {
+                    (user.roles || []).forEach(function (role) {
+                        DioscouriCore.ApplicationFacade.instance.server.acl.addUserRoles(user._id.toString(), role);
+                    });
+                }
 
                 done(null, user);
             });

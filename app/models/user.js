@@ -485,6 +485,8 @@ class UserModel extends BaseModel {
         self.getLDAPGroups(obj, function (err, groups) {
             if (err) return callback(err);
 
+            console.log(groups);
+
             async.map(groups, self.getAllGroups.bind(self), function (err, res) {
                 return callback(err, groups.concat.apply(groups, res));
             });

@@ -40,6 +40,8 @@ var async = require('async');
  */
 var ldap = require('ldapjs');
 
+ldap.Attribute.settings.guid_format = ldap.GUID_FORMAT_D;
+
 /**
  *  User model
  */
@@ -291,7 +293,6 @@ class UserModel extends BaseModel {
                     rejectUnauthorized: false
                 }
             });
-
 
             this._client.on('error', function (e) {
                 console.log('LDAP connection error:', e);

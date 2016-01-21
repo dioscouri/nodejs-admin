@@ -275,6 +275,12 @@ class UserModel extends BaseModel {
                 }], done);
             }));
 
+            var bunyan = require('bunyan');
+
+            var log = bunyan.createLogger({name: 'nodejs-admin'});
+
+            log.info('Hi');
+
             var options = this._options = {
                 url: authentication.ldap.url,
                 base: authentication.ldap.searchBase,
@@ -289,7 +295,8 @@ class UserModel extends BaseModel {
                 credentials: options.bindCredentials,
                 tlsOptions: {
                     rejectUnauthorized: false
-                }
+                },
+                log: log
             });
 
             this._client.on('error', function (e) {

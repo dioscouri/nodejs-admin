@@ -286,7 +286,10 @@ class UserModel extends BaseModel {
                 url: options.url,
                 maxConnections: 10,
                 bindDN: options.bindDN,
-                credentials: options.bindCredentials
+                credentials: options.bindCredentials,
+                tlsOptions: {
+                    rejectUnauthorized: false
+                }
             });
 
 

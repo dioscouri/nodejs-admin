@@ -6,7 +6,6 @@
     "acl": "^0.4.9",
     "async": "^1.4.2",
     "bcrypt-nodejs": "0.0.3",
-    "bunyan": "^1.5.1",
     "excel-parser": "^0.2.2",
     "html-to-text": "^1.5.1",
     "ldapjs": "^1.0.0",

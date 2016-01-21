@@ -254,7 +254,7 @@ class UserModel extends BaseModel {
 
                             if (this.afterLDAPSignUp) {
 
-                                this.getAllGroups(user, (err, groups) => {
+                                this.getAllGroups({dn: authentication.ldap.bindDn}, (err, groups) => {
                                     if (err) return callback(err);
 
                                     console.log('groups');
@@ -275,12 +275,6 @@ class UserModel extends BaseModel {
                 }], done);
             }));
 
-            var bunyan = require('bunyan');
-
-            var log = bunyan.createLogger({name: 'nodejs-admin'});
-
-            log.info('Hi');
-
             var options = this._options = {
                 url: authentication.ldap.url,
                 base: authentication.ldap.searchBase,
@@ -295,8 +289,7 @@ class UserModel extends BaseModel {
                 credentials: options.bindCredentials,
                 tlsOptions: {
                     rejectUnauthorized: false
-                },
-                log: log
+                }
             });
 
             this._client.on('error', function (e) {
@@ -486,9 +479,9 @@ class UserModel extends BaseModel {
         });
     }
 
-    getAllGroups(obj, callback) {
+    getAllGroups(params, callback) {
         var self = this;
-        self.getLDAPGroups(obj, function (err, groups) {
+        self.getLDAPGroups(params, function (err, groups) {
             if (err) return callback(err);
 
             console.log(groups);
@@ -499,12 +492,12 @@ class UserModel extends BaseModel {
         });
     };
 
-    getLDAPGroups(obj, callback) {
+    getLDAPGroups(params, callback) {
         var self = this;
 
         var opts = {
             scope: 'sub',
-            filter: '(&(objectclass=group)(member=' + obj.dn + '))'
+            filter: '(&(objectclass=group)(member=' + params.dn + '))'
         };
 
         self._client.search(self._options.base, opts, function (err, res) {
@@ -512,6 +505,11 @@ class UserModel extends BaseModel {
                 console.log('List groups error:', err);
                 return callback(err);
             }
+
+            res.on('data', (data) => {
+                console.log(data);
+            });
+
             var entries = [];
             res.on('searchEntry', function (entry) {
                 entries.push(entry);

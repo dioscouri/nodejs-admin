@@ -40,8 +40,6 @@ var async = require('async');
  */
 var ldap = require('ldapjs');
 
-ldap.Attribute.settings.guid_format = ldap.GUID_FORMAT_D;
-
 /**
  *  User model
  */

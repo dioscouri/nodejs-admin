@@ -58,43 +58,6 @@ class UserModel extends BaseModel {
          * @private
          */
         this._afterLDAPSignUp = null;
-
-        var authentication = DioscouriCore.ApplicationFacade.instance.config.env.authentication;
-
-        if (authentication && authentication.ldap && authentication.ldap.enabled === true) {
-
-            var options = this._options = {
-                url: authentication.ldap.url,
-                base: authentication.ldap.searchBase,
-                bindDN: authentication.ldap.bindDn,
-                bindCredentials: authentication.ldap.bindCredentials
-            };
-
-            this._client = ldap.createClient({
-                url: options.url,
-                maxConnections: 10,
-                bindDN: options.bindDN,
-                credentials: options.bindCredentials
-            });
-
-
-            this._client.on('error', function (e) {
-                console.log('LDAP connection error:', e);
-            });
-
-            this._queue = [];
-
-            var self = this;
-            this._client.bind(options.bindDN, options.bindCredentials, function (err) {
-                if (err) {
-                    return console.log("Error binding to LDAP", 'dn: ' + err.dn + '\n code: ' + err.code + '\n message: ' + err.message);
-                }
-                self.clientConnected = true;
-                self._queue.forEach(function (cb) {
-                    cb();
-                });
-            });
-        }
     }
 
     set afterLDAPSignUp(callback) {
@@ -311,6 +274,38 @@ class UserModel extends BaseModel {
 
                 }], done);
             }));
+
+            var options = this._options = {
+                url: authentication.ldap.url,
+                base: authentication.ldap.searchBase,
+                bindDN: authentication.ldap.bindDn,
+                bindCredentials: authentication.ldap.bindCredentials
+            };
+
+            this._client = ldap.createClient({
+                url: options.url,
+                maxConnections: 10,
+                bindDN: options.bindDN,
+                credentials: options.bindCredentials
+            });
+
+
+            this._client.on('error', function (e) {
+                console.log('LDAP connection error:', e);
+            });
+
+            this._queue = [];
+
+            var self = this;
+            this._client.bind(options.bindDN, options.bindCredentials, function (err) {
+                if (err) {
+                    return console.log("Error binding to LDAP", 'dn: ' + err.dn + '\n code: ' + err.code + '\n message: ' + err.message);
+                }
+                self.clientConnected = true;
+                self._queue.forEach(function (cb) {
+                    cb();
+                });
+            });
         }
 
         // Local strategy enabled by default but can be disabled in Configuration

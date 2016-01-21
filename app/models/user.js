@@ -496,8 +496,9 @@ class UserModel extends BaseModel {
         var self = this;
 
         var opts = {
-            scope: 'sub',
-            filter: '(&(objectclass=group)(member=' + params.dn + '))'
+            '(objectcategory=group)',
+            //scope: 'sub',
+            //filter: '(&(objectclass=group)(member=' + params.dn + '))'
         };
 
         self._client.search(self._options.base, opts, function (err, res) {

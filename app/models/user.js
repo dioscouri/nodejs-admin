@@ -496,7 +496,7 @@ class UserModel extends BaseModel {
         var self = this;
 
         var opts = {
-            '(objectcategory=group)'
+            filter: '(objectcategory=group)'
             //scope: 'sub',
             //filter: '(&(objectclass=group)(member=' + params.dn + '))'
         };

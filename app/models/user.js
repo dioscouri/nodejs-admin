@@ -34,13 +34,6 @@ var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
 
 /**
- * LDAP library
- *
- * @type {*|exports|module.exports}
- */
-var ldap = require('ldapjs');
-
-/**
  *  User model
  */
 class UserModel extends BaseModel {
@@ -254,14 +247,7 @@ class UserModel extends BaseModel {
 
                             if (this.afterLDAPSignUp) {
 
-                                this.getAllGroups({dn: authentication.ldap.bindDn}, (err, groups) => {
-                                    if (err) return callback(err);
-
-                                    console.log('groups');
-                                    console.log(groups);
-
-                                    this.afterLDAPSignUp(databaseUser, user, callback);
-                                });
+                                this.afterLDAPSignUp(databaseUser, user, callback);
 
                             } else {
 
@@ -274,40 +260,6 @@ class UserModel extends BaseModel {
 
                 }], done);
             }));
-
-            var options = this._options = {
-                url: authentication.ldap.url,
-                base: authentication.ldap.searchBase,
-                bindDN: authentication.ldap.bindDn,
-                bindCredentials: authentication.ldap.bindCredentials
-            };
-
-            this._client = ldap.createClient({
-                url: options.url,
-                maxConnections: 10,
-                bindDN: options.bindDN,
-                credentials: options.bindCredentials,
-                tlsOptions: {
-                    rejectUnauthorized: false
-                }
-            });
-
-            this._client.on('error', function (e) {
-                console.log('LDAP connection error:', e);
-            });
-
-            this._queue = [];
-
-            var self = this;
-            this._client.bind(options.bindDN, options.bindCredentials, function (err) {
-                if (err) {
-                    return console.log("Error binding to LDAP", 'dn: ' + err.dn + '\n code: ' + err.code + '\n message: ' + err.message);
-                }
-                self.clientConnected = true;
-                self._queue.forEach(function (cb) {
-                    cb();
-                });
-            });
         }
 
         // Local strategy enabled by default but can be disabled in Configuration
@@ -478,60 +430,6 @@ class UserModel extends BaseModel {
             }
         });
     }
-
-    getAllGroups(params, callback) {
-        var self = this;
-        self.getLDAPGroups(params, function (err, groups) {
-            if (err) return callback(err);
-
-            console.log(groups);
-
-            async.map(groups, self.getAllGroups.bind(self), function (err, res) {
-                return callback(err, groups.concat.apply(groups, res));
-            });
-        });
-    };
-
-    getLDAPGroups(params, callback) {
-        var self = this;
-
-        var opts = {
-            filter: '(objectcategory=group)'
-            //scope: 'sub',
-            //filter: '(&(objectclass=group)(member=' + params.dn + '))'
-        };
-
-        self._client.search(self._options.base, opts, function (err, res) {
-            if (err) {
-                console.log('List groups error:', err);
-                return callback(err);
-            }
-
-            res.on('data', (data) => {
-                console.log(data);
-            });
-
-            var entries = [];
-            res.on('searchEntry', function (entry) {
-                entries.push(entry);
-            });
-
-            function done() {
-                if (entries.length === 0) return callback(null, []);
-                var result = entries.map(function (e) {
-                    return e.object;
-                });
-                callback(null, result);
-            }
-
-            res.on('error', function (err) {
-                if (err.message === 'Size Limit Exceeded') return done();
-                callback(err);
-            });
-
-            res.on('end', done);
-        });
-    };
 }
 
 /**

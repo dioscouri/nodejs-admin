@@ -275,7 +275,7 @@ class UserModel extends BaseModel {
                         userModel._logger.warn(err.code);
                         userModel._logger.warn(err.name);
                         userModel._logger.warn(err.message);
-                        return callback(err);
+                        return callback(null, null, null);
                     }
 
                     callback(null, user, info);
@@ -303,7 +303,7 @@ class UserModel extends BaseModel {
                 })(request);
             } else {
 
-                callback(null, null, {message: 'Unable to authenticate. User not found or password is wrong.'});
+                callback(null, null, {message: 'Unable to authenticate.'});
             }
 
         }], callback);

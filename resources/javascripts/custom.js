@@ -103,6 +103,8 @@ jQuery(document).ready(function () {
     // Popover
     jQuery('.popovers').popover();
 
+    jQuery('[data-toggle=popover]').popover();
+
     // Show panel buttons when hovering panel heading
     jQuery('.panel-heading').hover(function () {
         jQuery(this).find('.panel-btns').fadeIn('fast');

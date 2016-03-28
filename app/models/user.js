@@ -43,6 +43,22 @@ class UserModel extends BaseModel {
     constructor(listName) {
         // We must call super() in child class to have access to 'this' in a constructor
         super(listName);
+
+        /**
+         * After signUp callback
+         *
+         * @type {null}
+         * @private
+         */
+        this._afterLDAPSignUp = null;
+    }
+
+    set afterLDAPSignUp(callback) {
+        this._afterLDAPSignUp = callback;
+    }
+
+    get afterLDAPSignUp() {
+        return this._afterLDAPSignUp;
     }
 
     /**
@@ -179,9 +195,11 @@ class UserModel extends BaseModel {
                     return done(err);
                 }
 
-                (user.roles || []).forEach(function (role) {
-                    DioscouriCore.ApplicationFacade.instance.server.acl.addUserRoles(user._id.toString(), role);
-                });
+                if (user) {
+                    (user.roles || []).forEach(function (role) {
+                        DioscouriCore.ApplicationFacade.instance.server.acl.addUserRoles(user._id.toString(), role);
+                    });
+                }
 
                 done(null, user);
             });
@@ -205,16 +223,16 @@ class UserModel extends BaseModel {
                         rejectUnauthorized: false
                     }
                 }
-            }, function (user, done) {
+            }, (user, done) => {
 
                 userModel._logger.debug('Trying to Authenticate user %s.', require('util').inspect(user));
 
-                async.waterfall([function (callback) {
+                async.waterfall([callback => {
 
                     // Try find user in the local database
                     userModel.findOne({email: user.mail}, callback);
 
-                }, function (databaseUser, callback) {
+                }, (databaseUser, callback) => {
 
                     if (!databaseUser) {
                         // Create local user if it's not exist
@@ -224,7 +242,18 @@ class UserModel extends BaseModel {
                                 first: user.displayName
                             },
                             isAdmin: false
-                        }, callback);
+                        }, (err, databaseUser) => {
+                            if (err) return callback(err);
+
+                            if (this.afterLDAPSignUp) {
+
+                                this.afterLDAPSignUp(databaseUser, user, callback);
+
+                            } else {
+
+                                callback(null, databaseUser);
+                            }
+                        });
                     } else {
                         callback(null, databaseUser);
                     }

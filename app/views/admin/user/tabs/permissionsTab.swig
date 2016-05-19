@@ -9,7 +9,7 @@
         <label class="col-md-2 control-label" for="roles">Roles</label>
 
         <div class="col-md-9">
-          <select class="form-control user-roles-select" id="roles" name="roles" multiple style="width:100%">
+          <select class="form-control select2" id="roles" name="roles" multiple style="width:100%">
             {% for role in roles %}
               <option value="{{ role.name }}" {% if item.roles.indexOf(role.name) !== -1 %}selected{% endif %}>
                 {{ role.name }}

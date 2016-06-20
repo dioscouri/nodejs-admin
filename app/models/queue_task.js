@@ -27,21 +27,30 @@ class QueueTaskModel extends BaseModel {
         var Types = this.mongoose.Schema.Types;
 
         var schemaObject = {
-            name: String,
-            params: Types.Mixed,
-            queue: String,
-            attempts: Types.Mixed,
-            delay: Date,
-            priority: Number,
-            status: String,
-            enqueued: Date,
-            dequeued: Date,
-            ended: Date,
+            queue: { type: String, index: true }, // name of the worker
+            name: { type: String, index: true }, // name of the method in the worker
+            params: { type: Types.Mixed }, // params sent to the worker.method
+            attempts: { type: Types.Mixed },
+            delay: { type: Date, default: Date.now, index: true },
+            priority: { type: Number, default: 1, index: true },
+            status: { type: String, default: "queued", index: true },
+            enqueued: { type: Date, default: Date.now, index: true },
+            dequeued: { type: Date, index: true },
+            ended: { type: Date, index: true },
             result: {}
         };
 
         // Creating DBO Schema
         var QueueTaskDBOSchema = this.createSchema(schemaObject);
+        
+        QueueTaskDBOSchema.pre('save', function(next){
+            var $this = this;
+            
+            if (!$this.attempts) {
+                $this.attempts = {count: 3, delay: 1000 * 60}; // 3 attempts with 1 min delay
+            }
+            next();
+        });
 
         // Registering schema and initializing model
         this.registerSchema(QueueTaskDBOSchema);

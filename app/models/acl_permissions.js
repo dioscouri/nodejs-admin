@@ -38,9 +38,9 @@ class AclPermissionModel extends BaseModel {
         var Types = this.mongoose.Schema.Types;
 
         var schemaObject = {
-            "aclRole": {type: Types.ObjectId, ref: 'acl_roles'},
-            "aclResource": String,
-            "actionName": String
+            "aclRole": {type: Types.ObjectId, ref: 'acl_roles', index: true },
+            "aclResource": { type: String, index: true },
+            "actionName": { type: String, index: true }
         };
 
         //Creating DBO Schema

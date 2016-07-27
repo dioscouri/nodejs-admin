@@ -247,37 +247,60 @@ jQuery(document).ready(function () {
             /**
              * Create permission
              */
-            var data = {
-                aclRole: $(this).data('role'),
-                aclResource: $(this).data('resource'),
-                actionName: $(this).data('action')
+            var a = {
+                aclRole: $(this).data("role"),
+                aclResource: $(this).data("resource"),
+                actionName: $(this).data("action")
             };
-
+            var el = $(this);
+            var container_id = $(this).data("message_container");
+            var container = null;
+            if (container_id) {
+                container = $(container_id);
+            }
             $.ajax({
-                url: $(this).data('create_url'),
-                method: 'POST',
-                dataType: 'json',
-                data: data
-            }).done(function (data) {
-
-                location.reload();
-
-            }).fail(function (jqXHR, textStatus) {
-                console.log(jqXHR, textStatus);
-                location.reload();
-            });
+                url: $(this).data("create_url"),
+                method: "POST",
+                dataType: "json",
+                data: a
+            }).done(function(a) {
+                if (a) {
+                    if (a.item) {
+                        el.attr('data-permission_id', a.item._id);
+                    }
+                }
+                if (container) {
+                    container.html('').removeClass().html('<i class="fa fa-check" aria-hidden="true"></i>').addClass('label label-sm label-success').show().fadeOut(500);
+                }
+            }).fail(function(a, b) {
+                if (container) {
+                    container.html('').removeClass().html('<i class="fa fa-times" aria-hidden="true"></i>').addClass('label label-sm label-danger').show().fadeOut(500);
+                }
+            })
         } else {
             /**
              * Remove permission
              */
+            var el = $(this);
+            var container_id = $(this).data("message_container");
+            var container = null;
+            if (container_id) {
+                container = $(container_id);
+            } 
+            
             $.ajax({
-                url: $(this).data('base_url') + '/' + $(this).data('permission_id') + '/delete',
-                method: 'GET'
-            }).done(function (data) {
-
-            }).fail(function (jqXHR, textStatus) {
-                console.log(jqXHR, textStatus);
-            });
+                url: $(this).data("base_url") + "/" + $(this).data("permission_id") + "/delete-ajax",
+                method: "GET"
+            }).done(function(a) {
+                if (container) {
+                    container.html('').removeClass().html('<i class="fa fa-check" aria-hidden="true"></i>').addClass('label label-sm label-success').show().fadeOut(500);
+                }                    
+            }).fail(function(a, b) {
+                if (container) {
+                    container.html('').removeClass().html('<i class="fa fa-times" aria-hidden="true"></i>').addClass('label label-sm label-danger').show().fadeOut(500);
+                }
+                
+            })
         }
     });
 

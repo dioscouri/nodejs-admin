@@ -44,7 +44,8 @@
                       {% if checked %} checked data-permission_id="{{ permission_id }}" {% endif %}
                      data-role="{{ role._id.toString() }}" data-resource="{{ resource.name }}"
                      data-action="{{ action }}" data-base_url="{{ baseUrl }}"
-                     data-create_url="{{ createActionUrl }}">
+                     data-create_url="{{ createActionUrl }}-ajax" data-message_container="#{{role._id.toString()}}-{{resource.name}}-{{action}}">
+              <span id="{{role._id.toString()}}-{{resource.name}}-{{action}}" class=""></span>
             </td>
           {% endfor %}
         </tr>

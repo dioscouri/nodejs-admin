@@ -48,6 +48,9 @@ class AdminAclPermissions extends AdminBaseCrudController {
          * @private
          */
         this._viewsPath = 'acl_permission';
+        
+        this.registerAction('create-ajax', 'doCreateAjax');
+        this.registerAction('delete-ajax', 'doDeleteAjax');
     }
 
     load(readyCallback) {
@@ -112,6 +115,106 @@ class AdminAclPermissions extends AdminBaseCrudController {
         return result;
     }
 
+    /**
+     * Proceed Create action
+     *
+     * @param readyCallback
+     */
+    doCreateAjax(readyCallback) {
+        this.data.actionUrl = this.getActionUrl('create');
+        var itemDetails     = this.getItemFromRequest({});
+        this.itemDetails = itemDetails;
+        
+        this.view(this.getViewClassDefinition().jsonView());
+        this.data = {};
+        
+        async.series([
+                asyncCallback => {
+                    this.model.validate(itemDetails, function (error, validationMessages) {
+                        if (error != null) {
+                            var validationErrors = (error.messages != null) ? error.messages : validationMessages;
+                            this.data.item       = itemDetails;
+                            
+                            this.data.error = true;
+                            this.data.errorMessage = "Failed to save item! " + error.message;
+
+                            error.isValidationFailed = true;
+                        }
+
+                        asyncCallback(error);
+                    }.bind(this));
+                },
+                asyncCallback => {
+                    // Run before Create item
+                    this.onBeforeCreate(asyncCallback);
+                },
+                asyncCallback => {
+                    // Run main create code
+                    this._logger.debug('Inserting new item to the database');
+                    itemDetails.last_modified_by = this.request.user._id;
+                    // Emitting ITEM_BEFORE_INSERT event
+                    this.emit(AdminBaseCrudController.CRUDEvents.ITEM_BEFORE_INSERT, {item: itemDetails});
+                    this.model.insert(itemDetails, function (error, item) {
+                        if (error != null) {
+                            this.data.error = true;
+                            this.data.errorMessage = "Failed to save item! " + error.message;
+                            this.terminate();
+                            //this.response.redirect(this.getActionUrl('list'));
+
+                            return asyncCallback(error);
+                        }
+
+                        // Set current item as newly inserted item
+                        this.itemDetails = item;
+
+                        this.data.item = item;
+
+                        // Send DATA_READY event
+                        asyncCallback();
+                    }.bind(this));
+                },
+                asyncCallback => {
+                    // Run after Create item
+                    this.onAfterCreate(asyncCallback);
+                }
+            ], (error) => {
+                
+                if (error != null && error.isValidationFailed) {
+                    readyCallback();
+                }  else {
+                    readyCallback(error);
+                }
+            }
+        );
+    }
+    
+    /**
+     * Proceed with Delete operation
+     *
+     * @param readyCallback
+     */
+    doDeleteAjax(readyCallback) {
+        this.view(this.getViewClassDefinition().jsonView());
+        this.data = {};
+        
+        this.model.removeById(this.itemId, this.request.user._id, function (error, item) {
+
+            // Emitting event
+            this.emit(AdminBaseCrudController.CRUDEvents.ITEM_DELETE, {item: item});
+
+            if (error != null) {
+                this.data.error = true;
+                this.data.errorMessage = "Failed to delete item! " + error.message;
+                this.terminate();
+
+                return readyCallback(error);
+            }
+
+            // Send DATA_READY event
+            readyCallback();
+        }.bind(this));
+    }    
+    
 }
 
 /**

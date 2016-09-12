@@ -196,12 +196,28 @@ class UserModel extends BaseModel {
                 }
 
                 if (user) {
-                    (user.roles || []).forEach(function (role) {
-                        DioscouriCore.ApplicationFacade.instance.server.acl.addUserRoles(user._id.toString(), role);
-                    });
-                }
 
-                done(null, user);
+                    // Find all roles assigned to this user
+                    DioscouriCore.ApplicationFacade.instance.server.acl.userRoles(user.id, function (err, roles) {
+                        if (err) return done(err);
+
+                        // Remove all roles
+                        DioscouriCore.ApplicationFacade.instance.server.acl.removeUserRoles(user.id, roles, function (err) {
+                            if (err) return done(err);
+
+                            // Add roles
+                            DioscouriCore.ApplicationFacade.instance.server.acl.addUserRoles(user.id, user.roles, function (err) {
+                                if (err) return done(err);
+
+                                done(null, user);
+                            });
+                        });
+                    });
+
+                } else {
+
+                    done(null, user);
+                }
             });
         });
 

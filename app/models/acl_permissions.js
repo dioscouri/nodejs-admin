@@ -35,6 +35,7 @@ class AclPermissionModel extends BaseModel {
      */
     defineSchema() {
 
+        let $this = this;
         var Types = this.mongoose.Schema.Types;
 
         var schemaObject = {
@@ -54,13 +55,18 @@ class AclPermissionModel extends BaseModel {
             }.bind(this));
         }.bind(this));
 
-        AclPermissionDBOSchema.post('remove', function (permission) {
-            require('./acl_roles').findById(permission.aclRole, function(err, role) {
-                if (err) return console.log(err);
+        AclPermissionDBOSchema.pre('remove', function (next) {
 
-                this.acl.removeAllow(role.name, permission.aclResource, permission.actionName);
-            }.bind(this));
-        }.bind(this));
+            let permission = this;
+
+            require('./acl_roles').findById(permission.aclRole, (err, role) => {
+                if (err) return next(err);
+
+                $this.acl.removeAllow(role.name, permission.aclResource, permission.actionName);
+
+                next();
+            });
+        });
 
         // Registering schema and initializing model
         this.registerSchema(AclPermissionDBOSchema);

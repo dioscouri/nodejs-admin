@@ -1,6 +1,6 @@
 {
   "name": "nodejs-admin",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "private": true,
   "dependencies": {
     "acl": "0.4.9",

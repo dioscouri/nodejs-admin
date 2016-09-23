@@ -52,23 +52,19 @@ class AclRoleModel extends BaseModel {
         //Creating DBO Schema
         var AclRoleDBOSchema = this.createSchema(schemaObject);
 
-        AclRoleDBOSchema.post('remove', function () {
+        AclRoleDBOSchema.pre('remove', function (next) {
             var role = this;
 
             require('./acl_permissions').model.find({
                 aclRole: role._id
             }, function (err, permissions) {
-                if (err) return console.log(err);
+                if (err) return next(err);
 
                 async.each(permissions, function (permission, callback) {
 
-                    permission.remove(function (err) {
-                        callback(err);
-                    });
+                    permission.remove(callback);
 
-                }, function (err) {
-                    if (err) console.log(err);
-                })
+                }, next);
             });
         });
 

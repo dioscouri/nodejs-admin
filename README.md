@@ -26,3 +26,10 @@
     ```
 
 2. Use `exportActionUrl` in views to export
+
+#### Audit logging
+
+How to upgrade to new logging:
+
+1. Update base model in your project, add `resourceModel` to `traceModelChange` calls, see [example](https://bitbucket.org/cohengroup/gvs-app/commits/e27cd11f5f39ec73877c87dfa8ece490214e731d#Lapp/models/common/basemodel.jsT87).
+2. Optionally. Add array of fields to audit ignore to your models, it should be called as `auditIgnoredFields`, see [example](https://bitbucket.org/cohengroup/gvs-app/commits/e27cd11f5f39ec73877c87dfa8ece490214e731d#Lapp/models/common/doctor.jsT162).

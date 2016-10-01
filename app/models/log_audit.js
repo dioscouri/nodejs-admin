@@ -104,7 +104,7 @@ class LogAuditModel extends BaseModel {
         if (logData.modified) {
 
             var diff = [];
-            var auditIgnoredFields = ['__v', 'last_modified_by', 'validationStatus', 'modifiedAt'];
+            var auditIgnoredFields = ['__v', 'last_modified_by', 'validationStatus', 'modifiedAt', 'modifiedBy', 'createdAt', 'createdBy'];
 
             if (logData.resourceModel && logData.resourceModel.auditIgnoredFields) {
 

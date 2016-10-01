@@ -35,12 +35,12 @@ class LogAuditModel extends BaseModel {
         var schemaObject = {
             resource: {type: String, index: true},
             resourceId: {type: Types.ObjectId, index: true},
-            action: {type: String, enum: ['removed', 'modified', 'created']},
+            action: {type: String, enum: ['removed', 'modified', 'created'], index: true},
             fieldsChanged: [{type: String, index: true}],
             diff: {type: [Types.Mixed]},
             message: {type: String},
             userId: {type: Types.ObjectId, index: true},
-            createdAt: {type: Date, 'default': Date.now}
+            createdAt: {type: Date, 'default': Date.now, index: true}
         };
 
         var option = {

@@ -18,7 +18,7 @@ class LogAuditModel extends BaseModel {
     /**
      * Model constructor
      */
-    constructor(listName) {
+    constructor (listName) {
         // We must call super() in child class to have access to 'this' in a constructor
         super(listName);
     }
@@ -28,17 +28,19 @@ class LogAuditModel extends BaseModel {
      *
      * @override
      */
-    defineSchema() {
+    defineSchema () {
 
         var Types = this.mongoose.Schema.Types;
 
         var schemaObject = {
             resource: {type: String, index: true},
-            resourceId: {type: Types.ObjectId},
+            resourceId: {type: Types.ObjectId, index: true},
+            action: {type: String, enum: ['removed', 'modified', 'created'], index: true},
+            fieldsChanged: [{type: String, index: true}],
             diff: {type: [Types.Mixed]},
             message: {type: String},
-            userId: {type: Types.ObjectId},
-            createdAt: {type: Date, 'default': Date.now}
+            userId: {type: Types.ObjectId, index: true},
+            createdAt: {type: Date, 'default': Date.now, index: true}
         };
 
         var option = {
@@ -62,7 +64,7 @@ class LogAuditModel extends BaseModel {
      * @param {string} rawData.message - Text message.
      * @param {Object} rawData.userId - User ID who made the change.
      */
-    writeRaw(rawData) {
+    writeRaw (rawData) {
         this.insert(rawData);
     }
 
@@ -75,9 +77,10 @@ class LogAuditModel extends BaseModel {
      * @param {Object} [logData.modified] - Flag, item was modified.
      * @param {Object} [logData.removed] - Flag, item was removed.
      * @param {Object} [logData.userId] - User ID who made the change.
+     * @param {Object} [logData.resourceModel] - Affected resource model.
      * @param {function} [callback] - Callback function.
      */
-    traceModelChange(logData, callback) {
+    traceModelChange (logData, callback) {
 
         if (typeof callback === 'undefined') callback = function () {
         };
@@ -91,6 +94,7 @@ class LogAuditModel extends BaseModel {
         if (logData.created) {
 
             this.writeRaw(merge(rawData, {
+                action: 'created',
                 message: logData.item.name ? logData.item.name + ' was created.' : logData.resource + ' was created.'
             }));
 
@@ -100,21 +104,37 @@ class LogAuditModel extends BaseModel {
         if (logData.modified) {
 
             var diff = [];
+            var auditIgnoredFields = ['__v', 'last_modified_by', 'validationStatus', 'modifiedAt', 'modifiedBy', 'createdAt', 'createdBy'];
+
+            if (logData.resourceModel && logData.resourceModel.auditIgnoredFields) {
+
+                // merge common and model audit ignored fields together
+                auditIgnoredFields = auditIgnoredFields.concat(logData.resourceModel.auditIgnoredFields);
+            }
 
             for (var k in logData.item) {
-                if (logData.item.hasOwnProperty(k) && k !== 'last_modified_by') {
-                    if (JSON.stringify(logData.item[k]) !== JSON.stringify(logData.oldItem[k])) {
-                        diff.push({
-                            name: k,
-                            from: logData.oldItem[k],
-                            to: logData.item[k]
-                        });
+                if (logData.item.hasOwnProperty(k)) {
+                    if (auditIgnoredFields.indexOf(k) === -1) {
+                        if (JSON.stringify(logData.item[k]) !== JSON.stringify(logData.oldItem[k])) {
+                            diff.push({
+                                name: k,
+                                from: logData.oldItem[k],
+                                to: logData.item[k]
+                            });
+                        }
                     }
                 }
             }
 
+            if (diff.length === 0) {
+
+                return callback(); // Audit log is empty, no changes to store
+            }
+
             this.writeRaw(merge(rawData, {
+                action: 'modified',
                 message: logData.oldItem.name ? logData.oldItem.name + ' was modified.' : logData.resource + ' was modified.',
+                fieldsChanged: diff.map(diffEntry => diffEntry.name),
                 diff: JSON.stringify(diff)
             }));
 
@@ -124,6 +144,7 @@ class LogAuditModel extends BaseModel {
         if (logData.removed) {
 
             this.writeRaw(merge(rawData, {
+                action: 'removed',
                 message: logData.item.name ? logData.item.name + ' was removed.' : logData.resource + ' was removed.'
             }));
 

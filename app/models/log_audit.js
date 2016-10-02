@@ -37,7 +37,7 @@ class LogAuditModel extends BaseModel {
             resourceId: {type: Types.ObjectId, index: true},
             action: {type: String, enum: ['removed', 'modified', 'created'], index: true},
             fieldsChanged: [{type: String, index: true}],
-            diff: {type: [Types.Mixed]},
+            diff: {type: Types.Mixed}, // a JSON-stringified array of objects, stringified so it is searchable
             message: {type: String},
             userId: {type: Types.ObjectId, index: true},
             createdAt: {type: Date, 'default': Date.now, index: true}

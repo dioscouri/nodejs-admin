@@ -28,26 +28,31 @@ module.exports = function () {
 
         // User management routes
         'get|/admin/users': 'users.js',
+        'get|/admin/users/page/:page': 'users.js',
         'get,post|/admin/users/:action': 'users.js',
         'get,post|/admin/users/:id/:action': 'users.js',
 
         // ACL Roles management routes
         'get|/admin/acl_roles': 'acl_roles.js',
+        'get|/admin/acl_roles/page/:page': 'acl_roles.js',
         'get,post|/admin/acl_roles/:action': 'acl_roles.js',
         'get,post|/admin/acl_roles/:id/:action': 'acl_roles.js',
 
         // ACL Permissions management routes
         'get|/admin/acl_permissions': 'acl_permissions.js',
+        'get|/admin/acl_permissions/page/:page': 'acl_permissions.js',
         'get,post|/admin/acl_permissions/:action': 'acl_permissions.js',
         'get,post|/admin/acl_permissions/:id/:action': 'acl_permissions.js',
 
         // Webhook Events management routes
         'get|/admin/webhookevents': 'webhookevents.js',
+        'get|/admin/webhookevents/page/:page': 'webhookevents.js',
         'get,post|/admin/webhookevents/:action': 'webhookevents.js',
         'get,post|/admin/webhookevents/:id/:action': 'webhookevents.js',
 
         // Webhooks management routes
         'get|/admin/webhooks': 'webhooks.js',
+        'get|/admin/webhooks/page/:page': 'webhooks.js',
         'get,post|/admin/webhooks/:action': 'webhooks.js',
         'get,post|/admin/webhooks/:id/:action': 'webhooks.js',
 

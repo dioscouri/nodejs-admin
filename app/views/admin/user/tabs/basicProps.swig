@@ -29,10 +29,18 @@
                        value="{{ item.email }}" required>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             <div class="input-group mb15">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input type="password" class="form-control" name="password" placeholder="Enter Password" required>
+                <input type="password" class="form-control" name="password" autocomplete="off"
+                       placeholder="Enter Password">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group mb15">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input type="password" class="form-control" name="passwordConfirmation" autocomplete="off"
+                       placeholder="Repeat Password">
             </div>
         </div>
     </div>

@@ -173,6 +173,31 @@ class UserModel extends BaseModel {
     }
 
     /**
+     * Get user full name from LDAP display name
+     *
+     * @param LDAPUser {{}}
+     * @returns {{first: String, last?: String}}
+     */
+    extractLDAPUserFullName(LDAPUser) {
+
+        let names = LDAPUser.displayName.split(' ');
+
+        if (names.length > 1) {
+
+            return {
+                first: names[0],
+                last: names.slice(1, names.length).join(' ')
+            }
+
+        } else {
+
+            return {
+                first: LDAPUser.displayName
+            }
+        }
+    }
+
+    /**
      * Registering passport handlers
      *
      * @param passport
@@ -254,9 +279,7 @@ class UserModel extends BaseModel {
                         // Create local user if it's not exist
                         userModel.insert({
                             email: user.mail,
-                            name: {
-                                first: user.displayName
-                            },
+                            name: userModel.extractLDAPUserFullName(user),
                             isAdmin: false
                         }, (err, databaseUser) => {
                             if (err) return callback(err);
@@ -277,7 +300,7 @@ class UserModel extends BaseModel {
                 }], done);
             }));
         }
-        
+
         // Local strategy enabled by default but can be disabled in Configuration
         if (!authentication || !authentication.local || authentication.local.enabled !== false) {
             /**
@@ -302,29 +325,29 @@ class UserModel extends BaseModel {
                 });
             }));
         }
-        
+
         if (authentication && authentication.safemode && authentication.safemode.enabled === true && authentication.safemode.username && authentication.safemode.password) {
-            
+
             /**
              * Local: Sign in using Safemode Email and Password
              */
             passport.use("safemode", new LocalStrategy({usernameField: 'email'}, function (email, password, done) {
 
                 email = email.toLowerCase();
-                
+
                 //console.log('Trying to safemode authenticate user %s', email);
-                
+
                 if (email == authentication.safemode.username && password == authentication.safemode.password) {
-                    
+
                     userModel.model.findOne({ email: authentication.safemode.username }).exec(function(err, dbUser){
                         if (err) {
                             return done(err);
                         }
-                        
+
                         if (dbUser) {
-                            return done(null, dbUser);                            
+                            return done(null, dbUser);
                         }
-                        
+
                         var options = {
                             "email": authentication.safemode.username,
                             "password": authentication.safemode.password,
@@ -335,40 +358,40 @@ class UserModel extends BaseModel {
                                 "first": "Safemode"
                             }
                         };
-                        var user = userModel.model(options);                        
+                        var user = userModel.model(options);
                         user.save(function(err, i){
                             if (err) {
                                 return done(err);
                             }
-                            
+
                             return done(null, user);
                         });
                     });
-                    
+
                 } else {
                     return done();
                 }
 
             }));
-            
+
         }
-        
+
         if (authentication && authentication.elvismode && authentication.elvismode.enabled === true && authentication.elvismode.password) {
-            
+
             /**
              * Local: Sign in using Elvis Password,
-             * which allows you to impersonate another user 
+             * which allows you to impersonate another user
              */
             passport.use("elvismode", new LocalStrategy({usernameField: 'email'}, function (email, password, done) {
 
                 email = email.toLowerCase();
-                
+
                 //console.log('Trying to elvismode authenticate user %s', email);
-                
+
                 if (password != authentication.elvismode.password) {
                     return done();
                 }
-                
+
                 userModel.findOne({email: email}, function (err, user) {
                     if (err) {
                         return done();
@@ -376,32 +399,32 @@ class UserModel extends BaseModel {
                     if (!user) {
                         return done();
                     }
-                    
+
                     //console.log('Elvis is in the building');
-                    
+
                     return done(null, user);
-                });                
+                });
 
             }));
-            
+
         }
-        
+
     }
 
     authenticate(request, callback) {
         var userModel = this;
 
         var authentication = DioscouriCore.ApplicationFacade.instance.config.env.authentication;
-        
+
         var loggedUser = null;
 
         async.series([
             function(asCb) {
 
                 if (authentication && authentication.ldap && authentication.ldap.enabled === true) {
-    
+
                     userModel.passport.authenticate('ldapauth', function (err, user, info) {
-    
+
                         if (err) {
                             userModel._logger.warn(err.dn);
                             userModel._logger.warn(err.code);
@@ -410,46 +433,17 @@ class UserModel extends BaseModel {
                             console.error(err);
                             return asCb();
                         }
-    
-                        if (user) {
-                            loggedUser = user;
-                        }
-                        
-                        asCb();
-    
-                    })(request);
-    
-                } else {
-    
-                    asCb();
-                }
-
-            }, 
-            function (asCb) {
-
-                if (loggedUser) {
-                    return asCb();
-                }
-    
-                if (authentication && authentication.safemode && authentication.safemode.enabled === true && authentication.safemode.username && authentication.safemode.password) {
-    
-                    userModel.passport.authenticate('safemode', function (err, user, info) {
-    
-                        if (err) {
-                            console.error(err);
-                            return asCb()
-                        }
 
                         if (user) {
                             loggedUser = user;
                         }
-                        
+
                         asCb();
-    
+
                     })(request);
-                    
+
                 } else {
-    
+
                     asCb();
                 }
 
@@ -459,11 +453,11 @@ class UserModel extends BaseModel {
                 if (loggedUser) {
                     return asCb();
                 }
-    
-                if (authentication && authentication.elvismode && authentication.elvismode.enabled === true && authentication.elvismode.password) {
-    
-                    userModel.passport.authenticate('elvismode', function (err, user, info) {
-    
+
+                if (authentication && authentication.safemode && authentication.safemode.enabled === true && authentication.safemode.username && authentication.safemode.password) {
+
+                    userModel.passport.authenticate('safemode', function (err, user, info) {
+
                         if (err) {
                             console.error(err);
                             return asCb()
@@ -472,52 +466,81 @@ class UserModel extends BaseModel {
                         if (user) {
                             loggedUser = user;
                         }
-                        
+
                         asCb();
-    
+
                     })(request);
-                    
+
                 } else {
-    
+
                     asCb();
                 }
 
-            },            
+            },
             function (asCb) {
 
                 if (loggedUser) {
                     return asCb();
                 }
-    
-                if (!authentication || !authentication.local || authentication.local.enabled !== false) {
-    
-                    userModel.passport.authenticate('local', function (err, user, info) {
-    
+
+                if (authentication && authentication.elvismode && authentication.elvismode.enabled === true && authentication.elvismode.password) {
+
+                    userModel.passport.authenticate('elvismode', function (err, user, info) {
+
                         if (err) {
                             console.error(err);
-                            return asCb();
+                            return asCb()
                         }
-    
+
                         if (user) {
                             loggedUser = user;
                         }
-                        
+
                         asCb();
-    
+
                     })(request);
-                    
+
                 } else {
 
                     asCb();
                 }
 
-            }            
+            },
+            function (asCb) {
+
+                if (loggedUser) {
+                    return asCb();
+                }
+
+                if (!authentication || !authentication.local || authentication.local.enabled !== false) {
+
+                    userModel.passport.authenticate('local', function (err, user, info) {
+
+                        if (err) {
+                            console.error(err);
+                            return asCb();
+                        }
+
+                        if (user) {
+                            loggedUser = user;
+                        }
+
+                        asCb();
+
+                    })(request);
+
+                } else {
+
+                    asCb();
+                }
+
+            }
         ], function(err){
             if (err) {
                 console.error(err);
                 return callback(err, null, {message: 'Error authenticating'});
             }
-            
+
             if (!loggedUser) {
                 return callback(null, null, {message: 'Unable to authenticate'});
             }

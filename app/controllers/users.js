@@ -68,6 +68,14 @@ class AdminUsers extends AdminBaseCrudController {
          * @private
          */
         this._modelEditableFields = ['name'];
+
+        /**
+         * XLS export fields
+         *
+         * @type {string[]}
+         * @private
+         */
+        this._xlsExportFields = [{field: '_id', column: 'ID'}, {field: 'email', column: 'E-mail'}];
     }
 
     /**

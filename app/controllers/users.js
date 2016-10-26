@@ -75,7 +75,12 @@ class AdminUsers extends AdminBaseCrudController {
          * @type {string[]}
          * @private
          */
-        this._xlsExportFields = [{field: '_id', column: 'ID'}, {field: 'email', column: 'E-mail'}];
+        this._xlsExportFields = [
+            {field: '_id', column: 'ID', width: 28},
+            {field: 'email', column: 'E-mail', width: 30},
+            {field: 'name.last', column: 'First name'},
+            {field: 'name.first', column: 'Last name'}
+        ];
     }
 
     /**

@@ -13,6 +13,9 @@
       <p>
         <a href="{{ createActionUrl }}" class="btn btn-success btn-block btn-create-msg">Create New</a>
       </p>
+      <p>
+        <a href="{{ exportActionUrl }}" class="btn btn-default btn-block">Export XLS</a>
+      </p>
 
       {{ search() }}
 

@@ -13,9 +13,12 @@
 
       {{ search() }}
 
-      <ul class="nav nav-pills nav-stacked nav-msg">
-        {{ quick_filter({search: '?filter[resource]=doctor', name: 'Resource: Doctor'}) }}
-      </ul>
+      {% include './partials/search-by-resource.swig' %}
+      {{ auditLoggingSearchByResource() }}
+
+      {#<ul class="nav nav-pills nav-stacked nav-msg">#}
+        {#{{ quick_filter({search: '?filter[resource]=doctor', name: 'Resource: Doctor'}) }}#}
+      {#</ul>#}
 
       <br/>
 

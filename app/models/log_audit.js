@@ -21,6 +21,13 @@ class LogAuditModel extends BaseModel {
     constructor (listName) {
         // We must call super() in child class to have access to 'this' in a constructor
         super(listName);
+
+        /**
+         * Response fields
+         *
+         * @type {string[]}
+         */
+        this.responseFields = ['resource', 'resourceId', 'action', 'userId'];
     }
 
     /**

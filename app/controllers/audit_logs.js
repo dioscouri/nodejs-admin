@@ -6,6 +6,11 @@
 var AdminBaseCrudController = require('./basecrud.js');
 
 /**
+ * Async library
+ */
+const async = require('async');
+
+/**
  *  AdminLogSystem controller
  */
 class AdminLogAudit extends AdminBaseCrudController {
@@ -43,13 +48,38 @@ class AdminLogAudit extends AdminBaseCrudController {
     }
 
     load(readyCallback) {
-        super.load(function (err) {
-            if (err) return readyCallback(err);
 
-            // TODO: Load filters
-            readyCallback();
+        async.series([callback => {
 
-        }.bind(this));
+            super.load(callback);
+
+        }, callback => {
+
+            this.loadFiltersData(callback);
+
+        }], readyCallback);
+    }
+
+    loadFiltersData(callback) {
+
+        async.series([callback => {
+
+            this.loadResources(callback);
+
+        }], callback);
+    }
+
+    loadResources(callback) {
+
+        this.model.model.distinct('resource', (err, resources) => {
+            if (err) return callback(err);
+
+            this.data.filtersData = this.data.filtersData ? this.data.filtersData : {};
+
+            this.data.filtersData.resources = resources;
+
+            callback();
+        });
     }
 }
 

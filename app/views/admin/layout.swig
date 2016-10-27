@@ -31,6 +31,7 @@
   {% include "./partials/sorting_column.swig" %}
   {% include "./partials/sorting.swig" %}
   {% include "./partials/search.swig" %}
+  {% include "./partials/search-buttons.swig" %}
   {% include "./partials/resource-action-buttons.swig" %}
   {% include "./partials/bulk-actions.swig" %}
   {% include "./partials/quickfilter.swig" %}

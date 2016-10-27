@@ -63,36 +63,50 @@ jQuery(document).ready(function () {
 
     $('.bs-data-picker').datepicker({});
 
-    // Search box binding
-    if ($('.search-box').length > 0) {
+    // Filters box binding
+    if ($('.filters').length > 0) {
+
         $('#searchValue').keydown(function (e) {
-            var oldValue = $('.search-box #oldValue').val();
             var basePath = $('.search-box #basePath').val();
 
             if (e.which === 13) {
                 var searchValue = $(this).val();
-                if (searchValue) {
-                    var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', searchValue);
-                    window.location = basePath + queryString;
-                }
+                if (!searchValue) searchValue = '';
+                var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', searchValue);
+                window.location = basePath + queryString;
                 return false;
             }
         });
 
-        $('.search-box .search').click(function (e) {
-            var basePath    = $('.search-box #basePath').val();
-            var searchValue = $('#searchValue').val();
+        $('.filters .search').click(function (e) {
 
-            if (searchValue) {
-                var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', searchValue);
-                window.location = basePath + queryString;
-            }
+            var queryString = window.location.search;
+
+            $('[data-filter]').each(function () {
+                var value = $(this).val();
+                var name  = $(this).data('filter');
+
+                if (value) {
+                    queryString = queryStringHelper.getUpdatedQueryString(queryString, 'filter[' + name + ']', value);
+                } else {
+                    queryString = queryStringHelper.getUpdatedQueryString(queryString, 'filter[' + name + ']', '');
+                }
+            });
+
+            window.location = $('.search-box #basePath').val() + queryString;
         });
 
-        $('.search-box .reset').click(function (e) {
-            var basePath    = $('.search-box #basePath').val();
-            var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', '');
-            window.location = basePath + queryString;
+        $('.filters .reset').click(function () {
+
+            var queryString = window.location.search;
+
+            $('[data-filter]').each(function () {
+                var name = $(this).data('filter');
+
+                queryString = queryStringHelper.getUpdatedQueryString(queryString, 'filter[' + name + ']', '');
+            });
+
+            window.location = $('.search-box #basePath').val() + queryString;
         });
     }
 
@@ -483,6 +497,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('.user-roles-select').select2();
+    $('.select2').select2();
 
     $('.admin-ui-select2-autocomplete').each(function () {
 

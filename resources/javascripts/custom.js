@@ -537,6 +537,13 @@ $(document).ready(function () {
             cancelLabel: 'Clear'
         }
     });
+    $('.date-range-picker').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+
+    $('.date-range-picker').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
 
     $('.admin-ui-select2-autocomplete').each(function () {
 

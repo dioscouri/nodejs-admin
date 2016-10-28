@@ -9,6 +9,11 @@
         {% set showResetButton = true %}
       {% endif %}
     {% endfor %}
+    {% for entry in filters.customFilters %}
+      {% if entry.filterName.indexOf('custom') == 0 and not entry.filterValue | isEmpty %}
+        {% set showResetButton = true %}
+      {% endif %}
+    {% endfor %}
   {% endif %}
 
   <div class="pull-right">

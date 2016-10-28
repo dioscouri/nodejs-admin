@@ -51,7 +51,7 @@ class LogAuditModel extends BaseModel {
          *
          * @type {Array}
          */
-        this.customFilters = ['dateRange'];
+        this.customFilters = ['customDateRange'];
     }
 
     /**

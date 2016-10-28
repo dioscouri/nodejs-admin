@@ -26,6 +26,7 @@
     "jquery": "~2.1.4",
     "bootstrap-datepicker": "~1.4.1",
     "jquery-ui": "~1.11.4",
-    "ckeditor": "~4.5.4"
+    "ckeditor": "~4.5.4",
+    "bootstrap-daterangepicker": "2.1.24"
   }
 }

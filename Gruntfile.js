@@ -33,6 +33,7 @@ module.exports = function (grunt) {
                     './resources/javascripts/chain/bootstrap-timepicker.min.js',
                     './resources/javascripts/chain/wysihtml5-0.3.0.min.js',
                     './resources/javascripts/chain/bootstrap-wysihtml5.js',
+                    './resources/bower_components/bootstrap-daterangepicker/daterangepicker.js',
                     './app/assets/javascripts/build.min.js'
                 ],
                 dest: './app/assets/javascripts/build.min.js'
@@ -59,6 +60,7 @@ module.exports = function (grunt) {
                         './resources/stylesheets/chain/bootstrap-timepicker.min.css',
                         './resources/stylesheets/chain/select2.min.css',
                         './resources/stylesheets/chain/select2-bootstrap.css',
+                        './resources/bower_components/bootstrap-daterangepicker/daterangepicker.css',
                         './resources/stylesheets/custom.css'
                     ]
                 }

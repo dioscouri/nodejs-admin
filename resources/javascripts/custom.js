@@ -531,6 +531,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('.user-roles-select').select2();
     $('.select2').select2();
+    $('.date-range-picker').daterangepicker();
 
     $('.admin-ui-select2-autocomplete').each(function () {
 

@@ -51,7 +51,7 @@ class LogAuditModel extends BaseModel {
          *
          * @type {Array}
          */
-        this.customFilters = ['dataRange'];
+        this.customFilters = ['dateRange'];
     }
 
     /**
@@ -197,6 +197,9 @@ class LogAuditModel extends BaseModel {
         console.log(mongoFilters);
         console.log(customFilters);
         console.log('---');
+
+        // [ { filterName: 'dateRange', filterValue: '123123-1231' } ]
+        
 
         return mongoFilters;
     }

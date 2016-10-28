@@ -26,6 +26,9 @@
         {% include './partials/search-by-resource-id.swig' %}
         {{ auditLoggingSearchByResourceId() }}
 
+        {% include './partials/search-by-date-range.swig' %}
+        {{ auditLoggingSearchByDateRange() }}
+
         {{ search_buttons() }}
 
         <br>

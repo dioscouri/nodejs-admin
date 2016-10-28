@@ -218,10 +218,10 @@ class LogAuditModel extends BaseModel {
             mongoFilters.$and.push({diff: {$regex: regExp}});
         }
 
-        console.log('---');
-        console.log(mongoFilters);
-        console.log(customFilters);
-        console.log('---');
+        // console.log('---');
+        // console.log(mongoFilters);
+        // console.log(customFilters);
+        // console.log('---');
 
         return mongoFilters;
     }

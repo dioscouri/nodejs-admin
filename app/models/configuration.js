@@ -39,6 +39,8 @@ class ConfigurationModel extends BaseModel {
      */
     defineSchema() {
 
+        var Types = this.mongoose.Schema.Types;
+
         var schemaObject = {
             project: {
                 name: {type: String}

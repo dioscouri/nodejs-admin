@@ -64,10 +64,10 @@ jQuery(document).ready(function () {
     $('.bs-data-picker').datepicker({});
 
     // Filters box binding
-    if ($('.filters').length > 0) {
+    if ($('.search-filters').length > 0) {
 
-        $('#searchValue').keydown(function (e) {
-            var basePath = $('.search-box #basePath').val();
+        $('.search-box-2 #searchValue').keydown(function (e) {
+            var basePath = $('.search-box-2 #basePath').val();
 
             if (e.which === 13) {
                 var searchValue = $(this).val();
@@ -78,7 +78,7 @@ jQuery(document).ready(function () {
             }
         });
 
-        $('.filters .search').click(function (e) {
+        $('.search-filters .search').click(function (e) {
 
             var queryString = window.location.search;
 
@@ -93,10 +93,10 @@ jQuery(document).ready(function () {
                 }
             });
 
-            window.location = $('.search-box #basePath').val() + queryString;
+            window.location = $('.search-box-2 #basePath').val() + queryString;
         });
 
-        $('.filters .reset').click(function () {
+        $('.search-filters .reset').click(function () {
 
             var queryString = window.location.search;
 
@@ -106,7 +106,7 @@ jQuery(document).ready(function () {
                 queryString = queryStringHelper.getUpdatedQueryString(queryString, 'filter[' + name + ']', '');
             });
 
-            window.location = $('.search-box #basePath').val() + queryString;
+            window.location = $('.search-box-2 #basePath').val() + queryString;
         });
     }
 
@@ -300,20 +300,20 @@ jQuery(document).ready(function () {
             var container = null;
             if (container_id) {
                 container = $(container_id);
-            } 
-            
+            }
+
             $.ajax({
                 url: $(this).data("base_url") + "/" + $(this).data("permission_id") + "/delete-ajax",
                 method: "GET"
             }).done(function(a) {
                 if (container) {
                     container.html('').removeClass().html('<i class="fa fa-check" aria-hidden="true"></i>').addClass('label label-sm label-success').show().fadeOut(500);
-                }                    
+                }
             }).fail(function(a, b) {
                 if (container) {
                     container.html('').removeClass().html('<i class="fa fa-times" aria-hidden="true"></i>').addClass('label label-sm label-danger').show().fadeOut(500);
                 }
-                
+
             })
         }
     });

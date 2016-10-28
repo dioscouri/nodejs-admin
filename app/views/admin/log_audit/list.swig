@@ -10,18 +10,21 @@
 
   <div class="row">
     <div class="col-sm-3 col-md-3 col-lg-2">
+      <div class="search-filters">
+        {{ search() }}
+        <br/>
 
-      {{ search() }}
+        {% include './partials/search-by-resource.swig' %}
+        {{ auditLoggingSearchByResource() }}
 
-      {% include './partials/search-by-resource.swig' %}
-      {{ auditLoggingSearchByResource() }}
+        {{ filtersData | json(2) }}
 
-      {#<ul class="nav nav-pills nav-stacked nav-msg">#}
+        {#<ul class="nav nav-pills nav-stacked nav-msg">#}
         {#{{ quick_filter({search: '?filter[resource]=doctor', name: 'Resource: Doctor'}) }}#}
-      {#</ul>#}
+        {#</ul>#}
 
-      <br/>
-
+        {{ search_buttons() }}
+      </div>
     </div>
 
     <div class="col-sm-9 col-md-9 col-lg-10">

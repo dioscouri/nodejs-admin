@@ -12,6 +12,11 @@ var BaseModel = require('./base');
 var merge = require('merge');
 
 /**
+ * Lodash helper
+ */
+const _ = require('lodash');
+
+/**
  *  Resources model
  */
 class LogAuditModel extends BaseModel {
@@ -193,13 +198,22 @@ class LogAuditModel extends BaseModel {
      */
     addCustomFilters(mongoFilters, customFilters) {
 
+        // [ { filterName: 'customDateRange', filterValue: '10/15/2016 - 10/29/2016' } ]
+
+        let customDateRange = _.find(customFilters, {filterName: 'customDateRange'});
+        if (customDateRange) {
+
+            let from = customDateRange.filterValue.split(' - ')[0];
+            let to = customDateRange.filterValue.split(' - ')[1];
+
+            mongoFilters.$and.push({createdAt: {$gte: from}});
+            mongoFilters.$and.push({createdAt: {$lte: to}});
+        }
+
         console.log('---');
         console.log(mongoFilters);
         console.log(customFilters);
         console.log('---');
-
-        // [ { filterName: 'dateRange', filterValue: '123123-1231' } ]
-        
 
         return mongoFilters;
     }

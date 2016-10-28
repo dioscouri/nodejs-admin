@@ -39,6 +39,9 @@ class LogAuditModel extends BaseModel {
         }, {
             name: 'inFieldAction',
             field: 'action'
+        }, {
+            name: 'inFieldUserId',
+            field: 'userId'
         }];
     }
 

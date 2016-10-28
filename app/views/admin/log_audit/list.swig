@@ -20,8 +20,12 @@
         {% include './partials/search-by-action.swig' %}
         {{ auditLoggingSearchByAction() }}
 
+        {% include './partials/search-by-user-id.swig' %}
+        {{ auditLoggingSearchByUserId() }}
+
         {{ search_buttons() }}
 
+        <br>
         <pre>{{ filters | json(2) }}</pre>
         <pre>{{ filterData | json(2) }}</pre>
       </div>

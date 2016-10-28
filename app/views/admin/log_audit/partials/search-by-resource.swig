@@ -17,7 +17,4 @@
       {% endfor %}
     </select>
   </div>
-
-  <pre>{{ filters | json(2) }}</pre>
-  <pre>{{ filterData | json(2) }}</pre>
 {% endmacro %}

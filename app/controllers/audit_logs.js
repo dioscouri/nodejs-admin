@@ -60,15 +60,29 @@ class AdminLogAudit extends AdminBaseCrudController {
         }], readyCallback);
     }
 
+    /**
+     * Load left search filters data
+     *
+     * @param callback
+     */
     loadFiltersData(callback) {
 
         async.series([callback => {
 
             this.loadResources(callback);
 
+        }, callback => {
+
+            this.loadActions(callback);
+
         }], callback);
     }
 
+    /**
+     * Load resources types
+     *
+     * @param callback
+     */
     loadResources(callback) {
 
         this.model.model.distinct('resource', (err, resources) => {
@@ -77,6 +91,24 @@ class AdminLogAudit extends AdminBaseCrudController {
             this.data.filtersData = this.data.filtersData ? this.data.filtersData : {};
 
             this.data.filtersData.resources = resources;
+
+            callback();
+        });
+    }
+
+    /**
+     * Load actions
+     *
+     * @param callback
+     */
+    loadActions(callback) {
+
+        this.model.model.distinct('action', (err, actions) => {
+            if (err) return callback(err);
+
+            this.data.filtersData = this.data.filtersData ? this.data.filtersData : {};
+
+            this.data.filtersData.actions = actions;
 
             callback();
         });

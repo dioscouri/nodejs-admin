@@ -17,13 +17,13 @@
         {% include './partials/search-by-resource.swig' %}
         {{ auditLoggingSearchByResource() }}
 
-        {{ filtersData | json(2) }}
-
-        {#<ul class="nav nav-pills nav-stacked nav-msg">#}
-        {#{{ quick_filter({search: '?filter[resource]=doctor', name: 'Resource: Doctor'}) }}#}
-        {#</ul>#}
+        {% include './partials/search-by-action.swig' %}
+        {{ auditLoggingSearchByAction() }}
 
         {{ search_buttons() }}
+
+        <pre>{{ filters | json(2) }}</pre>
+        <pre>{{ filterData | json(2) }}</pre>
       </div>
     </div>
 

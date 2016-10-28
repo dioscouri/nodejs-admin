@@ -36,6 +36,9 @@ class LogAuditModel extends BaseModel {
         this.inFieldFilterFields = [{
             name: 'inFieldResource',
             field: 'resource'
+        }, {
+            name: 'inFieldAction',
+            field: 'action'
         }];
     }
 

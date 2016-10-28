@@ -63,7 +63,40 @@ jQuery(document).ready(function () {
 
     $('.bs-data-picker').datepicker({});
 
-    // Filters box binding
+    // Search box binding (deprecated)
+    if ($('.search-box').length > 0) {
+        $('.search-box #searchValue').keydown(function (e) {
+            var oldValue = $('.search-box #oldValue').val();
+            var basePath = $('.search-box #basePath').val();
+
+            if (e.which === 13) {
+                var searchValue = $(this).val();
+                if (searchValue) {
+                    var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', searchValue);
+                    window.location = basePath + queryString;
+                }
+                return false;
+            }
+        });
+
+        $('.search-box .search').click(function (e) {
+            var basePath    = $('.search-box #basePath').val();
+            var searchValue = $('.search-box #searchValue').val();
+
+            if (searchValue) {
+                var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', searchValue);
+                window.location = basePath + queryString;
+            }
+        });
+
+        $('.search-box .reset').click(function (e) {
+            var basePath    = $('.search-box #basePath').val();
+            var queryString = queryStringHelper.getUpdatedQueryString(window.location.search, 'filter[search]', '');
+            window.location = basePath + queryString;
+        });
+    }
+
+    // Search filters binding
     if ($('.search-filters').length > 0) {
 
         $('.search-box-2 #searchValue').keydown(function (e) {

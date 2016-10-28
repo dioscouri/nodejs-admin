@@ -74,7 +74,7 @@
                 was {{ item.action }}
               </h4>
               <span>
-                By: {{ item.userId.fullName }}, resourceId: {{ item.resourceId }}
+                By: {{ item.userId.fullName }}, resourceId: {{ item.resourceId.toString() }}
               </span>
 
               {% if item.diff.length > 0 %}

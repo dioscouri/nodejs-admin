@@ -23,6 +23,9 @@
         {% include './partials/search-by-user-id.swig' %}
         {{ auditLoggingSearchByUserId() }}
 
+        {% include './partials/search-by-resource-id.swig' %}
+        {{ auditLoggingSearchByResourceId() }}
+
         {{ search_buttons() }}
 
         <br>

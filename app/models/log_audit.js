@@ -46,6 +46,12 @@ class LogAuditModel extends BaseModel {
             name: 'inFieldResourceId',
             field: 'resourceId'
         }];
+
+        /**
+         *
+         * @type {Array}
+         */
+        this.customFilters = ['dataRange'];
     }
 
     /**
@@ -175,6 +181,24 @@ class LogAuditModel extends BaseModel {
 
             return callback();
         }
+    }
+
+    /**
+     * Build and add a conditions based on custom filters
+     *
+     * @param mongoFilters {{}}
+     * @param customFilters {[{}]}
+     *
+     * @return {{}}
+     */
+    addCustomFilters(mongoFilters, customFilters) {
+
+        console.log('---');
+        console.log(mongoFilters);
+        console.log(customFilters);
+        console.log('---');
+
+        return mongoFilters;
     }
 }
 

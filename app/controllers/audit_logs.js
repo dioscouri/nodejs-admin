@@ -45,6 +45,14 @@ class AdminLogAudit extends AdminBaseCrudController {
          * @private
          */
         this._viewsPath = 'log_audit';
+
+        /**
+         * Population fields
+         *
+         * @type {string}
+         * @private
+         */
+        this._modelPopulateFields = 'userId';
     }
 
     load(readyCallback) {

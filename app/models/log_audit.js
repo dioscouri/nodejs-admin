@@ -28,6 +28,15 @@ class LogAuditModel extends BaseModel {
          * @type {string[]}
          */
         this.responseFields = ['resource', 'resourceId', 'action', 'userId'];
+
+        /**
+         * 
+         * @type {*[]}
+         */
+        this.inFieldFilterFields = [{
+            name: 'inFieldResource',
+            field: 'resource'
+        }];
     }
 
     /**

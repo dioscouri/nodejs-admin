@@ -75,7 +75,7 @@ class LogAuditModel extends BaseModel {
             fieldsChanged: [{type: String, index: true}],
             diff: {type: Types.Mixed}, // a JSON-stringified array of objects, stringified so it is searchable
             message: {type: String},
-            userId: {type: Types.ObjectId, index: true},
+            userId: {type: Types.ObjectId, ref: 'user', index: true},
             createdAt: {type: Date, 'default': Date.now, index: true}
         };
 
@@ -131,7 +131,7 @@ class LogAuditModel extends BaseModel {
 
             this.writeRaw(merge(rawData, {
                 action: 'created',
-                message: logData.item.name ? logData.item.name + ' was created.' : logData.resource + ' was created.'
+                message: typeof logData.item.name === 'string' ? logData.item.name + ' was created.' : logData.resource + ' was created.'
             }));
 
             return callback();
@@ -169,7 +169,7 @@ class LogAuditModel extends BaseModel {
 
             this.writeRaw(merge(rawData, {
                 action: 'modified',
-                message: logData.oldItem.name ? logData.oldItem.name + ' was modified.' : logData.resource + ' was modified.',
+                message: typeof logData.oldItem.name === 'string' ? logData.oldItem.name + ' was modified.' : logData.resource + ' was modified.',
                 fieldsChanged: diff.map(diffEntry => diffEntry.name),
                 diff: JSON.stringify(diff)
             }));
@@ -181,7 +181,7 @@ class LogAuditModel extends BaseModel {
 
             this.writeRaw(merge(rawData, {
                 action: 'removed',
-                message: logData.item.name ? logData.item.name + ' was removed.' : logData.resource + ' was removed.'
+                message: typeof logData.item.name === 'string' ? logData.item.name + ' was removed.' : logData.resource + ' was removed.'
             }));
 
             return callback();

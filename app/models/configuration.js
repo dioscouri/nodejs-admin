@@ -23,6 +23,13 @@ class ConfigurationModel extends BaseModel {
          * @private
          */
         this._configuration = null;
+
+        /**
+         * To Enable Audit traces.
+         * 1. Call enableAudit()
+         * 2. Do not forget to add `last_modified_by` field to this schema.
+         */
+        this.enableAudit();
     }
 
     /**
@@ -64,7 +71,8 @@ class ConfigurationModel extends BaseModel {
                     searchBase: {type: String},
                     searchFilter: {type: String}
                 }
-            }
+            },
+            last_modified_by: {type: Types.ObjectId, ref: 'user'}
         };
 
         // Creating DBO Schema

@@ -56,7 +56,7 @@ class LogAuditModel extends BaseModel {
          *
          * @type {Array}
          */
-        this.customFilters = ['customDateRange', 'customDiffString'];
+        this.customFilters = ['customDateRange'];
     }
 
     /**
@@ -208,20 +208,6 @@ class LogAuditModel extends BaseModel {
             mongoFilters.$and.push({createdAt: {$gte: from}});
             mongoFilters.$and.push({createdAt: {$lte: to}});
         }
-
-        // [ { filterName: 'customDiffString', filterValue: 'needle' } ]
-        let customDiffString = _.find(customFilters, {filterName: 'customDiffString'});
-        if (customDiffString && customDiffString.filterValue) {
-
-            let regExp = new RegExp(`.*${customDiffString.filterValue}.*`, 'gi');
-
-            mongoFilters.$and.push({diff: {$regex: regExp}});
-        }
-
-        // console.log('---');
-        // console.log(mongoFilters);
-        // console.log(customFilters);
-        // console.log('---');
 
         return mongoFilters;
     }

@@ -47,6 +47,14 @@ class AdminLogAudit extends AdminBaseCrudController {
         this._viewsPath = 'log_audit';
 
         /**
+         * Mongoose Searchable fields
+         *
+         * @type {string[]}
+         * @private
+         */
+        this._modelSearchableFields = ['diff'];
+        
+        /**
          * Population fields
          *
          * @type {string}

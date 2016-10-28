@@ -29,9 +29,6 @@
         {% include './partials/search-by-date-range.swig' %}
         {{ auditLoggingSearchByDateRange() }}
 
-        {% include './partials/search-by-diff-string.swig' %}
-        {{ auditLoggingSearchByDiffString() }}
-
         {{ search_buttons() }}
       </div>
       {#<pre>{{ filters | json(2) }}</pre>#}

@@ -23,7 +23,7 @@ class LogAuditModel extends BaseModel {
     /**
      * Model constructor
      */
-    constructor (listName) {
+    constructor(listName) {
         // We must call super() in child class to have access to 'this' in a constructor
         super(listName);
 
@@ -56,7 +56,7 @@ class LogAuditModel extends BaseModel {
          *
          * @type {Array}
          */
-        this.customFilters = ['customDateRange'];
+        this.customFilters = ['customDateRange', 'customDiffString'];
     }
 
     /**
@@ -64,7 +64,7 @@ class LogAuditModel extends BaseModel {
      *
      * @override
      */
-    defineSchema () {
+    defineSchema() {
 
         var Types = this.mongoose.Schema.Types;
 
@@ -100,7 +100,7 @@ class LogAuditModel extends BaseModel {
      * @param {string} rawData.message - Text message.
      * @param {Object} rawData.userId - User ID who made the change.
      */
-    writeRaw (rawData) {
+    writeRaw(rawData) {
         this.insert(rawData);
     }
 
@@ -116,7 +116,7 @@ class LogAuditModel extends BaseModel {
      * @param {Object} [logData.resourceModel] - Affected resource model.
      * @param {function} [callback] - Callback function.
      */
-    traceModelChange (logData, callback) {
+    traceModelChange(logData, callback) {
 
         if (typeof callback === 'undefined') callback = function () {
         };
@@ -199,15 +199,23 @@ class LogAuditModel extends BaseModel {
     addCustomFilters(mongoFilters, customFilters) {
 
         // [ { filterName: 'customDateRange', filterValue: '10/15/2016 - 10/29/2016' } ]
-
         let customDateRange = _.find(customFilters, {filterName: 'customDateRange'});
-        if (customDateRange) {
+        if (customDateRange && customDateRange.filterValue) {
 
             let from = customDateRange.filterValue.split(' - ')[0];
             let to = customDateRange.filterValue.split(' - ')[1];
 
             mongoFilters.$and.push({createdAt: {$gte: from}});
             mongoFilters.$and.push({createdAt: {$lte: to}});
+        }
+
+        // [ { filterName: 'customDiffString', filterValue: 'needle' } ]
+        let customDiffString = _.find(customFilters, {filterName: 'customDiffString'});
+        if (customDiffString && customDiffString.filterValue) {
+
+            let regExp = new RegExp(`.*${customDiffString.filterValue}.*`, 'gi');
+
+            mongoFilters.$and.push({diff: {$regex: regExp}});
         }
 
         console.log('---');

@@ -181,6 +181,31 @@ class UserModel extends BaseModel {
     }
 
     /**
+     * Get user full name from LDAP display name
+     *
+     * @param LDAPUser {{}}
+     * @returns {{first: String, last?: String}}
+     */
+    extractLDAPUserFullName(LDAPUser) {
+
+        let names = LDAPUser.displayName.split(' ');
+
+        if (names.length > 1) {
+
+            return {
+                first: names[0],
+                last: names.slice(1, names.length).join(' ')
+            }
+
+        } else {
+
+            return {
+                first: LDAPUser.displayName
+            }
+        }
+    }
+
+    /**
      * Registering passport handlers
      *
      * @param passport
@@ -262,9 +287,7 @@ class UserModel extends BaseModel {
                         // Create local user if it's not exist
                         userModel.insert({
                             email: user.mail,
-                            name: {
-                                first: user.displayName
-                            },
+                            name: userModel.extractLDAPUserFullName(user),
                             isAdmin: false
                         }, (err, databaseUser) => {
                             if (err) return callback(err);

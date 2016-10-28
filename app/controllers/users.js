@@ -60,6 +60,27 @@ class AdminUsers extends AdminBaseCrudController {
          * @private
          */
         this._modelSearchableFields = ['name.first', 'name.last', 'email'];
+
+        /**
+         * Mongoose editable fields. We must have at least one item in array.
+         *
+         * @type {Array}
+         * @private
+         */
+        this._modelEditableFields = ['name'];
+
+        /**
+         * XLS export fields
+         *
+         * @type {string[]}
+         * @private
+         */
+        this._xlsExportFields = [
+            {field: '_id', column: 'ID', width: 28},
+            {field: 'email', column: 'E-mail', width: 30},
+            {field: 'name.last', column: 'First name'},
+            {field: 'name.first', column: 'Last name'}
+        ];
     }
 
     /**
@@ -76,6 +97,19 @@ class AdminUsers extends AdminBaseCrudController {
         result.name.last  = this.request.body.lastName;
         result.isAdmin    = this.request.body.isAdmin === "on";
         result.roles      = this.request.body.roles || [];
+
+        if (this.request.body.password) {
+
+            if (this.request.body.password !== this.request.body.passwordConfirmation) {
+
+                this.flash.addMessage('Password does not match the confirm password', DioscouriCore.FlashMessageType.ERROR);
+
+            } else {
+
+                result.password = this.request.body.password;
+            }
+        }
+
         return result;
     }
 

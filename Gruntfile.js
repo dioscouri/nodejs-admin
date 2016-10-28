@@ -27,6 +27,7 @@ module.exports = function (grunt) {
                     './resources/javascripts/chain/bootstrap.min.js',
                     './resources/javascripts/chain/modernizr.min.js',
                     './resources/javascripts/chain/pace.min.js',
+                    './resources/bower_components/moment/moment.js',
                     './resources/javascripts/chain/retina.min.js',
                     './resources/javascripts/chain/select2.full.min.js',
                     './resources/javascripts/chain/jquery.cookies.js',

@@ -1,6 +1,6 @@
-{% macro auditLoggingSearchByUserId() %}
+{% macro auditLoggingSearchByResourceId() %}
 
-  {% set filterName = 'inFieldUserId' %}
+  {% set filterName = 'inFieldResourceId' %}
 
   <div class="form-group">
 
@@ -8,6 +8,6 @@
 
     <input type="text" class="form-control" data-filter="{{ filterName }}" style="width:100%;font-size:11px;"
            {% if filterData %}value="{{ filterData.fieldValue }}"{% endif %}
-           placeholder="Filter by user ID">
+           placeholder="Filter by resource ID">
   </div>
 {% endmacro %}

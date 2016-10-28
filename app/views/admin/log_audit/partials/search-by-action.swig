@@ -5,7 +5,7 @@
   <div class="form-group">
 
     <select class="form-control select2" data-filter="{{ filterName }}" multiple style="width:100%"
-            data-placeholder="Filter by action...">
+            data-placeholder="Filter by action">
 
       {% set filterData = filters.inField | find({filterName: filterName}) %}
 

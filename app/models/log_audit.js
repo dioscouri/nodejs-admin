@@ -30,7 +30,7 @@ class LogAuditModel extends BaseModel {
         this.responseFields = ['resource', 'resourceId', 'action', 'userId'];
 
         /**
-         * 
+         *
          * @type {*[]}
          */
         this.inFieldFilterFields = [{
@@ -42,6 +42,9 @@ class LogAuditModel extends BaseModel {
         }, {
             name: 'inFieldUserId',
             field: 'userId'
+        }, {
+            name: 'inFieldResourceId',
+            field: 'resourceId'
         }];
     }
 

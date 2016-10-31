@@ -26,3 +26,8 @@ th.sorting.desc {
     font-weight: normal;
     font-size: 11px;
 }
+
+.table-responsive {
+    overflow-x: auto;
+    min-height: 0.01%;
+}

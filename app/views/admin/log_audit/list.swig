@@ -103,12 +103,12 @@
                         <td>{{ d.name }}</td>
                         <td>
                           <div class="data-value">
-                            <pre>{{ diffValue(d.from) }}</pre>
+                            {{ diffValue(d.from) }}
                           </div>
                         </td>
                         <td>
                           <div class="data-value">
-                            <pre>{{ diffValue(d.to) }}</pre>
+                            {{ diffValue(d.to) }}
                           </div>
                         </td>
                       </tr>

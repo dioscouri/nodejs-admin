@@ -6,6 +6,16 @@
   {{ pageheader({title: 'Audit logs'}) }}
 {% endblock %}
 
+{% macro diffValue(val) %}
+  <div class="data-value">
+    {% if val|isObject %}
+      <pre>{{ val|json(1) }}</pre>
+    {% else %}
+      {{ val }}
+    {% endif %}
+  </div>
+{% endmacro %}
+
 {% block pagecontent %}
 
   <div class="row">
@@ -93,12 +103,12 @@
                         <td>{{ d.name }}</td>
                         <td>
                           <div class="data-value">
-                            <pre>{{ d.from | json(2) }}</pre>
+                            <pre>{{ diffValue(d.from) }}</pre>
                           </div>
                         </td>
                         <td>
                           <div class="data-value">
-                            <pre>{{ d.to | json(2) }}</pre>
+                            <pre>{{ diffValue(d.to) }}</pre>
                           </div>
                         </td>
                       </tr>

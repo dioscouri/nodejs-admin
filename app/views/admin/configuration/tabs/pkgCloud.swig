@@ -17,8 +17,6 @@
         </div>
     </div>
 
-    <hr>
-
     <div class="form-group">
         <label class="col-sm-3 control-label">API Key (rackspace)</label>
 
@@ -45,8 +43,6 @@
                    value="{{ item.pkgcloud.region }}"/>
         </div>
     </div>
-
-    <hr>
 
     <div class="form-group">
         <label class="col-sm-3 control-label">Account name (azure)</label>

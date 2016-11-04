@@ -411,19 +411,18 @@ jQuery(document).ready(function () {
 
         var pkgCloudProvider = $('#pkgcloud select[name="pkgcloudProvider"]').val();
 
-        $('#pkgcloud input[type="text"]').disable();
-        $('#pkgcloud input[name="pkgcloudProvider"]').enable();
+        $('#pkgcloud input[type="text"]').prop('disabled', true);
 
         if (pkgCloudProvider === 'rackspace') {
 
-            $('#pkgcloud input[name="pkgcloudApiKey"]').enable();
-            $('#pkgcloud input[name="pkgcloudUserName"]').enable();
-            $('#pkgcloud input[name="pkgcloudRegion"]').enable();
+            $('#pkgcloud input[name="pkgcloudApiKey"]').prop('disabled', false);
+            $('#pkgcloud input[name="pkgcloudUserName"]').prop('disabled', false);
+            $('#pkgcloud input[name="pkgcloudRegion"]').prop('disabled', false);
 
         } else if (pkgCloudProvider === 'azure') {
 
-            $('#pkgcloud input[name="pkgcloudStorageAccount"]').enable();
-            $('#pkgcloud input[name="pkgcloudStorageAccessKey"]').enable();
+            $('#pkgcloud input[name="pkgcloudStorageAccount"]').prop('disabled', false);
+            $('#pkgcloud input[name="pkgcloudStorageAccessKey"]').prop('disabled', false);
 
         } else {
 

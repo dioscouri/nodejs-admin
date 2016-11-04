@@ -401,7 +401,7 @@ jQuery(document).ready(function () {
     /** Pkg Cloud view */
     if ($('#pkgcloud').length > 0) {
 
-        $('#pkgcloud .pkgcloudProvider').change(function (event) {
+        $('#pkgcloud select[name="pkgcloudProvider"]').change(function (event) {
 
             updatePkgCloudInputAvailability();
         });
@@ -409,7 +409,7 @@ jQuery(document).ready(function () {
 
     function updatePkgCloudInputAvailability() {
 
-        var pkgCloudProvider = $('#pkgcloud .pkgcloudProvider').val();
+        var pkgCloudProvider = $('#pkgcloud select[name="pkgcloudProvider"]').val();
 
         $('#pkgcloud input[type="text"]').disable();
         $('#pkgcloud input[name="pkgcloudProvider"]').enable();

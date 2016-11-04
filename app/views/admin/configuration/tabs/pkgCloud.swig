@@ -6,8 +6,14 @@
         <label class="col-sm-3 control-label">Provider</label>
 
         <div class="col-sm-9">
-            <input type="text" name="pkgcloudProvider" class="form-control"
-                   value="{{ item.pkgcloud.provider }}"/>
+            <select name="pkgcloudProvider" class="form-control">
+                <option value="rackspace" {% if item.pkgcloud.provider === 'rackspace' %}selected{% endif %}>
+                    Rackspace
+                </option>
+                <option value="azure" {% if item.pkgcloud.provider === 'azure' %}selected{% endif %}>
+                    Azure
+                </option>
+            </select>
         </div>
     </div>
 

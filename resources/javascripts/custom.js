@@ -401,6 +401,8 @@ jQuery(document).ready(function () {
     /** Pkg Cloud view */
     if ($('#pkgcloud').length > 0) {
 
+        updatePkgCloudInputAvailability();
+
         $('#pkgcloud select[name="pkgcloudProvider"]').change(function (event) {
 
             updatePkgCloudInputAvailability();

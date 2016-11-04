@@ -3,38 +3,61 @@
     <h4>pkg Cloud settings</h4>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">Provider</label>
+        <label class="col-sm-3 control-label">Provider</label>
 
-        <div class="col-sm-10">
+        <div class="col-sm-9">
             <input type="text" name="pkgcloudProvider" class="form-control"
                    value="{{ item.pkgcloud.provider }}"/>
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="col-sm-2 control-label">API Key</label>
+    <hr>
 
-        <div class="col-sm-10">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">API Key (rackspace)</label>
+
+        <div class="col-sm-9">
             <input type="text" name="pkgcloudApiKey" class="form-control"
                    value="{{ item.pkgcloud.apiKey }}"/>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">Username</label>
+        <label class="col-sm-3 control-label">Username (rackspace)</label>
 
-        <div class="col-sm-10">
+        <div class="col-sm-9">
             <input type="text" name="pkgcloudUserName" class="form-control"
                    value="{{ item.pkgcloud.userName }}"/>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">Region</label>
+        <label class="col-sm-3 control-label">Region (rackspace)</label>
 
-        <div class="col-sm-10">
+        <div class="col-sm-9">
             <input type="text" name="pkgcloudRegion" class="form-control"
                    value="{{ item.pkgcloud.region }}"/>
         </div>
     </div>
+
+    <hr>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Account name (azure)</label>
+
+        <div class="col-sm-9">
+            <input type="text" name="pkgcloudStorageAccount" class="form-control"
+                   value="{{ item.pkgcloud.storageAccount }}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Access key (azure)</label>
+
+        <div class="col-sm-9">
+            <input type="text" name="pkgcloudStorageAccessKey" class="form-control"
+                   value="{{ item.pkgcloud.storageAccessKey }}"/>
+        </div>
+    </div>
+
 </div>

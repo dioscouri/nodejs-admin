@@ -286,20 +286,20 @@ jQuery(document).ready(function () {
             var container = null;
             if (container_id) {
                 container = $(container_id);
-            } 
-            
+            }
+
             $.ajax({
                 url: $(this).data("base_url") + "/" + $(this).data("permission_id") + "/delete-ajax",
                 method: "GET"
             }).done(function(a) {
                 if (container) {
                     container.html('').removeClass().html('<i class="fa fa-check" aria-hidden="true"></i>').addClass('label label-sm label-success').show().fadeOut(500);
-                }                    
+                }
             }).fail(function(a, b) {
                 if (container) {
                     container.html('').removeClass().html('<i class="fa fa-times" aria-hidden="true"></i>').addClass('label label-sm label-danger').show().fadeOut(500);
                 }
-                
+
             })
         }
     });
@@ -397,6 +397,41 @@ jQuery(document).ready(function () {
         });
         return false;
     }
+
+    /** Pkg Cloud view */
+    if ($('#pkgcloud').length > 0) {
+
+        $('#pkgcloud .pkgcloudProvider').change(function (event) {
+
+            updatePkgCloudInputAvailability();
+        });
+    }
+
+    function updatePkgCloudInputAvailability() {
+
+        var pkgCloudProvider = $('#pkgcloud .pkgcloudProvider').val();
+
+        $('#pkgcloud input[type="text"]').disable();
+        $('#pkgcloud input[name="pkgcloudProvider"]').enable();
+
+        if (pkgCloudProvider === 'rackspace') {
+
+            $('#pkgcloud input[name="pkgcloudApiKey"]').enable();
+            $('#pkgcloud input[name="pkgcloudUserName"]').enable();
+            $('#pkgcloud input[name="pkgcloudRegion"]').enable();
+
+        } else if (pkgCloudProvider === 'azure') {
+
+            $('#pkgcloud input[name="pkgcloudStorageAccount"]').enable();
+            $('#pkgcloud input[name="pkgcloudStorageAccessKey"]').enable();
+
+        } else {
+
+            console.error('nodejs-admin::custom.js: Provider "' + pkgCloudProvider + '" is not supported.');
+        }
+    }
+    /** Pkg Cloud view */
+
 });
 
 // Google analytics code

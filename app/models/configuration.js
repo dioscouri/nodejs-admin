@@ -43,9 +43,15 @@ class ConfigurationModel extends BaseModel {
             },
             pkgcloud: {
                 provider: {type: String},
+
+                /** For "rackspace" provider */
                 userName: {type: String},
                 apiKey: {type: String},
-                region: {type: String}
+                region: {type: String},
+
+                /** For "azure" provider */
+                storageAccount: {type: String},
+                storageAccessKey: {type: String}
             },
             frontui: {
                 requireLogin: {type: Boolean, default: false},

@@ -116,6 +116,7 @@ class AdminAssets extends AdminBaseCrudController {
 
                         this.request.body.cdnUrl = remoteFile.cdnUrl;
                         this.request.body.fileName = remoteFile.name;
+                        this.request.body.containerName = 'assets';
 
                         callback();
                     }.bind(this));

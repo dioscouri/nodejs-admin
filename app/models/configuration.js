@@ -50,8 +50,8 @@ class ConfigurationModel extends BaseModel {
                 region: {type: String},
 
                 /** For "azure" provider */
-                storageAccount: {type: String},
-                storageAccessKey: {type: String}
+                azureAccount: {type: String},
+                azureAccessKey: {type: String}
             },
             frontui: {
                 requireLogin: {type: Boolean, default: false},

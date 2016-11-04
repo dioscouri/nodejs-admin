@@ -48,8 +48,8 @@
         <label class="col-sm-3 control-label">Account name (azure)</label>
 
         <div class="col-sm-9">
-            <input type="text" name="pkgcloudStorageAccount" class="form-control"
-                   value="{{ item.pkgcloud.storageAccount }}"/>
+            <input type="text" name="azureAccount" class="form-control"
+                   value="{{ item.pkgcloud.azureAccount }}"/>
         </div>
     </div>
 
@@ -57,8 +57,8 @@
         <label class="col-sm-3 control-label">Access key (azure)</label>
 
         <div class="col-sm-9">
-            <input type="text" name="pkgcloudStorageAccessKey" class="form-control"
-                   value="{{ item.pkgcloud.storageAccessKey }}"/>
+            <input type="text" name="azureAccessKey" class="form-control"
+                   value="{{ item.pkgcloud.azureAccessKey }}"/>
         </div>
     </div>
 

@@ -423,8 +423,8 @@ jQuery(document).ready(function () {
 
         } else if (pkgCloudProvider === 'azure') {
 
-            $('#pkgcloud input[name="pkgcloudStorageAccount"]').prop('disabled', false);
-            $('#pkgcloud input[name="pkgcloudStorageAccessKey"]').prop('disabled', false);
+            $('#pkgcloud input[name="azureAccount"]').prop('disabled', false);
+            $('#pkgcloud input[name="azureAccessKey"]').prop('disabled', false);
 
         } else {
 

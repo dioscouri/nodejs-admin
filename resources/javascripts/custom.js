@@ -425,6 +425,7 @@ jQuery(document).ready(function () {
 
             $('#pkgcloud input[name="azureAccount"]').prop('disabled', false);
             $('#pkgcloud input[name="azureAccessKey"]').prop('disabled', false);
+            $('#pkgcloud input[name="azureStorageType"]').prop('disabled', false);
 
         } else {
 

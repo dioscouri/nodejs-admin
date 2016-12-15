@@ -74,7 +74,8 @@ class AdminConfiguration extends AdminBaseCrudController {
             region: this.request.body.pkgcloudRegion,
 
             azureAccount: this.request.body.azureAccount,
-            azureAccessKey: this.request.body.azureAccessKey
+            azureAccessKey: this.request.body.azureAccessKey,
+            azureStorageType: this.request.body.azureStorageType
         };
 
         result.frontui = {

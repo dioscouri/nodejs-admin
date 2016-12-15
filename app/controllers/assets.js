@@ -109,6 +109,7 @@ class AdminAssets extends AdminBaseCrudController {
 
                     client.upload(files.file[0].path, {
                         containerName: 'assets',
+                        shareName: 'assets',
                         containerCdn: true,
                         fileName: files.file[0].originalFilename
                     }, function(err, remoteFile) {

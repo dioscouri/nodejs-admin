@@ -51,7 +51,8 @@ class ConfigurationModel extends BaseModel {
 
                 /** For "azure" provider */
                 azureAccount: {type: String},
-                azureAccessKey: {type: String}
+                azureAccessKey: {type: String},
+                azureStorageType: {type: String, enum: ['fileStorage', 'blobStorage']}
             },
             frontui: {
                 requireLogin: {type: Boolean, default: false},

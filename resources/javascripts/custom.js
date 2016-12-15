@@ -286,20 +286,20 @@ jQuery(document).ready(function () {
             var container = null;
             if (container_id) {
                 container = $(container_id);
-            } 
-            
+            }
+
             $.ajax({
                 url: $(this).data("base_url") + "/" + $(this).data("permission_id") + "/delete-ajax",
                 method: "GET"
             }).done(function(a) {
                 if (container) {
                     container.html('').removeClass().html('<i class="fa fa-check" aria-hidden="true"></i>').addClass('label label-sm label-success').show().fadeOut(500);
-                }                    
+                }
             }).fail(function(a, b) {
                 if (container) {
                     container.html('').removeClass().html('<i class="fa fa-times" aria-hidden="true"></i>').addClass('label label-sm label-danger').show().fadeOut(500);
                 }
-                
+
             })
         }
     });
@@ -397,6 +397,43 @@ jQuery(document).ready(function () {
         });
         return false;
     }
+
+    /** Pkg Cloud view */
+    if ($('#pkgcloud').length > 0) {
+
+        updatePkgCloudInputAvailability();
+
+        $('#pkgcloud select[name="pkgcloudProvider"]').change(function (event) {
+
+            updatePkgCloudInputAvailability();
+        });
+    }
+
+    function updatePkgCloudInputAvailability() {
+
+        var pkgCloudProvider = $('#pkgcloud select[name="pkgcloudProvider"]').val();
+
+        $('#pkgcloud input[type="text"]').prop('disabled', true);
+
+        if (pkgCloudProvider === 'rackspace') {
+
+            $('#pkgcloud input[name="pkgcloudApiKey"]').prop('disabled', false);
+            $('#pkgcloud input[name="pkgcloudUserName"]').prop('disabled', false);
+            $('#pkgcloud input[name="pkgcloudRegion"]').prop('disabled', false);
+
+        } else if (pkgCloudProvider === 'azure') {
+
+            $('#pkgcloud input[name="azureAccount"]').prop('disabled', false);
+            $('#pkgcloud input[name="azureAccessKey"]').prop('disabled', false);
+            $('#pkgcloud input[name="azureStorageType"]').prop('disabled', false);
+
+        } else {
+
+            console.error('nodejs-admin::custom.js: Provider "' + pkgCloudProvider + '" is not supported.');
+        }
+    }
+    /** Pkg Cloud view */
+
 });
 
 // Google analytics code

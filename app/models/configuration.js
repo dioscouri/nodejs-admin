@@ -43,9 +43,16 @@ class ConfigurationModel extends BaseModel {
             },
             pkgcloud: {
                 provider: {type: String},
+
+                /** For "rackspace" provider */
                 userName: {type: String},
                 apiKey: {type: String},
-                region: {type: String}
+                region: {type: String},
+
+                /** For "azure" provider */
+                azureAccount: {type: String},
+                azureAccessKey: {type: String},
+                azureStorageType: {type: String, enum: ['fileStorage', 'blobStorage']}
             },
             frontui: {
                 requireLogin: {type: Boolean, default: false},

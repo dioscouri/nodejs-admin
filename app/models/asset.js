@@ -37,7 +37,9 @@ class AssetModel extends BaseModel {
             name: {type: String, unique: true},
             assetType: {type: String, index: true},
             fileName: {type: String, index: true, required: true},
-            cdnUrl: {type: String, index: true}
+            cdnUrl: {type: String, index: true},
+            containerName: {type: String, index: true},
+            shareName: {type: String, index: true}
         };
 
         /**

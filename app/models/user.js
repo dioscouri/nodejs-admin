@@ -74,7 +74,7 @@ class UserModel extends BaseModel {
         var schemaObject = {
             "token": String,
             "password": String,
-            "email": String,
+            "email": { type: String, required: true },
             "isAdmin": Boolean,
             "createdAt": {type: Date, 'default': Date.now},
             "modifiedAt": {type: Date, 'default': Date.now},
@@ -567,15 +567,23 @@ class UserModel extends BaseModel {
         }
 
         if (validationMessages.length == 0) {
-            var searchPattern = item.id != null ? {"$and": [{email: item.email}, {_id: {"$ne": item.id.toString()}}]} : {email: item.email};
+            var searchPattern = { email: item.email };
             this.model.findOne(searchPattern, function (error, document) {
-                if (error != null) {
+                if (error) {
                     validationMessages.push(error.message);
                     return validationCallback(DioscouriCore.ValidationError.create(validationMessages));
                 }
-
-                if (document != null && (item.id == null || item.id.toString() != document.id.toString())) {
-                    validationMessages.push('User with the same email already exists in the database');
+                
+                if (!document) {
+                    return validationCallback(DioscouriCore.ValidationError.create(validationMessages));
+                }
+                
+                if (!item.id && document.id) {
+                    validationMessages.push('A user with this email address already exists in the database.');
+                }
+                
+                if (item.id && item.id.toString() != document.id.toString()) {
+                    validationMessages.push('Cannot change to this email address. It is already in use.');
                 }
 
                 return validationCallback(DioscouriCore.ValidationError.create(validationMessages));

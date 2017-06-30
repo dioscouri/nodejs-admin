@@ -97,6 +97,7 @@ class AdminUsers extends AdminBaseCrudController {
         result.name.last  = this.request.body.lastName;
         result.isAdmin    = this.request.body.isAdmin === "on";
         result.roles      = this.request.body.roles || [];
+        result.email      = this.request.body.email;
 
         if (this.request.body.password) {
 
@@ -134,16 +135,23 @@ class AdminUsers extends AdminBaseCrudController {
         }
 
         if (validationError == null) {
-            var searchPattern = item.id != null ? {"$and": [{email: item.email}, {_id: {"$ne": item.id.toString()}}]} : {email: item.email};
+            var searchPattern = { email: item.email };
             this.model.findOne(searchPattern, function (error, document) {
-                if (error != null) {
+                if (error) {
                     validationMessages.push(error.message);
                     return validationCallback(error, validationMessages);
                 }
-
-                if (document != null && (item.id == null || item.id.toString() != document.id.toString())) {
-                    validationMessages.push('User with the same email already exists in the database');
-                    validationError = new Error('Validation error');
+                
+                if (!document) {
+                    return validationCallback(null, validationMessages);
+                }
+                
+                if (!item.id && document.id) {
+                    validationMessages.push('A user with this email address already exists in the database.');
+                }
+                
+                if (item.id && item.id.toString() != document.id.toString()) {
+                    validationMessages.push('Cannot change to this email address. It is already in use.');
                 }
 
                 return validationCallback(validationError, validationMessages);
